@@ -1,4 +1,4 @@
-from refeicao import Refeicao:
+from refeicao import Refeicao
 from nutricionista import Nutricionista
 from cliente import Cliente
 

@@ -13,19 +13,19 @@ class Avaliacao:
     @property
     def cliente(self):
         return self.__cliente
-    
+
     @property
     def nutricionista(self):
         return self.__nutricionista
-    
+
     @property
     def data(self):
         return self.__data
-    
+
     @property
     def imc(self):
         return self.__imc
-    
+
     @property
     def taxa_mb(self):
         return self.__taxa_mb

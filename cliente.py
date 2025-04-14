@@ -1,10 +1,9 @@
 from objetivo import Objetivo
-from plano_alimentar import PlanoAlimentar
 from usuario import Usuario
 
 
 class Cliente(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, cpf: str, idade: int, genero: str, peso: float, altura: float, objetivo: Objetivo, plano_alimentar: PlanoAlimentar):
+    def __init__(self, nome: str, email: str, senha: str, cpf: str, idade: int, genero: str, peso: float, altura: float, objetivo: Objetivo, plano_alimentar):
         super().__init__(nome, email, senha, cpf)
         self.__idade = idade
         self.__genero = genero
@@ -50,8 +49,10 @@ class Cliente(Usuario):
     def plano_alimentar(self):
         return self.__plano_alimentar
 
-    def add_plano_alimentar(self,  plano_alimentar: PlanoAlimentar):
-        self.__plano_alimentar = plano_alimentar
+    def add_plano_alimentar(self,  plano_alimentar):
+        from plano_alimentar import PlanoAlimentar
+        if isinstance(plano_alimentar, PlanoAlimentar):
+            self.__plano_alimentar = plano_alimentar
 
     def calcular_imc(self):
         if self.__altura <= 0:
@@ -68,3 +69,6 @@ class Cliente(Usuario):
             return "genero inválido. Use 'masculino' ou 'feminino'."
 
         return round(tmb, 2)
+
+    def cadastrar(self):
+        print(f"Cliente {self.nome} cadastrado com sucesso.")

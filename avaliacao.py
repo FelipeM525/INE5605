@@ -1,14 +1,15 @@
-from cliente import Cliente
-from nutricionista import Nutricionista
 
 class Avaliacao:
-    def __init__(self, cliente: Cliente, nutricionista: Nutricionista, data: str):
+    def __init__(self, cliente, nutricionista, data: str, imc: float, taxa_mb: int):
+        from cliente import Cliente
+        from nutricionista import Nutricionista
+
         if isinstance(cliente, Cliente) and isinstance(nutricionista, Nutricionista):
             self.__cliente = cliente
             self.__nutricionista = nutricionista
         self.__data = data
-        self.__imc = cliente.imc
-        self.__taxa_mb = cliente.taxa_mb
+        self.__imc = imc
+        self.__taxa_mb = taxa_mb
 
     @property
     def cliente(self):

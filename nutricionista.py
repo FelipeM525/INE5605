@@ -1,9 +1,8 @@
-from avaliacao import Avaliacao
 from usuario import Usuario
 
 
 class Nutricionista(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, cpf: str, clinica: str, crn: str, avaliacoes: list[Avaliacao]):
+    def __init__(self, nome: str, email: str, senha: str, cpf: str, clinica: str, crn: str, avaliacoes: list):
         super().__init__(nome, email, senha, cpf)
         self.__clinica = clinica
         self.__crn = crn
@@ -29,5 +28,10 @@ class Nutricionista(Usuario):
     def avaliacoes(self):
         return self.__avaliacoes
 
-    def adicionar_avaliacao(self, avaliacao: Avaliacao):
-        self.__avaliacoes.append(avaliacao)
+    def adicionar_avaliacao(self, avaliacao):
+        from avaliacao import Avaliacao
+        if isinstance(avaliacao, Avaliacao):
+            self.__avaliacoes.append(avaliacao)
+
+    def cadastrar(self):
+        print(f"Nutricionista {self.nome} cadastrado com sucesso.")

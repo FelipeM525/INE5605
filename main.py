@@ -1,10 +1,10 @@
-from alimento import Alimento
-from avaliacao import Avaliacao
-from cliente import Cliente
-from nutricionista import Nutricionista
-from objetivo import Objetivo
-from plano_alimentar import PlanoAlimentar
-from refeicao import Refeicao
+from model.alimento import Alimento
+from model.avaliacao import Avaliacao
+from model.cliente import Cliente
+from model.nutricionista import Nutricionista
+from model.objetivo import Objetivo
+from model.plano_alimentar import PlanoAlimentar
+from model.refeicao import Refeicao
 
 
 def main():

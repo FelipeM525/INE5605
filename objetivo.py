@@ -28,5 +28,3 @@ class Objetivo:
     @tempo.setter
     def tempo(self, tempo: int):
         self.__tempo = tempo
-    
-    

@@ -1,4 +1,4 @@
-from alimento import Alimento
+from model.alimento import Alimento
 
 class Refeicao:
     def __init__(self, alimentos: list[Alimento], tipo: str):

@@ -1,10 +1,10 @@
-from alimento import Alimento
-from avaliacao import Avaliacao
-from cliente import Cliente
-from nutricionista import Nutricionista
-from objetivo import Objetivo
-from plano_alimentar import PlanoAlimentar
-from refeicao import Refeicao
+from model.alimento import Alimento
+from model.avaliacao import Avaliacao
+from model.cliente import Cliente
+from model.nutricionista import Nutricionista
+from model.objetivo import Objetivo
+from model.plano_alimentar import PlanoAlimentar
+from model.refeicao import Refeicao
 
 
 arroz = Alimento("Arroz", 130, 28, 0, 2)
@@ -40,4 +40,3 @@ print(f" IMC de {cliente.nome}: {imc_cliente}")
 print(f" TMB de {cliente.nome}: {tmb_cliente}")
 print(f"Nutricionista {nutri.nome} avaliou {avaliacao1.cliente.nome} em {avaliacao1.data}")
 print(f"IMC da avaliacao_1: {avaliacao1.imc}, TMB da avaliacao_1: {avaliacao1.taxa_mb} kcal")
-

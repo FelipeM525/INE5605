@@ -29,7 +29,7 @@ class Nutricionista(Usuario):
         return self.__avaliacoes
 
     def adicionar_avaliacao(self, avaliacao):
-        from avaliacao import Avaliacao
+        from model.avaliacao import Avaliacao
         if isinstance(avaliacao, Avaliacao):
             self.__avaliacoes.append(avaliacao)
 

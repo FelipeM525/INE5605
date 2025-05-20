@@ -1,3 +1,5 @@
+from model.cliente import Cliente
+from model.nutricionista import Nutricionista
 
 class Avaliacao:
     def __init__(self, cliente, nutricionista, data: str, imc: float, taxa_mb: int):

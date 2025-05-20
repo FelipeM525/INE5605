@@ -1,7 +1,6 @@
-
 from model.cliente import Cliente
 from model.objetivo import Objetivo
-from controller.ControladorCliente import ControladorCliente
+from controller.controlador_cliente import ControladorCliente
 
 class TelaCliente:
     def mostrar_menu(self):

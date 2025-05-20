@@ -1,8 +1,11 @@
 from usuario import Usuario
+from model.clinica import Clinica
+from model.avaliacao import Avaliacao
+
 
 
 class Nutricionista(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, cpf: str, clinica: str, crn: str, avaliacoes: list):
+    def __init__(self, nome: str, email: str, senha: str, cpf: str, clinica: Clinica, crn: str, avaliacoes: list):
         super().__init__(nome, email, senha, cpf)
         self.__clinica = clinica
         self.__crn = crn
@@ -13,7 +16,7 @@ class Nutricionista(Usuario):
         return self.__clinica
 
     @clinica.setter
-    def clinica(self, clinica):
+    def clinica(self, clinica: Clinica):
         self.__clinica = clinica
 
     @property
@@ -29,7 +32,6 @@ class Nutricionista(Usuario):
         return self.__avaliacoes
 
     def adicionar_avaliacao(self, avaliacao):
-        from model.avaliacao import Avaliacao
         if isinstance(avaliacao, Avaliacao):
             self.__avaliacoes.append(avaliacao)
 

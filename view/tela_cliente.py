@@ -12,6 +12,9 @@ class TelaCliente:
     
     def cadastrar_cliente(self):
         nome = input("Nome: ")
+        email = input("Email: ")
+        senha = input("Senha: ")
+        cpf = int(input("CPF: "))
         idade = int(input("Idade: "))
         genero = input("Genero: ")
         peso = int(input("Peso: "))
@@ -20,7 +23,8 @@ class TelaCliente:
         quantidade = int(input("Quantidade (kg): "))
         tempo = int(input("Tempo(meses): "))
         objetivo = Objetivo(meta, quantidade, tempo)
-        return nome, idade, genero, peso, altura, objetivo
+        
+        return Cliente(nome, email, senha, cpf, idade, genero, peso, altura, objetivo)
     
     def mostrar_dados_do_cliente(self, cliente: Cliente):
         if cliente:

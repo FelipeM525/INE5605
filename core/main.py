@@ -2,8 +2,8 @@ from alimentos.alimento import Alimento
 from avaliacoes.avaliacao import Avaliacao
 from usuarios.model.cliente import Cliente
 from usuarios.model.nutricionista import Nutricionista
-from model.objetivo import Objetivo
-from model.plano_alimentar import PlanoAlimentar
+from core.objetivo import Objetivo
+from plano.plano_alimentar import PlanoAlimentar
 from refeicoes.refeicao import Refeicao
 
 

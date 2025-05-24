@@ -3,7 +3,7 @@ from usuario import Usuario
 
 
 class Cliente(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, cpf: str, idade: int, genero: str, peso: float, altura: float, objetivo: Objetivo, plano_alimentar):
+    def __init__(self, nome: str, email: str, senha: str, cpf: str, idade: int, genero: str, peso: float, altura: float, objetivo: Objetivo, plano_alimentar = None):
         super().__init__(nome, email, senha, cpf)
         self.__idade = idade
         self.__genero = genero

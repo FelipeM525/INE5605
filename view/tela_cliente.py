@@ -1,5 +1,5 @@
 from model.cliente import Cliente
-
+from model.objetivo import Objetivo
 
 class TelaCliente:
     def mostrar_menu(self):

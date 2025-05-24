@@ -40,3 +40,4 @@ print(f" IMC de {cliente.nome}: {imc_cliente}")
 print(f" TMB de {cliente.nome}: {tmb_cliente}")
 print(f"Nutricionista {nutri.nome} avaliou {avaliacao1.cliente.nome} em {avaliacao1.data}")
 print(f"IMC da avaliacao_1: {avaliacao1.imc}, TMB da avaliacao_1: {avaliacao1.taxa_mb} kcal")
+

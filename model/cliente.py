@@ -72,3 +72,15 @@ class Cliente(Usuario):
 
     def cadastrar(self):
         print(f"Cliente {self.nome} cadastrado com sucesso.")
+
+    def __str__(self):
+        return (f"Cliente: {self.nome}\n"
+            f"Email: {self.email}\n"
+            f"CPF: {self.cpf}\n"
+            f"Idade: {self.idade}\n"
+            f"Gênero: {self.__genero}\n"
+            f"Peso: {self.peso:.1f} kg\n"
+            f"Altura: {self.altura:.2f} m\n"
+            f"Objetivo: {self.objetivo}\n"
+            f"IMC: {self.calcular_imc()}\n"
+            f"TMB: {self.calcular_tmb()}")

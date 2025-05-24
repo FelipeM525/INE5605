@@ -36,7 +36,17 @@ class ControladorNutricionista:
 
         else:
             raise CadastroInexistenteException()
-        
+
+    def mostrar_dados_nutricionista(self):
+        cpf = cpf.tela_nutricionista.selecionar_nutricionista_cpf()
+        nutricionista = self.buscar_nutricionista_por_cpf(cpf)
+
+        if nutricionista:
+            self.tela_nutricionista.mostrar_dados_do_nutricionista(nutricionista)
+
+        else:
+            raise CadastroInexistenteException()
+
     def listar_nutricionistas(self):
         lista_de_nutricionistas = self.__nutricionistas
         self.tela_nutricionista.listar_nutricionistas(lista_de_nutricionistas)

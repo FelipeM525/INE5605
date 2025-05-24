@@ -5,18 +5,18 @@ from model.avaliacao import Avaliacao
 
 
 class Nutricionista(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, cpf: str, clinica: Clinica, crn: str, avaliacoes: list):
+    def __init__(self, nome: str, email: str, senha: str, cpf: str, clinica: str, crn: str):
         super().__init__(nome, email, senha, cpf)
         self.__clinica = clinica
         self.__crn = crn
-        self.__avaliacoes = avaliacoes
+        self.__avaliacoes = []
 
     @property
     def clinica(self):
         return self.__clinica
 
     @clinica.setter
-    def clinica(self, clinica: Clinica):
+    def clinica(self, clinica: str):
         self.__clinica = clinica
 
     @property

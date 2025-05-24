@@ -19,7 +19,7 @@ class TelaNutricionista:
 
         return Nutricionista(nome, email, senha, cpf, crn, clinica)
 
-    def mostrar_dados_do_nutricionista(self, nutricionista: Nutricionista):
+    def pegar_dados_nutricionista(self, nutricionista: Nutricionista):
         if nutricionista:
             print(f"Nome: {nutricionista.nome}")
             print(f"Email: {nutricionista.email}")

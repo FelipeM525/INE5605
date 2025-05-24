@@ -17,7 +17,7 @@ class ControladorCliente:
         return None
 
     def incluir_cliente(self):
-        novo_cliente = self.tela_cliente.cadastrar_cliente()
+        novo_cliente = self.tela_cliente.pegar_dados_cliente()
 
         if not isinstance(novo_cliente, Cliente):
             raise ValueError("Valores inválidos")
@@ -37,53 +37,35 @@ class ControladorCliente:
         
         else:
             raise CadastroInexistenteException()
+    
+    def listar_clientes(self):
+        lista_de_clientes = self.__clientes
+        self.tela_cliente.listar_clientes(lista_de_clientes)
         
     def alterar_cliente(self):
         cpf = self.tela_cliente.selecionar_cliente_cpf()
         cliente = self.buscar_cliente_por_cpf(cpf)
 
         if cliente:
-            opcoes = {
-                "1": ("nome", str),
-                "2": ("email", str),
-                "3": ("senha", str),
-                "4": ("idade", int),
-                "5": ("genero", str),
-                "6": ("peso", float),
-                "7": ("altura", float),
-            }
-        
-            while True:
-                self.tela_cliente.mostrar_dados_do_cliente(cliente)
-                opcao = self.tela_cliente.mostrar_menu_alteracao()
-
-                if opcao == "0":
-                    self.tela_cliente.mostrar_mensagem("Alterações concluídas")
-                    break
-
-                elif opcao == "8":
-                    novos_dados_obj = self.tela_cliente.pegar_dados_novo_objetivo()
-                    cliente.objetivo.meta = novos_dados_obj["meta"]
-                    cliente.objetivo.quantidade = novos_dados_obj["quantidade"]
-                    cliente.objetivo.tempo = novos_dados_obj["tempo"]
-                    self.tela_cliente.mostrar_mensagem("Objetivo alterado com sucesso")
-
-                elif opcao in opcoes:
-                    atributo, tipo = opcoes[opcao]
-                    novo_valor_str = self.tela_cliente.pegar_dados_valor_alteracao(atributo)
-
-                    try:
-                        novo_valor = tipo(novo_valor_str)
-                        setattr(cliente, atributo, novo_valor)
-                    except ValueError:
-                        self.tela_cliente.mostrar_mensagem("Valor inválido para este campo")
-                    
-                else:
-                    self.tela_cliente.mostrar_mensagem("Opcao inválida")
+            self.tela_cliente.mostrar_mensagem("Digite os novos dados para o cliente")
             
+            cliente_com_novos_dados = self.tela_cliente.pegar_dados_cliente()
+
+            cliente.nome = cliente_com_novos_dados.nome
+            cliente.email = cliente_com_novos_dados.email
+            cliente.senha = cliente_com_novos_dados.senha
+            cliente.idade = cliente_com_novos_dados.idade
+            cliente.genero = cliente_com_novos_dados.genero
+            cliente.peso = cliente_com_novos_dados.peso
+            cliente.altura = cliente_com_novos_dados.altura
+            
+            cliente.objetivo = cliente_com_novos_dados.objetivo
+            
+            self.tela_cliente.mostrar_mensagem("Cliente alterado com sucesso!")
+            self.tela_cliente.mostrar_dados_do_cliente(cliente)
+        
         else:
             raise CadastroInexistenteException()
-
 
 #    def calcular_imc(cliente: Cliente):
 #        if isinstance(cliente, Cliente):

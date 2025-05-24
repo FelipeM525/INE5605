@@ -1,5 +1,5 @@
-from model.TipoRefeicao import TipoRefeicao
-from model.alimento import Alimento
+from refeicoes.tipo_refeicao import TipoRefeicao
+from alimentos.alimento import Alimento
 
 class Refeicao:
     def __init__(self, alimentos: list[Alimento], tipo: TipoRefeicao):

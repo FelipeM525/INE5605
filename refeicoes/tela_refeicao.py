@@ -1,4 +1,4 @@
-from model.TipoRefeicao import TipoRefeicao
+from refeicoes.tipo_refeicao import TipoRefeicao
 
 
 class TelaRefeicao:

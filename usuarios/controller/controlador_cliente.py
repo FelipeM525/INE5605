@@ -1,7 +1,7 @@
-from model.cliente import Cliente
+from usuarios.model.cliente import Cliente
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
-from view.tela_cliente import TelaCliente
+from usuarios.view.tela_cliente import TelaCliente
 
 class ControladorCliente:
 

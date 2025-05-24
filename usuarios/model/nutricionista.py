@@ -1,6 +1,5 @@
-from usuario import Usuario
-from model.clinica import Clinica
-from model.avaliacao import Avaliacao
+from usuarios.model.usuario import Usuario
+from avaliacoes.avaliacao import Avaliacao
 
 
 

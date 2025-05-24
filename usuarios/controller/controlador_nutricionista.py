@@ -1,7 +1,7 @@
-from model.nutricionista import Nutricionista
+from usuarios.model.nutricionista import Nutricionista
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
-from view.tela_nutricionista import TelaNutricionista
+from usuarios.view.tela_nutricionista import TelaNutricionista
 
 class ControladorNutricionista:
     def __init__(self):

@@ -1,4 +1,4 @@
-from model.nutricionista import Nutricionista
+from usuarios.model.nutricionista import Nutricionista
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from exception.jahCadastradoException import JahCadastradoException
 

@@ -1,3 +1,5 @@
+from usuarios.model.cliente import Cliente
+
 from model.cliente import Cliente
 from model.objetivo import Objetivo
 

@@ -1,10 +1,10 @@
-from controller.controlador_cliente import ControladorCliente
-from controller.controlador_nutricionista import ControladorNutricionista
+from usuarios.controller.controlador_cliente import ControladorCliente
+from usuarios.controller.controlador_nutricionista import ControladorNutricionista
 from exception.cadastroInexistenteException import CadastroInexistenteException
-from model.avaliacao import Avaliacao
-from model.cliente import Cliente
-from model.nutricionista import Nutricionista
-from view.tela_avaliacao import TelaAvaliacao
+from avaliacoes.avaliacao import Avaliacao
+from usuarios.model.cliente import Cliente
+from usuarios.model.nutricionista import Nutricionista
+from avaliacoes.tela_avaliacao import TelaAvaliacao
 
 
 class ControladorAvaliacao:

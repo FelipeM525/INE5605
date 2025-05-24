@@ -1,5 +1,5 @@
 from exception.jahCadastradoException import JahCadastradoException
-from view.tela_alimento import TelaAlimento
+from alimentos.tela_alimento import TelaAlimento
 
 
 class ControladorAlimento:

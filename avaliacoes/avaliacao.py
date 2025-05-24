@@ -1,10 +1,7 @@
-from model.cliente import Cliente
-from model.nutricionista import Nutricionista
-
 class Avaliacao:
     def __init__(self, cliente, nutricionista, data: str, imc: float, taxa_mb: int):
-        from cliente import Cliente
-        from nutricionista import Nutricionista
+        from usuarios.model.cliente import Cliente
+        from usuarios.model.nutricionista import Nutricionista
 
         if isinstance(cliente, Cliente) and isinstance(nutricionista, Nutricionista):
             self.__cliente = cliente

@@ -1,6 +1,6 @@
-from refeicao import Refeicao
-from nutricionista import Nutricionista
-from model.cliente import Cliente
+from refeicoes.refeicao import Refeicao
+from usuarios.model.nutricionista import Nutricionista
+from usuarios.model.cliente import Cliente
 
 class PlanoAlimentar:
     def __init__(self, refeicoes: list[Refeicao], nutricionista: Nutricionista, cliente: Cliente):

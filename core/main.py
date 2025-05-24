@@ -1,10 +1,10 @@
-from model.alimento import Alimento
-from model.avaliacao import Avaliacao
-from model.cliente import Cliente
-from model.nutricionista import Nutricionista
+from alimentos.alimento import Alimento
+from avaliacoes.avaliacao import Avaliacao
+from usuarios.model.cliente import Cliente
+from usuarios.model.nutricionista import Nutricionista
 from model.objetivo import Objetivo
 from model.plano_alimentar import PlanoAlimentar
-from model.refeicao import Refeicao
+from refeicoes.refeicao import Refeicao
 
 
 arroz = Alimento("Arroz", 130, 28, 0, 2)

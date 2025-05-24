@@ -1,6 +1,3 @@
-from model.cliente import Cliente
-
-
 class TelaAvaliacao:
     def mostrar_menu(self):
         print("---------- AVALIACAO ------------")

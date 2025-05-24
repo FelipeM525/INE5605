@@ -1,5 +1,5 @@
 from objetivo import Objetivo
-from usuario import Usuario
+from usuarios.model.usuario import Usuario
 
 
 class Cliente(Usuario):

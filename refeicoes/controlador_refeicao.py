@@ -1,9 +1,9 @@
-from controller.controlador_alimento import ControladorAlimento
+from alimentos.controlador_alimento import ControladorAlimento
 from exception.alimento_inexistente_exception import AlimentoInexistenteException
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
-from model.refeicao import Refeicao
-from view.tela_refeicao import TelaRefeicao
+from refeicoes.refeicao import Refeicao
+from refeicoes.tela_refeicao import TelaRefeicao
 
 
 class ControladorRefeicao:

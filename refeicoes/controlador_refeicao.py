@@ -95,11 +95,11 @@ class ControladorRefeicao:
 
     def abre_tela(self):
         lista_opcoes = {1: self.incluir_refeicao, 2: self.listar_refeicoes, 3: self.incluir_alimento_na_refeicao,
-                        4: self.excluir_alimento_da_refeicao, 5: self.excluir_refeicao, 6: self.retornar}
+                        4: self.excluir_alimento_da_refeicao, 5: self.excluir_refeicao, 0: self.retornar}
 
         while True:
             opcao = self.__tela_refeicao.mostrar_menu()
-            if opcao == 6:
+            if opcao == 0:
                 self.retornar()
                 break
 

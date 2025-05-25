@@ -9,7 +9,7 @@ class TelaCliente:
         print("3 - Remover cliente")
         print("4 - Mostrar Dados do Cliente")
         print("5 - Alterar Dados do Cliente")
-        print("6 - Voltar")
+        print("0 - Voltar")
 
         while True:
             try:

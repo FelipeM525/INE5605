@@ -11,7 +11,7 @@ class TelaRefeicao:
         print("3 - Adicionar alimento à refeição")
         print("4 - Remover alimento da refeição")
         print("5 - Excluir refeição")
-        print("6 - Sair")
+        print("0 - Sair")
 
         while True:
             try:

@@ -14,7 +14,7 @@ class TelaPlanoAlimentar:
         print("3 - Adicionar Refeicao ao plano")
         print("4 - Remover Refeicao do plano")
         print("5 - Remover Plano Alimentar")
-        print("6 - Sair")
+        print("0 - Sair")
 
         while True:
             try:

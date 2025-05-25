@@ -82,7 +82,7 @@ class ControladorPlanoAlimentar:
 
     def abre_tela(self):
         lista_opcoes = {1: self.incluir_plano_alimentar, 2: self.listar_planos, 3: self.inclui_refeicao_no_plano, 4: self.remover_refeicao,
-                        5: self.remover_plano, 6: self.retornar}
+                        5: self.remover_plano, 0: self.retornar}
 
         continua = True
         while continua:

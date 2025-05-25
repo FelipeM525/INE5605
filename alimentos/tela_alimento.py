@@ -7,7 +7,7 @@ class TelaAlimento:
         print("Opcoes:")
         print("1 - Cadastrar alimento")
         print("2 - Listar alimentos")
-        print("3 - Sair")
+        print("0 - Sair")
 
         while True:
             try:

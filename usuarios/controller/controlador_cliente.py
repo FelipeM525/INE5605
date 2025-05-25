@@ -18,13 +18,13 @@ class ControladorCliente:
             3: self.remover_cliente,
             4: self.mostrar_dados_cliente,
             5: self.alterar_cliente,
-            6: self.retornar
+            0: self.retornar
         }
 
         while True:
             opcao = self.__tela_cliente.mostrar_menu()
 
-            if opcao == 6:
+            if opcao == 0:
                 self.retornar()
                 break
 

@@ -93,7 +93,7 @@ class ControladorAvaliacao:
         return None
 
     def retornar(self):
-        return self.__controlador_sistema.inicializa_sistema()
+        pass
 
     def veriricar_se_avaliacoes_existem(self):
         if len(self.__avaliacoes) == 0:

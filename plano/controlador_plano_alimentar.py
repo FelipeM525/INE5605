@@ -90,7 +90,7 @@ class ControladorPlanoAlimentar:
             lista_opcoes[self.__tela_plano_alimentar.mostra_tela()]()
 
     def retornar(self):
-        self.__controlador_sistema.inicializa_sistema()
+        pass
 
 
 

@@ -13,16 +13,19 @@ class ControladorNutricionista:
 
     def abre_tela(self):
         lista_opcoes = {1: self.incluir_nutricionista, 2: self.mostrar_dados_nutricionista, 3: self.listar_nutricionistas,
-                        4: self.remover_nutricionista,
-                        5: self.retornar}
-
-        opcao = self.__tela_nutricionista.mostrar_menu()
-        if opcao < 1 or opcao > 5:
-            self.__tela_nutricionista.mostrar_mensagem("Opcao invalida!")
-            self.retornar()
+                        4: self.remover_nutricionista, 0: self.retornar}
 
         while True:
-            lista_opcoes[opcao]()
+            opcao = self.__tela_nutricionista.mostrar_menu()
+            if opcao == 0:
+                self.retornar()
+                break
+
+            funcao_escolhida = lista_opcoes.get(opcao)
+            if funcao_escolhida:
+                funcao_escolhida()
+            else:
+                self.__tela_nutricionista.mostrar_mensagem("Opção inválida!")
 
     def buscar_nutricionista_por_cpf(self, cpf: str):
         for nutricionista in self.__nutricionistas:
@@ -81,4 +84,4 @@ class ControladorNutricionista:
             self.__tela_nutricionista.listar_nutricionistas(lista_de_nutricionistas)
 
     def retornar(self):
-        return self.__controlador_sistema.inicializa_sistema()
+        pass

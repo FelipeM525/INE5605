@@ -96,17 +96,20 @@ class ControladorRefeicao:
                 self.__tela_refeicao.mostra_refeicao(refeicao)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_refeicao, 2: self.listar_refeicoes, 3: self.incluir_alimento_na_refeicao, 4: self.excluir_refeicao,
-                        5: self.excluir_refeicao, 6: self.retornar}
-
-        opcao = self.__tela_refeicao.mostrar_menu()
-
-        if opcao < 1 or opcao > 6:
-            self.__tela_refeicao.mostra_mensagem("Opcao invalida!")
-            self.retornar()
+        lista_opcoes = {1: self.incluir_refeicao, 2: self.listar_refeicoes, 3: self.incluir_alimento_na_refeicao,
+                        4: self.excluir_alimento_da_refeicao, 5: self.excluir_refeicao, 6: self.retornar}
 
         while True:
-            lista_opcoes[opcao]()
+            opcao = self.__tela_refeicao.mostrar_menu()
+            if opcao == 6:
+                self.retornar()
+                break
+
+            funcao_escolhida = lista_opcoes.get(opcao)
+            if funcao_escolhida:
+                funcao_escolhida()
+            else:
+                self.__tela_refeicao.mostra_mensagem("Opção inválida!")
 
     def retornar(self):
-        self.__controlador_sistema.inicializa_sistema()
+        pass

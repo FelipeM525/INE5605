@@ -6,7 +6,14 @@ from core.objetivo import Objetivo
 from plano.plano_alimentar import PlanoAlimentar
 from refeicoes.refeicao import Refeicao
 from refeicoes.tipo_refeicao import TipoRefeicao
+from core.controlador_sistema import ControladorSistema
 
+if __name__ == "__main__":
+    """
+    Ponto de entrada principal para iniciar o sistema da clínica de nutrição.
+    """
+    controlador = ControladorSistema()
+    controlador.inicializa_sistema()
 
 arroz = Alimento("Arroz", 130, 28, 0, 2)
 frango = Alimento("Frango", 165, 0, 3, 31)

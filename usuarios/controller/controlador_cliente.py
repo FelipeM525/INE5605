@@ -121,4 +121,4 @@ class ControladorCliente:
             return self.__tela_cliente.mostrar_mensagem("Cliente inexistente!")
 
     def retornar(self):
-        return self.__controlador_sistema.inicializa_sistema()
+        pass

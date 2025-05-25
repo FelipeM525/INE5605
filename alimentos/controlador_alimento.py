@@ -55,4 +55,4 @@ class ControladorAlimento:
                 self.__tela_alimento.mostra_mensagem("Opção inválida, tente novamente.")
 
     def retornar(self):
-        self.__controlador_sistema.inicializa_sistema()
+        pass

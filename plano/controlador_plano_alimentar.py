@@ -10,13 +10,34 @@ from usuarios.controller.controlador_nutricionista import ControladorNutricionis
 
 class ControladorPlanoAlimentar:
 
-    def __init__(self):
+    def __init__(self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista, controlador_refeicao: ControladorRefeicao):
         self.__planos = []
         self.__tela_plano_alimentar = TelaPlanoAlimentar()
         self.__tela_refeicao = TelaRefeicao()
-        self.__controlador_nutricionista = ControladorNutricionista()
-        self.__controlador_cliente = ControladorCliente()
-        self.__controlador_refeicao = ControladorRefeicao()
+        self.__controlador_nutricionista = controlador_nutricionista
+        self.__controlador_cliente = controlador_cliente
+        self.__controlador_refeicao = controlador_refeicao
+
+    def abre_tela(self):
+        while True:
+            try:
+                opcao = self.__tela_plano_alimentar.mostra_tela()
+                if opcao == 1:
+                    self.incluir_plano_alimentar()
+                elif opcao == 2:
+                    self.listar_planos()
+                elif opcao == 3:
+                    self.inclui_refeicao_no_plano()
+                elif opcao == 4:
+                    self.remover_refeicao()
+                elif opcao == 5:
+                    self.remover_plano()
+                elif opcao == 6: #sair
+                    break
+                else:
+                    self.__tela_plano_alimentar.mostra_mensagem("Opção inválida, favor escolher uma das disponíveis.")
+            except Exception as e:
+                self.__tela_plano_alimentar.mostra_mensagem(str(e))
 
     def incluir_plano_alimentar(self):
         dados_plano = self.__tela_plano_alimentar.pegar_dados_plano()

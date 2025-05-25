@@ -19,7 +19,8 @@ class TelaSistema:
         print("  3 - Menu Alimentos")
         print("  4 - Menu Avaliações")
         print("  5 - Menu Refeições")
+        print("  6 - Menu Plano Alimentar")
         print("  0 - Finalizar Sistema")
 
-        opcao = self.le_num_inteiro("Digite a opção: ", [0, 1, 2, 3, 4, 5])
+        opcao = self.le_num_inteiro("Digite a opção: ", [0, 1, 2, 3, 4, 5, 6])
         return opcao

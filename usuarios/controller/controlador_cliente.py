@@ -119,5 +119,15 @@ class ControladorCliente:
         except ClienteInexistenteException:
             return self.__tela_cliente.mostrar_mensagem("Cliente inexistente!")
 
+    def mostrar_dados_cliente(self):
+        cpf = self.__tela_cliente.selecionar_cliente_cpf()
+        cliente = self.buscar_cliente_por_cpf(cpf)
+        try:
+            if cliente:
+                self.__tela_cliente.mostrar_dados_do_cliente(cliente)
+            else:
+                raise CadastroInexistenteException()
+        except CadastroInexistenteException:
+            self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {cpf} nao existe!")
     def retornar(self):
         pass

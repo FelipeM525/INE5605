@@ -1,66 +1,54 @@
-from exception.alimento_inexistente_exception import AlimentoInexistenteException
-from exception.jahCadastradoException import JahCadastradoException
+from alimentos.alimento import Alimento
 from alimentos.tela_alimento import TelaAlimento
-#from alimentos.alimento import Alimento
+from core.controlador_sistema import ControladorSistema
+from exception.alimento_inexistente_exception import AlimentoInexistenteException
 
 
 class ControladorAlimento:
-    def __init__(self):
+    def __init__(self, controlador_sistema: ControladorSistema):
         self.__tela_alimento = TelaAlimento()
         self.__alimentos = []
-    
-    def abre_tela(self):
-        while True:
-            try:
-                opcao = self.__tela_alimento.mostrar_menu()
-                if opcao == 1:
-                    self.incluir_alimento()
-                if opcao == 2:
-                    self.listar_alimento()
-                if opcao == 3:
-                    break
-                else:
-                    self.__tela_alimento.mostra_mensagem("Opção inválida, favor escolher uma das disponíveis.")
-            except (JahCadastradoException) as e:
-                self.__tela_alimento.mostra_mensagem(e)
-            except ValueError:
-                self.__tela_alimento.mostra_mensagem("Entrada inválida. Por favor, insira um número.")        
+        self.__controlador_sistema = controlador_sistema
 
     def incluir_alimento(self):
         dados_alimento = self.__tela_alimento.pega_dados_alimento()
-        if self.busca_alimento_por_nome(dados_alimento.nome):
-            raise JahCadastradoException()
-        else:
-            self.__alimentos.append(dados_alimento)
-            self.__tela_alimento.mostra_mensagem("Alimento incluido com sucesso!")
+        alimento: Alimento = self.busca_alimento_por_nome(dados_alimento["nome"])
 
-
-#    def incluir_alimento(self):
-#        dados_alimento = self.__tela_alimento.pega_dados_alimento()
-#        
-#        # O busca_alimento_por_nome espera objetos, então buscamos pelo nome no dicionário
-#        if self.busca_alimento_por_nome(dados_alimento["nome"]):
-#            raise JahCadastradoException()
-#        else:
-#            # ALTERAÇÃO 3 (BUG FIX): Criar um objeto Alimento em vez de adicionar um dicionário na lista
-#            novo_alimento = Alimento(
-#                nome=dados_alimento["nome"],
-#                calorias=dados_alimento["calorias"],
-#                carboidratos=dados_alimento["carboidratos"],
-#                gorduras=dados_alimento["gorduras"],
-#                proteinas=dados_alimento["proteinas"]
-#            )
-#            self.__alimentos.append(novo_alimento)
-#            self.__tela_alimento.mostra_mensagem("Alimento incluido com sucesso!")
-
+        try:
+            if alimento:
+                self.__alimentos.append(alimento)
+                self.__tela_alimento.mostra_mensagem("Alimento incluido com sucesso!")
+            else:
+                raise AlimentoInexistenteException
+        except AlimentoInexistenteException:
+            self.__tela_alimento.mostra_mensagem("Alimento nao existe!")
 
     def busca_alimento_por_nome(self, nome):
         for alimento in self.__alimentos:
             if alimento.nome == nome:
                 return alimento
 
-        raise AlimentoInexistenteException
+        return None
 
     def listar_alimento(self):
-        for alimento in self.__alimentos:
-            self.__tela_alimento.mostra_alimento(alimento)
+        if len(self.__alimentos) == 0:
+            self.__tela_alimento.mostra_mensagem("Nao ha alimentos cadastrados!")
+        else:
+            for alimento in self.__alimentos:
+                self.__tela_alimento.mostra_alimento(alimento)
+
+    def abre_tela(self):
+        lista_opcoes = {1: self.incluir_alimento, 2: self.listar_alimento, 3: self.retornar}
+
+        continua = True
+        opcao = self.__tela_alimento.mostrar_menu()
+
+        if opcao < 1 or opcao > 3:
+            self.__tela_alimento.mostra_mensagem("Opcao invalida!")
+            self.retornar()
+
+        while continua:
+            lista_opcoes[opcao]()
+
+    def retornar(self):
+        self.__controlador_sistema.inicializa_sistema()

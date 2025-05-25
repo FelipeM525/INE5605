@@ -10,34 +10,14 @@ from usuarios.controller.controlador_nutricionista import ControladorNutricionis
 
 class ControladorPlanoAlimentar:
 
-    def __init__(self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista, controlador_refeicao: ControladorRefeicao):
+    def __init__(self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista, controlador_refeicao: ControladorRefeicao, controladorSistema: ControladorSistema):
         self.__planos = []
         self.__tela_plano_alimentar = TelaPlanoAlimentar()
         self.__tela_refeicao = TelaRefeicao()
         self.__controlador_nutricionista = controlador_nutricionista
-        self.__controlador_cliente = controlador_cliente
+        self.__controlador_cliente = ControladorCliente
         self.__controlador_refeicao = controlador_refeicao
-
-    def abre_tela(self):
-        while True:
-            try:
-                opcao = self.__tela_plano_alimentar.mostra_tela()
-                if opcao == 1:
-                    self.incluir_plano_alimentar()
-                elif opcao == 2:
-                    self.listar_planos()
-                elif opcao == 3:
-                    self.inclui_refeicao_no_plano()
-                elif opcao == 4:
-                    self.remover_refeicao()
-                elif opcao == 5:
-                    self.remover_plano()
-                elif opcao == 6: #sair
-                    break
-                else:
-                    self.__tela_plano_alimentar.mostra_mensagem("Opção inválida, favor escolher uma das disponíveis.")
-            except Exception as e:
-                self.__tela_plano_alimentar.mostra_mensagem(str(e))
+        self.__controlador_sistema = controladorSistema
 
     def incluir_plano_alimentar(self):
         dados_plano = self.__tela_plano_alimentar.pegar_dados_plano()
@@ -99,6 +79,18 @@ class ControladorPlanoAlimentar:
             for plano in self.__planos:
                 self.__tela_plano_alimentar.mostra_plano(plano)
             return None
+
+    def abre_tela(self):
+        lista_opcoes = {1: self.incluir_plano_alimentar(), 2: self.listar_planos(), 3: self.inclui_refeicao_no_plano(), 4: self.remover_refeicao(),
+                        5: self.remover_plano(), 6: self.retornar()}
+
+        continua = True
+        while continua:
+            lista_opcoes[self.__tela_plano_alimentar.mostra_tela()]()
+
+    def retornar(self):
+        self.__controlador_sistema.inicializa_sistema()
+
 
 
 

@@ -7,7 +7,8 @@ class TelaNutricionista:
         print("2 - Mostrar Dados do Nutricionista")
         print("3 - Listar Nutricionistas")
         print("4 - Remover Nutricionista")
-        print("0 - Sair")
+        print("5 - Sair")
+        return int(input("Escolha uma opcao: "))
     
     def cadastrar_nutricionista(self):
         nome = input("Nome: ")

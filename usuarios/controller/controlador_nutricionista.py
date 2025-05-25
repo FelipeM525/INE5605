@@ -1,36 +1,28 @@
+from core.controlador_sistema import ControladorSistema
 from usuarios.model.nutricionista import Nutricionista
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from usuarios.view.tela_nutricionista import TelaNutricionista
 
 class ControladorNutricionista:
-    def __init__(self):
+    def __init__(self, controlador_sistema: ControladorSistema):
         self.__nutricionistas = []
-        self.tela_nutricionista = TelaNutricionista()
+        self.__tela_nutricionista = TelaNutricionista()
+        self.__controlador_sistema = controlador_sistema
+
 
     def abre_tela(self):
+        lista_opcoes = {1: self.incluir_nutricionista(), 2: self.mostrar_dados_nutricionista(), 3: self.listar_nutricionistas(),
+                        4: self.remover_nutricionista(),
+                        5: self.retornar()}
+
+        opcao = self.__tela_nutricionista.mostrar_menu()
+        if opcao < 1 or opcao > 5:
+            self.__tela_nutricionista.mostrar_mensagem("Opcao invalida!")
+            self.retornar()
+
         while True:
-            try:
-                opcao = self.tela_nutricionista.mostrar_menu()
-
-                if opcao == 1:
-                    self.incluir_nutricionista()
-                elif opcao == 2:
-                    self.mostrar_dados_nutricionista()
-                elif opcao == 3:
-                    self.listar_nutricionistas()
-                elif opcao == 4:
-                    self.remover_nutricionista()
-                elif opcao == 0: #menu
-                    break
-                else:
-                    self.tela_nutricionista.mostrar_mensagem("Opção inválida. Insira um número listado.")
-
-            except ValueError:
-                self.tela_nutricionista.mostrar_mensagem("Entrada inválida. Por favor, insira um número dentre os listados.")
-
-            except (JahCadastradoException, CadastroInexistenteException) as e:
-                self.tela_nutricionista.mostrar_mensagem(e)
+            lista_opcoes[opcao]()
 
     def buscar_nutricionista_por_cpf(self, cpf: str):
         for nutricionista in self.__nutricionistas:
@@ -39,37 +31,54 @@ class ControladorNutricionista:
         return None
 
     def incluir_nutricionista(self):
-        novo_nutricionista = self.tela_nutricionista.cadastrar_nutricionista()
+        novo_nutricionista = self.__tela_nutricionista.cadastrar_nutricionista()
 
         if not isinstance(novo_nutricionista, Nutricionista):
             raise ValueError("Valores inválidos")
+
+        try:
         
-        if self.buscar_nutricionista_por_cpf(novo_nutricionista.cpf):
-            raise JahCadastradoException()
+            if self.buscar_nutricionista_por_cpf(novo_nutricionista.cpf):
+                raise JahCadastradoException()
         
-        else:
-            self.__nutricionistas.append(novo_nutricionista)
+            else:
+                self.__nutricionistas.append(novo_nutricionista)
+
+        except JahCadastradoException:
+            return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {novo_nutricionista.cpf} ja existe!")
 
     def remover_nutricionista(self):
-        cpf = self.tela_nutricionista.selecionar_nutricionista_cpf()
+        cpf = self.__tela_nutricionista.selecionar_nutricionista_cpf()
         nutricionista = self.buscar_nutricionista_por_cpf(cpf)
 
-        if nutricionista:
-            self.__nutricionistas.remove(nutricionista)
+        try:
+            if nutricionista:
+                self.__nutricionistas.remove(nutricionista)
+                return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} removido com sucesso!")
 
-        else:
-            raise CadastroInexistenteException()
+            else:
+                raise CadastroInexistenteException()
+        except CadastroInexistenteException:
+            return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} nao existe!")
 
     def mostrar_dados_nutricionista(self):
-        cpf = self.tela_nutricionista.selecionar_nutricionista_cpf()
+        cpf = self.__tela_nutricionista.selecionar_nutricionista_cpf()
         nutricionista = self.buscar_nutricionista_por_cpf(cpf)
+        try:
+            if nutricionista:
+                return self.__tela_nutricionista.pegar_dados_nutricionista(nutricionista)
 
-        if nutricionista:
-            self.tela_nutricionista.pegar_dados_nutricionista(nutricionista)
-
-        else:
-            raise CadastroInexistenteException()
+            else:
+                raise CadastroInexistenteException()
+        except CadastroInexistenteException:
+            return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} nao existe!")
 
     def listar_nutricionistas(self):
         lista_de_nutricionistas = self.__nutricionistas
-        self.tela_nutricionista.listar_nutricionistas(lista_de_nutricionistas)
+        if len(self.__nutricionistas) == 0:
+             self.__tela_nutricionista.mostrar_mensagem("Nao ha nutricionistas cadastrados!")
+        else:
+            self.__tela_nutricionista.listar_nutricionistas(lista_de_nutricionistas)
+
+    def retornar(self):
+        return self.__controlador_sistema.inicializa_sistema()

@@ -28,10 +28,10 @@ class TelaAlimento:
         
         while True:
             try:
-                calorias = float(input("Digite as calorias (kcal): "))
-                carboidratos = float(input("Digite os carboidratos (g): "))
-                gorduras = float(input("Digite as gorduras (g): "))
-                proteinas = float(input("Digite as proteinas (g): "))
+                calorias = float(input("Digite as calorias (kcal) a cada 100 gramas: "))
+                carboidratos = float(input("Digite os carboidratos (g) a cada 100 gramas: "))
+                gorduras = float(input("Digite as gorduras (g) a cada 100 gramas: "))
+                proteinas = float(input("Digite as proteinas (g) a cada 100 gramas: "))
                 
                 if all(valor >= 0 for valor in [calorias, carboidratos, gorduras, proteinas]):
                     break

@@ -5,7 +5,7 @@ class TelaAvaliacao:
         print("1 - Cadastrar avaliacao")
         print("2 - Listar avaliacoes")
         print("3 - Excluir avaliacao")
-        print("3 - Sair")
+        print("0 - Sair")
         return int(input("Escolha uma opcao: "))
 
     def pega_dados_avaliacao(self):
@@ -29,4 +29,3 @@ class TelaAvaliacao:
 
     def mostra_mensagem(self, msg):
         print(msg)
-

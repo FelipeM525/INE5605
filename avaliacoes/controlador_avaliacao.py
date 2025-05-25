@@ -8,11 +8,35 @@ from avaliacoes.tela_avaliacao import TelaAvaliacao
 
 
 class ControladorAvaliacao:
-    def __init__(self):
+    def __init__(self):# (self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista):
         self.__tela_avaliacao = TelaAvaliacao()
-        self.__controlador_cliente = ControladorCliente()
-        self.__controlador_nutricionista = ControladorNutricionista()
+        self.__controlador_cliente = ControladorCliente() #substituindo esse
+        self.__controlador_nutricionista = ControladorNutricionista() #substituindo esse
+        #self.__controlador_cliente = controlador_cliente
+        #elf.__controlador_nutricionista = controlador_nutricionista
+
         self.__avaliacoes = []
+    
+    def abre_tela(self):
+        while True:
+            try:
+                opcao = self.__tela_avaliacao.mostrar_menu()
+                if opcao == 1:
+                    self.incluir_avaliacao()
+                elif opcao == 2:
+                    self.lista_avaliacao()
+                elif opcao == 3:
+                    self.remover_avaliacao()
+                elif opcao == 0:
+                    break
+                else:
+                    self.__tela_avaliacao.mostra_mensagem("Opção inválida. Tente novamente.")
+            except ValueError:
+                self.__tela_avaliacao.mostra_mensagem("Entrada inválida. Por favor, digite um número.")
+            except CadastroInexistenteException as e:
+                self.__tela_avaliacao.mostra_mensagem(e)
+            except Exception as e:
+                self.__tela_avaliacao.mostra_mensagem(f"Ocorreu um erro: {e}")
 
     def incluir_avaliacao(self):
         dados_avaliacao = self.__tela_avaliacao.pega_dados_avaliacao(self)
@@ -24,6 +48,20 @@ class ControladorAvaliacao:
         self.__avaliacoes.append(avaliacao)
 
         self.__tela_avaliacao.mostra_mensagem(f"Avaliacao de {avaliacao.cliente.nome} incluida com sucesso!")
+
+#    # ALTERAÇÃO 3 (BUG FIX): Corrigido o método para funcionar corretamente
+#    def incluir_avaliacao(self):
+#        dados_avaliacao = self.__tela_avaliacao.pega_dados_avaliacao()
+#        
+#        cliente = self.__controlador_cliente.buscar_cliente_por_cpf(dados_avaliacao["cpf_cliente"])
+#        nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(dados_avaliacao["cpf_nutricionista"])
+#
+#        if not cliente or not nutricionista:
+#            raise CadastroInexistenteException("Cliente ou Nutricionista não encontrado.")
+#
+#        avaliacao = Avaliacao(cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"], dados_avaliacao["tmb"])
+#        self.__avaliacoes.append(avaliacao)
+#        self.__tela_avaliacao.mostra_mensagem(f"Avaliação de {cliente.nome} incluída com sucesso!")
 
     def list_avaliacao_cliente(self, cpf_cliente):
         for avaliacao in self.__avaliacoes:
@@ -57,7 +95,3 @@ class ControladorAvaliacao:
                 return avaliacao
 
         return None
-
-
-
-

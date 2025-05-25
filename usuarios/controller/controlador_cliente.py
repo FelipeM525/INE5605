@@ -8,6 +8,31 @@ class ControladorCliente:
     def __init__(self):
         self.__clientes = []
         self.tela_cliente = TelaCliente()
+    
+    def abre_tela(self):
+        while True:
+            try:
+                opcao = self.tela_cliente.mostrar_menu()
+                if opcao == 1:
+                    self.incluir_cliente()
+                elif opcao == 2:
+                    self.listar_clientes()
+                elif opcao == 3:
+                    self.remover_cliente()
+                elif opcao == 4:
+                    cpf = self.tela_cliente.selecionar_cliente_cpf()
+                    cliente = self.buscar_cliente_por_cpf(cpf)
+                    self.tela_cliente.mostrar_dados_do_cliente(cliente)
+                elif opcao == 5:
+                    self.alterar_cliente()
+                elif opcao == 6: # Voltar
+                    break
+                else:
+                    self.tela_cliente.mostrar_mensagem("Opção inválida.")
+            except (JahCadastradoException, CadastroInexistenteException) as e:
+                self.tela_cliente.mostrar_mensagem(e)
+            except ValueError:
+                self.tela_cliente.mostrar_mensagem("Entrada inválida. Digite um número.")
 
     def buscar_cliente_por_cpf(self, cpf: str):
         for cliente in self.__clientes:

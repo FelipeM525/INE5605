@@ -3,6 +3,7 @@ from usuarios.model.cliente import Cliente
 from core.objetivo import Objetivo
 
 class TelaCliente:
+
     def mostrar_menu(self):
         print("1 - Cadastrar cliente")
         print("2 - Listar clientes")
@@ -11,7 +12,7 @@ class TelaCliente:
         print("5 - Alterar Dados do Cliente")
         print("6 - Voltar")
         return int(input("Escolha uma opção"))
-    
+
     def selecionar_meta_objetivo(self) -> str | None:
         print("Escolha a Meta do Objetivo")
         metas = {

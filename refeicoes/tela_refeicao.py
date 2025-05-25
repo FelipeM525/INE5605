@@ -12,7 +12,13 @@ class TelaRefeicao:
         print("4 - Remover alimento da refeição")
         print("5 - Excluir refeição")
         print("6 - Sair")
-        return int(input("Escolha uma opcao: "))
+
+        while True:
+            try:
+                opcao = int(input("Escolha uma opcao: "))
+                return opcao
+            except ValueError:
+                self.mostra_mensagem("Opção inválida. Por favor, digite um número.")
 
     def pega_dados_refeicao(self):
         print("------- DADOS REFEIÇÃO -------")
@@ -20,14 +26,31 @@ class TelaRefeicao:
         tipo_refeicao = self.mostra_menu_tipo_refeicao()
 
         nomes_alimento = []
-        try:
-            quantidade = int(input("Digite uma quantidade de alimentos par adicionar: "))
+        while True:
+            try:
+                quantidade = int(input("Digite a quantidade de alimentos para adicionar: "))
+                if quantidade >= 0:
+                    break
+                else:
+                    self.mostra_mensagem("A quantidade não pode ser um número negativo.")
+            except ValueError:
+                self.mostra_mensagem("Por favor, digite um número válido.")
 
-            for i in range(quantidade):
-                nomes_alimento.append(input("insira o nome do alimento:"))
-        except ValueError:
-            print("Por favor, digite um número válido.")
-        nome = input("digite um nome para  a refeicao: ")
+        for i in range(quantidade):
+            while True:
+                nome_alimento = input(f"Insira o nome do alimento {i + 1}: ").strip()
+                if nome_alimento:
+                    nomes_alimento.append(nome_alimento)
+                    break
+                else:
+                    self.mostra_mensagem("O nome do alimento não pode ser vazio.")
+        
+        while True:
+            nome = input("Digite um nome para a refeição: ").strip()
+            if nome:
+                break
+            else:
+                self.mostra_mensagem("O nome da refeição não pode ser vazio.")
 
         return {
             "nome": nome,
@@ -35,16 +58,17 @@ class TelaRefeicao:
             "nomes_alimento": nomes_alimento
         }
 
-
-
     def mostra_refeicao(self, refeicao: Refeicao):
         print("\n----- INFORMAÇÕES DA REFEIÇÃO -----")
         print(refeicao.__str__())
 
     def seleciona_refeicao(self):
-        return input("Digite o nome da refeicao: ")
-
-
+        while True:
+            nome = input("Digite o nome da refeicao: ").strip()
+            if nome:
+                return nome
+            else:
+                self.mostra_mensagem("O nome da refeição não pode ser vazio.")
 
     def mostra_menu_tipo_refeicao(self):
         for i, tipo in enumerate(TipoRefeicao, 1):
@@ -63,5 +87,3 @@ class TelaRefeicao:
 
     def mostra_mensagem(self, msg):
         print(msg)
-
-

@@ -7,16 +7,51 @@ class TelaNutricionista:
         print("2 - Mostrar Dados do Nutricionista")
         print("3 - Listar Nutricionistas")
         print("4 - Remover Nutricionista")
-        print("5 - Sair")
-        return int(input("Escolha uma opcao: "))
+        print("0 - Sair")
+
+        while True:
+            try:
+                opcao = int(input("Escolha uma opção: "))
+                return opcao
+            except ValueError:
+                self.mostrar_mensagem("Opção inválida. Por favor, digite um número.")        
     
     def cadastrar_nutricionista(self):
-        nome = input("Nome: ")
-        email = input("Email: ")
-        senha = input("Senha: ")
-        cpf = input("CPF: ")
-        crn = input("CRN: ")
-        clinica = input("Clinica: ")
+        while True:
+            nome = input("Nome: ").strip()
+            if nome:
+                break
+            self.mostrar_mensagem("O nome não pode ser vazio.")
+
+        while True:
+            email = input("Email: ").strip()
+            if "@" in email and "." in email:
+                break
+            self.mostrar_mensagem("Formato de e-mail inválido. Tente novamente.")
+
+        while True:
+            senha = input("Senha: ").strip()
+            if senha:
+                break
+            self.mostrar_mensagem("A senha não pode ser vazia.")
+
+        while True:
+            cpf = input("CPF (apenas números): ").strip()
+            if cpf.isdigit() and len(cpf) == 11:
+                break
+            self.mostrar_mensagem("CPF inválido. Deve conter 11 dígitos numéricos.")
+
+        while True:
+            crn = input("CRN: ").strip()
+            if crn:
+                break
+            self.mostrar_mensagem("O CRN não pode ser vazio.")
+
+        while True:
+            clinica = input("Clínica: ").strip()
+            if clinica:
+                break
+            self.mostrar_mensagem("O nome da clínica não pode ser vazio.")
 
         return Nutricionista(nome, email, senha, cpf, crn, clinica)
 
@@ -40,4 +75,9 @@ class TelaNutricionista:
         print(msg)
 
     def selecionar_nutricionista_cpf(self):
-        return input("Digite o CPF do nutricionista: ")
+           while True:
+            cpf = input("Digite o CPF do nutricionista: ").strip()
+            if cpf:
+                return cpf
+            else:
+                self.mostrar_mensagem("O CPF não pode ser vazio.")

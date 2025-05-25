@@ -8,11 +8,23 @@ class TelaAlimento:
         print("1 - Cadastrar alimento")
         print("2 - Listar alimentos")
         print("3 - Sair")
-        return int(input("Escolha uma opcao: "))
+
+        while True:
+            try:
+                opcao = int(input("Escolha uma opcao: "))
+                return opcao
+            except ValueError:
+                self.mostra_mensagem("Opção inválida. Por favor, digite um número.")
 
     def pega_dados_alimento(self):
         print("------- DADOS ALIMENTO -------")
-        nome = input("Digite o nome do alimento: ")
+
+        while True:
+            nome = input("Digite o nome do alimento: ").strip()
+            if nome:
+                break
+            else:
+                self.mostra_mensagem("O nome do alimento não pode ser vazio.")
         
         while True:
             try:
@@ -45,4 +57,9 @@ class TelaAlimento:
         print(msg)
 
     def seleciona_alimento(self):
-        return input("Digite o nome do alimento: ")
+        while True:
+            nome = input("Digite o nome do alimento: ").strip()
+            if nome:
+                return nome
+            else:
+                self.mostra_mensagem("O nome do alimento não pode ser vazio.")

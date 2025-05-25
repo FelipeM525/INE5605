@@ -1,6 +1,8 @@
 from avaliacoes.avaliacao import Avaliacao
 from avaliacoes.tela_avaliacao import TelaAvaliacao
 from exception.avaliacao_inexistente_exception import AvaliacaoInexistenteException
+from exception.cadastroInexistenteException import CadastroInexistenteException
+from exception.cliente_inexistente_exception import ClienteInexistenteException
 from usuarios.controller.controlador_cliente import ControladorCliente
 from usuarios.controller.controlador_nutricionista import ControladorNutricionista
 from usuarios.model.cliente import Cliente
@@ -42,7 +44,21 @@ class ControladorAvaliacao:
         dados_avaliacao = self.__tela_avaliacao.pega_dados_avaliacao()
 
         cliente: Cliente = self.__controlador_cliente.buscar_cliente_por_cpf(dados_avaliacao["cpf_cliente"])
-        nutricionista: Nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(dados_avaliacao["cpf_nutricionista"])
+
+        try:
+            if not cliente:
+                raise ClienteInexistenteException
+        except ClienteInexistenteException:
+             self.__tela_avaliacao.mostra_mensagem(f"Cliente com cpf {dados_avaliacao['cpf_cliente']} nao existe!")
+        nutricionista: Nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(
+            dados_avaliacao["cpf_nutricionista"])
+
+        try:
+            if not nutricionista:
+                raise CadastroInexistenteException
+        except CadastroInexistenteException:
+             self.__tela_avaliacao.mostra_mensagem(f"Nutricionista com cpf {dados_avaliacao['cpf_nutricionista']} nao existe!")
+
 
         avaliacao = Avaliacao(cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"], dados_avaliacao["tmb"])
 

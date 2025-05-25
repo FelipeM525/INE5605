@@ -12,9 +12,9 @@ class ControladorNutricionista:
 
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_nutricionista(), 2: self.mostrar_dados_nutricionista(), 3: self.listar_nutricionistas(),
-                        4: self.remover_nutricionista(),
-                        5: self.retornar()}
+        lista_opcoes = {1: self.incluir_nutricionista, 2: self.mostrar_dados_nutricionista, 3: self.listar_nutricionistas,
+                        4: self.remover_nutricionista,
+                        5: self.retornar}
 
         opcao = self.__tela_nutricionista.mostrar_menu()
         if opcao < 1 or opcao > 5:

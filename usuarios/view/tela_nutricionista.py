@@ -53,7 +53,7 @@ class TelaNutricionista:
                 break
             self.mostrar_mensagem("O nome da clínica não pode ser vazio.")
 
-        return Nutricionista(nome, email, senha, cpf, crn, clinica)
+        return Nutricionista(nome, email, senha, cpf, clinica, crn)
 
     def pegar_dados_nutricionista(self, nutricionista: Nutricionista):
         if nutricionista:

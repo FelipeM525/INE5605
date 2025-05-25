@@ -96,8 +96,8 @@ class ControladorRefeicao:
                 self.__tela_refeicao.mostra_refeicao(refeicao)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_refeicao(), 2: self.listar_refeicoes(), 3: self.incluir_alimento_na_refeicao(), 4: self.excluir_refeicao(),
-                        5: self.excluir_refeicao(), 6: self.retornar()}
+        lista_opcoes = {1: self.incluir_refeicao, 2: self.listar_refeicoes, 3: self.incluir_alimento_na_refeicao, 4: self.excluir_refeicao,
+                        5: self.excluir_refeicao, 6: self.retornar}
 
         opcao = self.__tela_refeicao.mostrar_menu()
 

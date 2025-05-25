@@ -13,18 +13,28 @@ class ControladorCliente:
         self.__controlador_sistema = controlador_sistema
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_cliente, 2: self.listar_clientes, 3: self.remover_cliente,
-                        4: self.__tela_cliente.mostrar_dados_do_cliente(self.buscar_cliente_por_cpf(self.__tela_cliente.selecionar_cliente_cpf())),
-                        5: self.alterar_cliente, 6: self.retornar}
-
-        opcao = self.__tela_cliente.mostrar_menu()
-
-        if opcao < 1 or opcao > 6:
-            self.__tela_cliente.mostrar_mensagem("Opcao invalida!")
-            self.retornar()
+        lista_opcoes = {
+            1: self.incluir_cliente,
+            2: self.listar_clientes,
+            3: self.remover_cliente,
+            4: self.mostrar_dados_cliente,
+            5: self.alterar_cliente,
+            6: self.retornar
+        }
 
         while True:
-            lista_opcoes[opcao]()
+            opcao = self.__tela_cliente.mostrar_menu()
+
+            if opcao == 6:
+                self.retornar()
+                break
+
+            funcao_escolhida = lista_opcoes.get(opcao)
+
+            if funcao_escolhida:
+                funcao_escolhida()
+            else:
+                self.__tela_cliente.mostrar_mensagem("Opcao invalida!")
 
     def buscar_cliente_por_cpf(self, cpf: str):
         for cliente in self.__clientes:

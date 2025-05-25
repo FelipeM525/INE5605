@@ -17,17 +17,26 @@ class ControladorAvaliacao:
         self.__avaliacoes = []
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_avaliacao, 2: self.lista_avaliacao, 3: self.remover_avaliacao,
-                        4: self.retornar}
-
-        opcao = self.__tela_avaliacao.mostrar_menu()
-
-        if opcao < 1 or opcao > 4:
-            self.__tela_avaliacao.mostra_mensagem("Opcao invalida!")
-            self.retornar()
+        lista_opcoes = {
+            1: self.incluir_avaliacao,
+            2: self.lista_avaliacao,
+            3: self.remover_avaliacao,
+            0: self.retornar
+        }
 
         while True:
-            lista_opcoes[opcao]()
+            opcao = self.__tela_avaliacao.mostrar_menu()
+
+            if opcao == 0:
+                self.retornar()
+                break
+
+            funcao_escolhida = lista_opcoes.get(opcao)
+
+            if funcao_escolhida:
+                funcao_escolhida()
+            else:
+                self.__tela_avaliacao.mostra_mensagem("Opção inválida. Tente novamente.")
 
 
     def incluir_avaliacao(self):

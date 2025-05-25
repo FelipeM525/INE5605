@@ -12,16 +12,19 @@ class ControladorAlimento:
 
     def incluir_alimento(self):
         dados_alimento = self.__tela_alimento.pega_dados_alimento()
-        alimento: Alimento = self.busca_alimento_por_nome(dados_alimento["nome"])
-
-        try:
-            if alimento:
-                self.__alimentos.append(alimento)
-                self.__tela_alimento.mostra_mensagem("Alimento incluido com sucesso!")
-            else:
-                raise AlimentoInexistenteException
-        except AlimentoInexistenteException:
-            self.__tela_alimento.mostra_mensagem("Alimento nao existe!")
+        nome_alimento = dados_alimento["nome"]
+        if self.busca_alimento_por_nome(nome_alimento):
+            self.__tela_alimento.mostra_mensagem(f"Alimento com o nome '{nome_alimento}' já existe!")
+        else:
+            novo_alimento = Alimento(
+                nome=dados_alimento["nome"],
+                calorias=dados_alimento["calorias"],
+                carboidratos=dados_alimento["carboidratos"],
+                gorduras=dados_alimento["gorduras"],
+                proteinas=dados_alimento["proteinas"]
+            )
+            self.__alimentos.append(novo_alimento)
+            self.__tela_alimento.mostra_mensagem("Alimento incluido com sucesso!")
 
     def busca_alimento_por_nome(self, nome):
         for alimento in self.__alimentos:
@@ -38,17 +41,18 @@ class ControladorAlimento:
                 self.__tela_alimento.mostra_alimento(alimento)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_alimento, 2: self.listar_alimento, 3: self.retornar}
+        lista_opcoes = {1: self.incluir_alimento, 2: self.listar_alimento, 0: self.retornar}
+        while True:
+            opcao = self.__tela_alimento.mostrar_menu()
+            if opcao == 0:
+                self.retornar()
+                break
 
-        continua = True
-        opcao = self.__tela_alimento.mostrar_menu()
-
-        if opcao < 1 or opcao > 3:
-            self.__tela_alimento.mostra_mensagem("Opcao invalida!")
-            self.retornar()
-
-        while continua:
-            lista_opcoes[opcao]()
+            funcao_escolhida = lista_opcoes.get(opcao)
+            if funcao_escolhida:
+                funcao_escolhida()
+            else:
+                self.__tela_alimento.mostra_mensagem("Opção inválida, tente novamente.")
 
     def retornar(self):
         self.__controlador_sistema.inicializa_sistema()

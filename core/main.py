@@ -5,13 +5,14 @@ from usuarios.model.nutricionista import Nutricionista
 from core.objetivo import Objetivo
 from plano.plano_alimentar import PlanoAlimentar
 from refeicoes.refeicao import Refeicao
+from refeicoes.tipo_refeicao import TipoRefeicao
 
 
 arroz = Alimento("Arroz", 130, 28, 0, 2)
 frango = Alimento("Frango", 165, 0, 3, 31)
 salada = Alimento("Salada", 20, 4, 0, 1)
 
-almoco = Refeicao([arroz, frango], "Almoço")
+almoco = Refeicao("Almoço", [arroz, frango], TipoRefeicao.ALMOCO)
 almoco.adicionar_alimento(salada)
 
 print(f" Calorias totais: {almoco.calorias_totais()} kcal")

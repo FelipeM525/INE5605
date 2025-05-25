@@ -14,7 +14,7 @@ class ControladorSistema:
         self.__controlador_avaliacao = ControladorAvaliacao(self, self.__controlador_cliente, self.__controlador_nutricionista)
         self.__controlador_alimento = ControladorAlimento(self)
         self.__controlador_refeicao = ControladorRefeicao(self.__controlador_alimento, self)
-        self.__controlador_plano_alimentar = ControladorPlanoAlimentar(self.__controlador_cliente, self.__controlador_nutricionista, self.__controlador_refeicao)
+        self.__controlador_plano_alimentar = ControladorPlanoAlimentar(self.__controlador_cliente, self.__controlador_nutricionista, self.__controlador_refeicao, self)
 
     def inicializa_sistema(self):
         while True:

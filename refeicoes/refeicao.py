@@ -18,6 +18,10 @@ class Refeicao:
     def alimentos(self):
         return self.__alimentos
 
+    @alimentos.setter
+    def alimentos(self, alimentos: list[Alimento]):
+        self.__alimentos = alimentos
+
     @property
     def tipo(self):
         return self.__tipo

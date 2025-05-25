@@ -16,7 +16,7 @@ class ControladorPlanoAlimentar:
         self.__tela_plano_alimentar = TelaPlanoAlimentar()
         self.__tela_refeicao = TelaRefeicao()
         self.__controlador_nutricionista = controlador_nutricionista
-        self.__controlador_cliente = ControladorCliente
+        self.__controlador_cliente = controlador_cliente
         self.__controlador_refeicao = controlador_refeicao
         self.__controlador_sistema = controlador_sistema
 

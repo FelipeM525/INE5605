@@ -81,12 +81,26 @@ class ControladorPlanoAlimentar:
             return None
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_plano_alimentar, 2: self.listar_planos, 3: self.inclui_refeicao_no_plano, 4: self.remover_refeicao,
-                        5: self.remover_plano, 0: self.retornar}
+        lista_opcoes = {
+            1: self.incluir_plano_alimentar,
+            2: self.listar_planos,
+            3: self.inclui_refeicao_no_plano,
+            4: self.remover_refeicao,
+            5: self.remover_plano,
+            0: self.retornar
+        }
 
-        continua = True
-        while continua:
-            lista_opcoes[self.__tela_plano_alimentar.mostra_tela()]()
+        while True:
+            opcao = self.__tela_plano_alimentar.mostra_tela()
+            if opcao == 0:
+                self.retornar()
+                break
+
+            funcao_escolhida = lista_opcoes.get(opcao)
+            if funcao_escolhida:
+                funcao_escolhida()
+            else:
+                self.__tela_plano_alimentar.mostra_mensagem("Opção inválida!")
 
     def retornar(self):
         pass

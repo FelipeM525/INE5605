@@ -36,6 +36,13 @@ class Cliente(Usuario):
     def altura(self, altura):
         self.__altura = altura
 
+    @property
+    def genero(self):
+        return self.__genero
+
+    @genero.setter
+    def genero(self, genero):
+        self.__genero = genero
 
     @property
     def objetivo(self):

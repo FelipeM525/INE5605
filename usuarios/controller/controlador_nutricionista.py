@@ -1,11 +1,10 @@
-from core.controlador_sistema import ControladorSistema
 from usuarios.model.nutricionista import Nutricionista
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from usuarios.view.tela_nutricionista import TelaNutricionista
 
 class ControladorNutricionista:
-    def __init__(self, controlador_sistema: ControladorSistema):
+    def __init__(self, controlador_sistema):
         self.__nutricionistas = []
         self.__tela_nutricionista = TelaNutricionista()
         self.__controlador_sistema = controlador_sistema

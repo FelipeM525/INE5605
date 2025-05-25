@@ -1,6 +1,6 @@
-from enum import StrEnum
+from enum import Enum
 
-class TipoRefeicao(StrEnum):
+class TipoRefeicao(str, Enum):
     CAFE_MANHA = "café da manhã"
     ALMOCO = "almoço"
     LANCHE = "lanche"

@@ -1,4 +1,3 @@
-from core.controlador_sistema import ControladorSistema
 from exception.plano_inexistente_exception import PlanoInexistenteException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
 from plano.plano_alimentar import PlanoAlimentar
@@ -11,7 +10,7 @@ from usuarios.controller.controlador_nutricionista import ControladorNutricionis
 
 class ControladorPlanoAlimentar:
 
-    def __init__(self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista, controlador_refeicao: ControladorRefeicao, controlador_sistema: ControladorSistema):
+    def __init__(self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista, controlador_refeicao: ControladorRefeicao, controlador_sistema):
         self.__planos = []
         self.__tela_plano_alimentar = TelaPlanoAlimentar()
         self.__tela_refeicao = TelaRefeicao()

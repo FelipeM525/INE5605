@@ -1,11 +1,9 @@
 from alimentos.alimento import Alimento
 from alimentos.tela_alimento import TelaAlimento
-from core.controlador_sistema import ControladorSistema
-from exception.alimento_inexistente_exception import AlimentoInexistenteException
 
 
 class ControladorAlimento:
-    def __init__(self, controlador_sistema: ControladorSistema):
+    def __init__(self, controlador_sistema):
         self.__tela_alimento = TelaAlimento()
         self.__alimentos = []
         self.__controlador_sistema = controlador_sistema

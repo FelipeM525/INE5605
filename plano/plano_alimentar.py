@@ -1,9 +1,7 @@
 from refeicoes.refeicao import Refeicao
-from usuarios.model.nutricionista import Nutricionista
-from usuarios.model.cliente import Cliente
 
 class PlanoAlimentar:
-    def __init__(self, refeicoes: list[Refeicao], nutricionista: Nutricionista, cliente: Cliente):
+    def __init__(self, refeicoes: list[Refeicao], nutricionista, cliente):
         self.__refeicoes = refeicoes
         self.__nutricionista = nutricionista
         self.__cliente = cliente
@@ -17,7 +15,9 @@ class PlanoAlimentar:
         return self.__nutricionista
 
     @nutricionista.setter
-    def nutricionista(self, nutricionista: Nutricionista):
+    def nutricionista(self, nutricionista):
+        from usuarios.model.nutricionista import Nutricionista
+
         if isinstance(nutricionista, Nutricionista):
             self.__nutricionista = nutricionista
         
@@ -26,7 +26,8 @@ class PlanoAlimentar:
         return self.__cliente
     
     @cliente.setter
-    def cliente(self, cliente: Cliente):
+    def cliente(self, cliente):
+        from usuarios.model.cliente import Cliente
         if isinstance(cliente, Cliente):
             self.__cliente = cliente
 

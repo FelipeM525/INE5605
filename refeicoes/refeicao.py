@@ -1,8 +1,7 @@
-from refeicoes.tipo_refeicao import TipoRefeicao
 from alimentos.alimento import Alimento
 
 class Refeicao:
-    def __init__(self, nome: str, alimentos: list[Alimento], tipo: TipoRefeicao):
+    def __init__(self, nome: str, alimentos: list[Alimento], tipo):
         self.__nome = nome
         self.__alimentos = alimentos
         self.__tipo = tipo

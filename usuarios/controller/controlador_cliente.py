@@ -1,4 +1,3 @@
-from core.controlador_sistema import ControladorSistema
 from exception.cliente_inexistente_exception import ClienteInexistenteException
 from usuarios.model.cliente import Cliente
 from exception.jahCadastradoException import JahCadastradoException
@@ -7,7 +6,7 @@ from usuarios.view.tela_cliente import TelaCliente
 
 class ControladorCliente:
 
-    def __init__(self, controlador_sistema: ControladorSistema):
+    def __init__(self, controlador_sistema):
         self.__clientes = []
         self.__tela_cliente = TelaCliente()
         self.__controlador_sistema = controlador_sistema

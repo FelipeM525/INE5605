@@ -1,6 +1,5 @@
 from avaliacoes.avaliacao import Avaliacao
 from avaliacoes.tela_avaliacao import TelaAvaliacao
-from core.controlador_sistema import ControladorSistema
 from exception.avaliacao_inexistente_exception import AvaliacaoInexistenteException
 from usuarios.controller.controlador_cliente import ControladorCliente
 from usuarios.controller.controlador_nutricionista import ControladorNutricionista
@@ -9,7 +8,7 @@ from usuarios.model.nutricionista import Nutricionista
 
 
 class ControladorAvaliacao:
-    def __init__(self, controlador_sistema: ControladorSistema, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista):
+    def __init__(self, controlador_sistema, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista):
         self.__tela_avaliacao = TelaAvaliacao()
         self.__controlador_cliente = controlador_cliente
         self.__controlador_nutricionista = controlador_nutricionista

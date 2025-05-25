@@ -1,6 +1,4 @@
-from alimentos.controlador_alimento import ControladorAlimento
 from alimentos.tela_alimento import TelaAlimento
-from core.controlador_sistema import ControladorSistema
 from exception.alimento_inexistente_exception import AlimentoInexistenteException
 from exception.refeicao_existente_exception import RefeicaoExistenteException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
@@ -9,7 +7,7 @@ from refeicoes.tela_refeicao import TelaRefeicao
 
 
 class ControladorRefeicao:
-    def __init__(self, controlador_alimento: ControladorAlimento, controlador_sistema: ControladorSistema):
+    def __init__(self, controlador_alimento, controlador_sistema):
         self.__controlador_alimento = controlador_alimento
         self.__controlador_sistema = controlador_sistema
         self.__tela_refeicao = TelaRefeicao()

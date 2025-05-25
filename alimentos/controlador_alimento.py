@@ -1,3 +1,4 @@
+from exception.alimento_inexistente_exception import AlimentoInexistenteException
 from exception.jahCadastradoException import JahCadastradoException
 from alimentos.tela_alimento import TelaAlimento
 #from alimentos.alimento import Alimento
@@ -58,8 +59,8 @@ class ControladorAlimento:
             if alimento.nome == nome:
                 return alimento
 
-        return None
+        raise AlimentoInexistenteException
 
     def listar_alimento(self):
         for alimento in self.__alimentos:
-            self.__tela_alimento.mostra_alimento(alimento.__dict__)
+            self.__tela_alimento.mostra_alimento(alimento)

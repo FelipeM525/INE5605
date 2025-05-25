@@ -1,3 +1,6 @@
+from alimentos.alimento import Alimento
+
+
 class TelaAlimento:
     def mostrar_menu(self):
         print("---------- ALIMENTOS ------------")
@@ -33,11 +36,13 @@ class TelaAlimento:
             "proteinas": proteinas
         }
 
-    def mostra_alimento(self, dados_alimento):
+    def mostra_alimento(self, alimento: Alimento):
         print("\n----- INFORMAÇÕES DO ALIMENTO -----")
-        for key, value in dados_alimento.items():
-            print(f"{key}: {value}")
+        print(alimento.__str__())
 
 
     def mostra_mensagem(self, msg):
         print(msg)
+
+    def seleciona_alimento(self):
+        return input("Digite o nome do alimento: ")

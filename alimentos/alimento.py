@@ -45,3 +45,12 @@ class Alimento:
     @proteinas.setter
     def proteinas(self, proteinas: int):
         self.__proteinas = proteinas
+
+    def __str__(self):
+        return (
+            f"Alimento: {self.__nome}, "
+            f"Calorias: {self.__calorias} kcal, "
+            f"Carboidratos: {self.__carboidratos}g, "
+            f"Gorduras: {self.__gorduras}g, "
+            f"Proteínas: {self.__proteinas}g"
+        )

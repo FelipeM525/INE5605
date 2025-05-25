@@ -1,3 +1,6 @@
+from avaliacoes.avaliacao import Avaliacao
+
+
 class TelaAvaliacao:
     def mostrar_menu(self):
         print("---------- AVALIACAO ------------")
@@ -19,13 +22,12 @@ class TelaAvaliacao:
         return {"cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista, "data": data, "imc": imc, "tmb": tmb}
 
 
-    def mostra_avaliacao(self, dados_avaliacao):
+    def mostra_avaliacao(self, avaliacao: Avaliacao):
         print("Informacaoes da avaliacao:")
-        for key, value in dados_avaliacao.items():
-            print(f"{key}: {value}")
+        print(avaliacao.__str__())
 
-    def excluir_avaliacao(self):
-        return input("Digite o cpf do cliente a ser excluido: ")
+    def seleciona_avaliacao(self):
+        return input("Digite o cpf do cliente cuja avaliacao sera excluida: ")
 
     def mostra_mensagem(self, msg):
         print(msg)

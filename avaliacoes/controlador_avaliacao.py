@@ -1,3 +1,4 @@
+from exception.avaliacao_inexistente_exception import AvaliacaoInexistenteException
 from usuarios.controller.controlador_cliente import ControladorCliente
 from usuarios.controller.controlador_nutricionista import ControladorNutricionista
 from exception.cadastroInexistenteException import CadastroInexistenteException
@@ -66,27 +67,27 @@ class ControladorAvaliacao:
     def list_avaliacao_cliente(self, cpf_cliente):
         for avaliacao in self.__avaliacoes:
             if avaliacao.cliente.cpf == cpf_cliente:
-                self.__tela_avaliacao.mostra_avaliacao(avaliacao.__dict__)
+                self.__tela_avaliacao.mostra_avaliacao(avaliacao)
 
     def lista_avaliacao_nutricionista(self, cpf_nutricionista):
         for avaliacao in self.__avaliacoes:
             if avaliacao.nutricionista.cpf == cpf_nutricionista:
-                self.__tela_avaliacao.mostra_avaliacao(avaliacao.__dict__)
+                self.__tela_avaliacao.mostra_avaliacao(avaliacao)
 
 
     def lista_avaliacao(self):
         for avaliacao in self.__avaliacoes:
-            self.__tela_avaliacao.mostra_avaliacao(avaliacao.__dict__)
+            self.__tela_avaliacao.mostra_avaliacao(avaliacao)
 
     def remover_avaliacao(self):
-        cpf_cliente = self.__tela_avaliacao.excluir_avaliacao()
+        cpf_cliente = self.__tela_avaliacao.seleciona_avaliacao()
         avaliacao = self.busca_avaliacao_por_cpf_cliente(cpf_cliente)
 
         if avaliacao:
             self.__avaliacoes.remove(avaliacao)
             return self.__tela_avaliacao.mostra_mensagem(f"Avaliacao de {avaliacao.cliente.nome} removida com sucesso!")
         else:
-            raise CadastroInexistenteException()
+            raise AvaliacaoInexistenteException
 
 
     def busca_avaliacao_por_cpf_cliente(self, cpf_cliente):

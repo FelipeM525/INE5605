@@ -1,3 +1,4 @@
+from exception.cliente_inexistente_exception import ClienteInexistenteException
 from usuarios.model.cliente import Cliente
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
@@ -39,7 +40,7 @@ class ControladorCliente:
             if cliente.cpf == cpf:
                 return cliente
             
-        return None
+        raise ClienteInexistenteException
 
     def incluir_cliente(self):
         novo_cliente = self.tela_cliente.pegar_dados_cliente()
@@ -66,7 +67,7 @@ class ControladorCliente:
     def listar_clientes(self):
         lista_de_clientes = self.__clientes
         self.tela_cliente.listar_clientes(lista_de_clientes)
-        
+
     def alterar_cliente(self):
         cpf = self.tela_cliente.selecionar_cliente_cpf()
         cliente = self.buscar_cliente_por_cpf(cpf)
@@ -91,3 +92,11 @@ class ControladorCliente:
         
         else:
             raise CadastroInexistenteException()
+
+    def atualizar_cliente(self, cliente_att: Cliente):
+        for cliente in self.__clientes:
+            if cliente_att.cpf == cliente.cpf:
+                self.__clientes.remove(cliente)
+                self.__clientes.append(cliente_att)
+                return self.tela_cliente.mostrar_mensagem("Cliente atualizado com sucesso!")
+        raise ClienteInexistenteException

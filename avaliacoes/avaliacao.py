@@ -29,3 +29,13 @@ class Avaliacao:
     @property
     def taxa_mb(self):
         return self.__taxa_mb
+
+    def __str__(self):
+        return (
+            f"Avaliação:\n"
+            f"Cliente: {self.__cliente}\n"
+            f"Nutricionista: {self.__nutricionista}\n"
+            f"Data: {self.__data}\n"
+            f"IMC: {self.__imc}\n"
+            f"Taxa Metabólica Basal: {self.__taxa_mb} kcal"
+        )

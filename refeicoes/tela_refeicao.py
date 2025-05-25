@@ -1,3 +1,4 @@
+from refeicoes.refeicao import Refeicao
 from refeicoes.tipo_refeicao import TipoRefeicao
 
 
@@ -26,32 +27,24 @@ class TelaRefeicao:
                 nomes_alimento.append(input("insira o nome do alimento:"))
         except ValueError:
             print("Por favor, digite um número válido.")
-
+        nome = input("digite um nome para  a refeicao: ")
 
         return {
+            "nome": nome,
             "tipo": tipo_refeicao,
             "nomes_alimento": nomes_alimento
         }
 
 
-    def mostra_refeicao(self, dados_refeicao):
+
+    def mostra_refeicao(self, refeicao: Refeicao):
         print("\n----- INFORMAÇÕES DA REFEIÇÃO -----")
-        for  key, value in dados_refeicao.items():
-            print(f"{key}: {value}")
+        print(refeicao.__str__())
+
+    def seleciona_refeicao(self):
+        return input("Digite o nome da refeicao: ")
 
 
-    def excluir_refeicao(self):
-        print("Escolha uma refeicao para excluir: ")
-
-        return self.mostra_menu_tipo_refeicao()
-
-    def excluir_alimento_refeicao(self):
-        print("Escolha uma refeicao para excluir: ")
-        tipo_refeicao = self.mostra_menu_tipo_refeicao()
-
-        nome_alimento = input("digite o nome do alimento a ser excluido:")
-
-        return {"tipo_refeicao": tipo_refeicao, "nome_alimento": nome_alimento}
 
     def mostra_menu_tipo_refeicao(self):
         for i, tipo in enumerate(TipoRefeicao, 1):

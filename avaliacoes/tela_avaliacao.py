@@ -7,7 +7,8 @@ class TelaAvaliacao:
         print("Opcoes:")
         print("1 - Cadastrar avaliacao")
         print("2 - Listar avaliacoes")
-        print("3 - Excluir avaliacao")
+        print("3 - Alterar avaliacao")
+        print("4 - Excluir avaliacao")
         print("0 - Sair")
 
         while True:
@@ -19,6 +20,13 @@ class TelaAvaliacao:
 
     def pega_dados_avaliacao(self):
         print("------- DADOS AVALIACAO -------")
+
+        while True:
+            nome = input("Digite um nome para a avaliação (ex: Avaliação Inicial): ").strip()
+            if nome:
+                break
+            self.mostra_mensagem("O nome não pode ser vazio.")
+
         while True:
             cpf_cliente = input("Digite o CPF do cliente (apenas números): ").strip()
             if cpf_cliente.isdigit() and len(cpf_cliente) == 11:
@@ -55,20 +63,20 @@ class TelaAvaliacao:
             except ValueError:
                 self.mostra_mensagem("Entrada inválida. Por favor, digite um número inteiro para a TMB.")
 
-        return {"cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista, "data": data, "imc": imc, "tmb": tmb}
+        return {"nome": nome, "cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista, "data": data, "imc": imc, "tmb": tmb}
 
 
     def mostra_avaliacao(self, avaliacao: Avaliacao):
-        print("Informacaoes da avaliação:")
-        print(avaliacao.__str__())
+        print("----Informacoes da avaliação:----")
+        print(avaliacao)
 
     def seleciona_avaliacao(self):
         while True:
-            cpf = input("Digite o CPF do cliente cuja avaliacao será excluída: ").strip()
-            if cpf:
-                return cpf
+            nome = input("Digite o NOME da avaliação: ").strip()
+            if nome:
+                return nome
             else:
-                self.mostra_mensagem("O CPF não pode ser vazio.")
+                self.mostra_mensagem("O nome não pode ser vazio.")
 
     def mostra_mensagem(self, msg):
         print(msg)

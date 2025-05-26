@@ -21,7 +21,8 @@ class ControladorAvaliacao:
         lista_opcoes = {
             1: self.incluir_avaliacao,
             2: self.lista_avaliacao,
-            3: self.remover_avaliacao,
+            3: self.alterar_avaliacao,
+            4: self.remover_avaliacao,
             0: self.retornar
         }
 
@@ -39,33 +40,78 @@ class ControladorAvaliacao:
             else:
                 self.__tela_avaliacao.mostra_mensagem("Opção inválida. Tente novamente.")
 
-
     def incluir_avaliacao(self):
         dados_avaliacao = self.__tela_avaliacao.pega_dados_avaliacao()
+        nome_avaliacao = dados_avaliacao["nome"]
+
+        if self.busca_avaliacao_por_nome(nome_avaliacao):
+            self.__tela_avaliacao.mostra_mensagem(f"Já existe uma avaliação com o nome '{nome_avaliacao}'.")
+            return
 
         cliente: Cliente = self.__controlador_cliente.buscar_cliente_por_cpf(dados_avaliacao["cpf_cliente"])
-
         try:
             if not cliente:
                 raise ClienteInexistenteException
         except ClienteInexistenteException:
-             self.__tela_avaliacao.mostra_mensagem(f"Cliente com cpf {dados_avaliacao['cpf_cliente']} nao existe!")
+            self.__tela_avaliacao.mostra_mensagem(f"Cliente com cpf {dados_avaliacao['cpf_cliente']} não existe!")
+            return
+
         nutricionista: Nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(
             dados_avaliacao["cpf_nutricionista"])
-
         try:
             if not nutricionista:
                 raise CadastroInexistenteException
         except CadastroInexistenteException:
-             self.__tela_avaliacao.mostra_mensagem(f"Nutricionista com cpf {dados_avaliacao['cpf_nutricionista']} nao existe!")
+            self.__tela_avaliacao.mostra_mensagem(f"Nutricionista com cpf {dados_avaliacao['cpf_nutricionista']} não existe!")
+            return
 
-
-        avaliacao = Avaliacao(cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"], dados_avaliacao["tmb"])
+        avaliacao = Avaliacao(nome_avaliacao, cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"], dados_avaliacao["tmb"])
 
         self.__avaliacoes.append(avaliacao)
+        self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{avaliacao.nome}' incluida com sucesso!")
 
-        self.__tela_avaliacao.mostra_mensagem(f"Avaliacao de {avaliacao.cliente.nome} incluida com sucesso!")
+    def alterar_avaliacao(self):
+            if not self.veriricar_se_avaliacoes_existem():
+                return
+            nome_alvo = self.__tela_avaliacao.seleciona_avaliacao()
+            avaliacao = self.busca_avaliacao_por_nome(nome_alvo)
 
+            try:
+                if not avaliacao:
+                    raise AvaliacaoInexistenteException
+
+                self.__tela_avaliacao.mostra_mensagem("\nDigite os novos dados para a avaliação:")
+                novos_dados = self.__tela_avaliacao.pega_dados_avaliacao()
+                novo_nome = novos_dados["nome"]
+
+                if novo_nome != nome_alvo and self.busca_avaliacao_por_nome(novo_nome):
+                    self.__tela_avaliacao.mostra_mensagem(f"O nome '{novo_nome}' já está em uso por outra avaliação.")
+                    return
+
+                cliente = self.__controlador_cliente.buscar_cliente_por_cpf(novos_dados["cpf_cliente"])
+                if not cliente:
+                    raise ClienteInexistenteException
+
+                nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(
+                    novos_dados["cpf_nutricionista"])
+                if not nutricionista:
+                    raise CadastroInexistenteException
+
+                avaliacao.nome = novo_nome
+                avaliacao.cliente = cliente
+                avaliacao.nutricionista = nutricionista
+                avaliacao.data = novos_dados["data"]
+                avaliacao.imc = novos_dados["imc"]
+                avaliacao.taxa_mb = novos_dados["tmb"]
+
+                self.__tela_avaliacao.mostra_mensagem("Avaliação alterada com sucesso!")
+
+            except AvaliacaoInexistenteException as e:
+                print(e)
+            except ClienteInexistenteException as e:
+               print(e)
+            except CadastroInexistenteException as e:
+               print(e)
 
     def list_avaliacao_cliente(self, cpf_cliente):
 
@@ -87,24 +133,24 @@ class ControladorAvaliacao:
                 self.__tela_avaliacao.mostra_avaliacao(avaliacao)
 
     def remover_avaliacao(self):
-        cpf_cliente = self.__tela_avaliacao.seleciona_avaliacao()
-        avaliacao = self.busca_avaliacao_por_cpf_cliente(cpf_cliente)
+        if not self.veriricar_se_avaliacoes_existem():
+            return
+        nome_avaliacao = self.__tela_avaliacao.seleciona_avaliacao()
+        avaliacao = self.busca_avaliacao_por_nome(nome_avaliacao)
 
         try:
             if avaliacao:
                 self.__avaliacoes.remove(avaliacao)
-                return self.__tela_avaliacao.mostra_mensagem(f"Avaliacao de {avaliacao.cliente.nome} removida com sucesso!")
+                self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{avaliacao.nome}' removida com sucesso!")
             else:
                 raise AvaliacaoInexistenteException()
-        except AvaliacaoInexistenteException:
-            return self.__tela_avaliacao.mostra_mensagem(f"Avaliacao de {cpf_cliente} nao existe!")
+        except AvaliacaoInexistenteException as e:
+            print(e)
 
-
-    def busca_avaliacao_por_cpf_cliente(self, cpf_cliente):
+    def busca_avaliacao_por_nome(self, nome: str):
         for avaliacao in self.__avaliacoes:
-            if avaliacao.cliente.cpf == cpf_cliente:
+            if avaliacao.nome == nome:
                 return avaliacao
-
         return None
 
     def retornar(self):
@@ -112,7 +158,7 @@ class ControladorAvaliacao:
 
     def veriricar_se_avaliacoes_existem(self):
         if len(self.__avaliacoes) == 0:
-            self.__tela_avaliacao.mostra_mensagem("Nao ha avaliacoes cadastradas!")
+            self.__tela_avaliacao.mostra_mensagem("Não há avaliacoes cadastradas!")
             return False
         else:
             return True

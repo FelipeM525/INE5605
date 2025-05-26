@@ -55,6 +55,12 @@ class Cliente(Usuario):
     @property
     def plano_alimentar(self):
         return self.__plano_alimentar
+    
+    @plano_alimentar.setter
+    def plano_alimentar(self, plano_alimentar):
+        from plano.plano_alimentar import PlanoAlimentar
+        if isinstance(plano_alimentar, PlanoAlimentar) or plano_alimentar is None:
+            self.__plano_alimentar = plano_alimentar
 
     def add_plano_alimentar(self,  plano_alimentar):
         from plano.plano_alimentar import PlanoAlimentar

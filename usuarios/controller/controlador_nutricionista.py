@@ -45,6 +45,7 @@ class ControladorNutricionista:
         
             else:
                 self.__nutricionistas.append(novo_nutricionista)
+                print ("Nutricionista cadastrado com sucesso!")
 
         except JahCadastradoException:
             return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {novo_nutricionista.cpf} ja existe!")

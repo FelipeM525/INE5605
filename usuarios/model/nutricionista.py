@@ -36,3 +36,6 @@ class Nutricionista(Usuario):
 
     def cadastrar(self):
         print(f"Nutricionista {self.nome} cadastrado com sucesso.")
+
+    def __str__(self):
+        return f"{self.nome} (CRN: {self.crn})"

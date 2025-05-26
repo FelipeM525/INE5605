@@ -28,3 +28,6 @@ class Objetivo:
     @tempo.setter
     def tempo(self, tempo: int):
         self.__tempo = tempo
+
+    def __str__(self):
+        return f"{self.meta} ({self.quantidade} kg em {self.tempo} meses)"

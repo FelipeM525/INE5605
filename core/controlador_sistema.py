@@ -69,7 +69,7 @@ class ControladorSistema:
 
         imc_cliente1 = cliente1.calcular_imc()
         tmb_cliente1 = cliente1.calcular_tmb()
-        avaliacao1 = Avaliacao(cliente=cliente1, nutricionista=nutri1, data="20/05/2024", imc=imc_cliente1,
+        avaliacao1 = Avaliacao(nome= "avaliacao1", cliente=cliente1, nutricionista=nutri1, data="20/05/2024", imc=imc_cliente1,
                                taxa_mb=int(tmb_cliente1))
 
         self.__controlador_avaliacao._ControladorAvaliacao__avaliacoes.append(avaliacao1)

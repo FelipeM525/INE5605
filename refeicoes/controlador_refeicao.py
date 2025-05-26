@@ -4,6 +4,7 @@ from exception.refeicao_existente_exception import RefeicaoExistenteException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
 from refeicoes.refeicao import Refeicao
 from refeicoes.tela_refeicao import TelaRefeicao
+from exception.plano_inexistente_exception import PlanoInexistenteException
 
 
 class ControladorRefeicao:
@@ -33,17 +34,28 @@ class ControladorRefeicao:
                 return refeicao
         return None
 
-    def excluir_refeicao(self):
-        nome = self.__tela_refeicao.seleciona_refeicao()
-        refeicao = self.busca_refeicao_por_nome(nome)
+    def remover_refeicao(self):
+        cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
         try:
-            if not refeicao:
-                raise RefeicaoInexistenteException
+            plano = self.busca_plano_por_cliente(cpf_cliente)
+            
+            nome_refeicao = self.__tela_refeicao.seleciona_refeicao()
+            refeicao_encontrada = None
+            for refeicao in plano.refeicoes:
+                if refeicao.nome == nome_refeicao:
+                    refeicao_encontrada = refeicao
+                    break
+            
+            if refeicao_encontrada:
+                plano.refeicoes.remove(refeicao_encontrada)
+                self.__tela_plano_alimentar.mostra_mensagem(f"Refeição '{nome_refeicao}' removida do plano alimentar!")
             else:
-                self.__refeicoes.remove(refeicao)
-                return self.__tela_refeicao.mostra_mensagem(f"Refeicao {nome} removida com sucesso!")
+                raise RefeicaoInexistenteException
+
+        except PlanoInexistenteException:
+            self.__tela_plano_alimentar.mostra_mensagem(f"Erro: Não foi encontrado um plano alimentar para o CPF {cpf_cliente}.")
         except RefeicaoInexistenteException:
-            return self.__tela_refeicao.mostra_mensagem(f"Refeicao {nome} nao existe!")
+            self.__tela_plano_alimentar.mostra_mensagem(f"Erro: A refeição '{nome_refeicao}' não foi encontrada neste plano.")
 
 
     def excluir_alimento_da_refeicao(self):

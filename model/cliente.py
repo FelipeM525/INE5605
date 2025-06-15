@@ -3,13 +3,16 @@ from model.usuario import Usuario
 
 
 class Cliente(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, cpf: str, idade: int, genero: str, peso: float, altura: float, objetivo: Objetivo, plano_alimentar = None):
+    def __init__(self, nome: str, email: str, senha: str, cpf: str,
+                  idade: int, genero: str, peso: float, altura: float,
+                  meta_objetivo: str, qtd_objetivo: int, tempo_objetivo: int,
+                    plano_alimentar = None):
         super().__init__(nome, email, senha, cpf)
         self.__idade = idade
         self.__genero = genero
         self.__peso = peso
         self.__altura = altura
-        self.__objetivo = objetivo
+        self.__objetivo = Objetivo(meta=meta_objetivo, quantidade=qtd_objetivo, tempo=tempo_objetivo)
         self.__plano_alimentar = plano_alimentar
 
     @property
@@ -49,8 +52,10 @@ class Cliente(Usuario):
         return self.__objetivo
 
     @objetivo.setter
-    def objetivo(self, objetivo):
-        self.__objetivo = objetivo
+    def objetivo(self, novos_dados_objetivo: dict):
+        self.__objetivo = Objetivo(meta=novos_dados_objetivo['meta'],
+                                   quantidade=novos_dados_objetivo['quantidade'],
+                                   tempo=novos_dados_objetivo['tempo'])
 
     @property
     def plano_alimentar(self):

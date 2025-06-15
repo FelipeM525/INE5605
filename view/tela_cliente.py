@@ -96,19 +96,26 @@ class TelaCliente:
             except ValueError:
                 self.mostrar_mensagem("Entrada inválida. Por favor, digite um número para a altura (ex: 1.75).")
 
+        dados_cliente = {
+            "nome": nome, "email": email, "senha": senha, "cpf": cpf,
+            "idade": idade, "genero": genero, "peso": peso, "altura": altura
+        }
+
         meta_selecionada = self.selecionar_meta_objetivo()
 
         if not meta_selecionada:
             self.mostrar_mensagem("Nenhuma meta específica para o objetivo")
-            obj_cliente = Objetivo(meta="Não definido", quantidade=0, tempo=0)
+            dados_cliente["meta_objetivo"] = "Não definido"
+            dados_cliente["qtd_objetivo"] = 0
+            dados_cliente["tempo_objetivo"] = 0
 
         else:
             while True:
                 try:
                     quantidade = int(input(f"Meta de kg: "))
-                    if quantidade > 0:
+                    if quantidade >= 0: # Permite 0 para "manter peso"
                         break
-                    self.mostrar_mensagem("A meta de kg deve ser um número positivo.")
+                    self.mostrar_mensagem("A meta de kg deve ser um número positivo ou zero.")
                 except ValueError:
                     self.mostrar_mensagem("Entrada inválida. Por favor, digite um número inteiro.")
 
@@ -121,9 +128,11 @@ class TelaCliente:
                 except ValueError:
                     self.mostrar_mensagem("Entrada inválida. Por favor, digite um número inteiro.")
             
-            obj_cliente = Objetivo(meta_selecionada, quantidade, tempo)
-
-        return Cliente(nome, email, senha, cpf, idade, genero, peso, altura, obj_cliente)
+            dados_cliente["meta_objetivo"] = meta_selecionada
+            dados_cliente["qtd_objetivo"] = quantidade
+            dados_cliente["tempo_objetivo"] = tempo
+        
+        return dados_cliente
 
     def listar_clientes(self, clientes: list):
         if not clientes:

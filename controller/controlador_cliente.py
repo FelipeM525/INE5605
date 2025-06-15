@@ -43,20 +43,31 @@ class ControladorCliente:
         return None
 
     def incluir_cliente(self):
-        novo_cliente = self.__tela_cliente.pegar_dados_cliente()
+        dados_cliente = self.__tela_cliente.pegar_dados_cliente()
 
-        if not isinstance(novo_cliente, Cliente):
-            raise ValueError("Valores inválidos")
         try:
-            if self.buscar_cliente_por_cpf(novo_cliente.cpf):
+            if self.buscar_cliente_por_cpf(dados_cliente["cpf"]):
                 raise JahCadastradoException()
 
             else:
+                novo_cliente = Cliente(
+                    nome=dados_cliente["nome"],
+                    email=dados_cliente["email"],
+                    senha=dados_cliente["senha"],
+                    cpf=dados_cliente["cpf"],
+                    idade=dados_cliente["idade"],
+                    genero=dados_cliente["genero"],
+                    peso=dados_cliente["peso"],
+                    altura=dados_cliente["altura"],
+                    meta_objetivo=dados_cliente["meta_objetivo"],
+                    qtd_objetivo=dados_cliente["qtd_objetivo"],
+                    tempo_objetivo=dados_cliente["tempo_objetivo"]
+                )
                 self.__clientes.append(novo_cliente)
                 self.__tela_cliente.mostrar_mensagem("Cliente incluido com sucesso!")
 
         except JahCadastradoException:
-            self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {novo_cliente.cpf} ja existe!")
+            self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {dados_cliente['cpf']} ja existe!")
 
     def remover_cliente(self):
         cpf = self.__tela_cliente.selecionar_cliente_cpf()
@@ -87,18 +98,24 @@ class ControladorCliente:
             if cliente:
                 self.__tela_cliente.mostrar_mensagem("Digite os novos dados para o cliente")
 
-                cliente_com_novos_dados = self.__tela_cliente.pegar_dados_cliente()
+                dados_novos = self.__tela_cliente.pegar_dados_cliente()
 
-                cliente.nome = cliente_com_novos_dados.nome
-                cliente.email = cliente_com_novos_dados.email
-                cliente.senha = cliente_com_novos_dados.senha
-                cliente.idade = cliente_com_novos_dados.idade
-                cliente.genero = cliente_com_novos_dados.genero
-                cliente.peso = cliente_com_novos_dados.peso
-                cliente.altura = cliente_com_novos_dados.altura
+                cliente.nome = dados_novos["nome"]
+                cliente.email = dados_novos["email"]
+                cliente.senha = dados_novos["senha"]
+                cliente.idade = dados_novos["idade"]
+                cliente.genero = dados_novos["genero"]
+                cliente.peso = dados_novos["peso"]
+                cliente.altura = dados_novos["altura"]
 
-                cliente.objetivo = cliente_com_novos_dados.objetivo
+                novos_dados_do_objetivo = {
+                    "meta": dados_novos["meta_objetivo"],
+                    "quantidade": dados_novos["qtd_objetivo"],
+                    "tempo": dados_novos["tempo_objetivo"]
+                }
 
+                cliente.objetivo = novos_dados_do_objetivo
+                
                 self.__tela_cliente.mostrar_mensagem("Cliente alterado com sucesso!")
                 self.__tela_cliente.mostrar_dados_do_cliente(cliente)
 
@@ -129,5 +146,6 @@ class ControladorCliente:
                 raise CadastroInexistenteException()
         except CadastroInexistenteException:
             self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {cpf} nao existe!")
+
     def retornar(self):
         pass

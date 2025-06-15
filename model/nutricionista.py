@@ -1,4 +1,4 @@
-from usuarios.model.usuario import Usuario
+from model.usuario import Usuario
 
 
 class Nutricionista(Usuario):
@@ -29,7 +29,7 @@ class Nutricionista(Usuario):
         return self.__avaliacoes
 
     def adicionar_avaliacao(self, avaliacao):
-        from avaliacoes.avaliacao import Avaliacao
+        from model.avaliacao import Avaliacao
 
         if isinstance(avaliacao, Avaliacao):
             self.__avaliacoes.append(avaliacao)

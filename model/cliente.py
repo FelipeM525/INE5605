@@ -1,5 +1,5 @@
-from core.objetivo import Objetivo
-from usuarios.model.usuario import Usuario
+from model.objetivo import Objetivo
+from model.usuario import Usuario
 
 
 class Cliente(Usuario):
@@ -58,12 +58,12 @@ class Cliente(Usuario):
     
     @plano_alimentar.setter
     def plano_alimentar(self, plano_alimentar):
-        from plano.plano_alimentar import PlanoAlimentar
+        from model.plano_alimentar import PlanoAlimentar
         if isinstance(plano_alimentar, PlanoAlimentar) or plano_alimentar is None:
             self.__plano_alimentar = plano_alimentar
 
     def add_plano_alimentar(self,  plano_alimentar):
-        from plano.plano_alimentar import PlanoAlimentar
+        from model.plano_alimentar import PlanoAlimentar
         if isinstance(plano_alimentar, PlanoAlimentar):
             self.__plano_alimentar = plano_alimentar
 

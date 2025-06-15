@@ -1,5 +1,5 @@
-from plano.plano_alimentar import PlanoAlimentar
-from refeicoes.tela_refeicao import TelaRefeicao
+from model.plano_alimentar import PlanoAlimentar
+from view.tela_refeicao import TelaRefeicao
 
 
 class TelaPlanoAlimentar:

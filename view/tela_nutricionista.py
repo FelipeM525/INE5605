@@ -1,4 +1,4 @@
-from usuarios.model.nutricionista import Nutricionista
+from model.nutricionista import Nutricionista
 
 class TelaNutricionista:
 

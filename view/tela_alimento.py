@@ -1,4 +1,4 @@
-from alimentos.alimento import Alimento
+from model.alimento import Alimento
 
 
 class TelaAlimento:

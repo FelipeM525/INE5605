@@ -1,4 +1,4 @@
-from avaliacoes.avaliacao import Avaliacao
+from model.avaliacao import Avaliacao
 
 
 class TelaAvaliacao:

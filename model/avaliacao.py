@@ -1,7 +1,7 @@
 class Avaliacao:
     def __init__(self, nome: str, cliente, nutricionista, data: str, imc: float, taxa_mb: int):
-        from usuarios.model.cliente import Cliente
-        from usuarios.model.nutricionista import Nutricionista
+        from model.cliente import Cliente
+        from model.nutricionista import Nutricionista
 
         self.__nome = nome
         if isinstance(cliente, Cliente) and isinstance(nutricionista, Nutricionista):
@@ -25,7 +25,7 @@ class Avaliacao:
 
     @cliente.setter
     def cliente(self, cliente):
-        from usuarios.model.cliente import Cliente
+        from model.cliente import Cliente
         if isinstance(cliente, Cliente):
             self.__cliente = cliente
 
@@ -35,7 +35,7 @@ class Avaliacao:
     
     @nutricionista.setter
     def nutricionista(self, nutricionista):
-        from usuarios.model.nutricionista import Nutricionista
+        from model.nutricionista import Nutricionista
         if isinstance(nutricionista, Nutricionista):
             self.__nutricionista = nutricionista
 

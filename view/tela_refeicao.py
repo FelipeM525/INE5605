@@ -1,5 +1,5 @@
-from refeicoes.refeicao import Refeicao
-from refeicoes.tipo_refeicao import TipoRefeicao
+from model.refeicao import Refeicao
+from model.tipo_refeicao import TipoRefeicao
 
 
 class TelaRefeicao:

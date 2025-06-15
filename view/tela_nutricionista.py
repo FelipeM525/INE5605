@@ -80,4 +80,4 @@ class TelaNutricionista:
             if cpf:
                 return cpf
             else:
-                self.mostrar_mensagem("O CPF não pode ser vazio.")
+                self.mostrar_mensagem("O CPF deve conter 11 dígitos numericos")

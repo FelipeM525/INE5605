@@ -9,6 +9,7 @@ class TelaAvaliacao:
         print("2 - Listar avaliacoes")
         print("3 - Alterar avaliacao")
         print("4 - Excluir avaliacao")
+        print("5 - Relatorio de avaliacao")
         print("0 - Sair")
 
         while True:
@@ -65,18 +66,47 @@ class TelaAvaliacao:
 
         return {"codigo": codigo, "cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista, "data": data, "imc": imc, "tmb": tmb}
 
-
     def mostra_avaliacao(self, avaliacao: Avaliacao):
         print("----Informacoes da avaliação:----")
         print(avaliacao)
 
     def seleciona_avaliacao(self):
         while True:
-            codigo = input("Digite o CODIGO da avaliação: ").strip()
+            codigo = input("Digite o CÓDIGO da avaliação: ").strip()
             if codigo:
                 return codigo
             else:
-                self.mostra_mensagem("O codigo não pode ser vazio.")
+                self.mostra_mensagem("O código não pode ser vazio.")
+
+    def seleciona_tipo_de_relatorio(self):
+        print("----Selecione o Tipo de Relatório----")
+        print("1 - Por cliente")
+        print("2 - Por nutricionista")
+        print("3 - Por data")
+        print("0 - Sair")
+    
+        while True:
+            try:
+                opcao = int(input("Escolha uma opcao: "))
+                return opcao
+            except ValueError:
+                self.mostra_mensagem("Opção inválida. Por favor, digite um número.")
+
+    def selecionar_cliente_cpf(self):
+        while True:
+            cpf = input("Digite o CPF do cliente: ").strip()
+            if cpf:
+                return cpf
+            else:
+                self.mostrar_mensagem("O CPF não pode ser vazio.")
+
+    def selecionar_nutricionista_cpf(self):
+           while True:
+            cpf = input("Digite o CPF do nutricionista: ").strip()
+            if cpf:
+                return cpf
+            else:
+                self.mostrar_mensagem("O CPF não pode ser vazio.")
 
     def mostra_mensagem(self, msg):
         print(msg)

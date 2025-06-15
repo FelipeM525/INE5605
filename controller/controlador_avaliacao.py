@@ -23,6 +23,7 @@ class ControladorAvaliacao:
             2: self.lista_avaliacao,
             3: self.alterar_avaliacao,
             4: self.remover_avaliacao,
+            5: self.relatorio_de_avaliacoes,
             0: self.retornar
         }
 
@@ -113,19 +114,11 @@ class ControladorAvaliacao:
             except CadastroInexistenteException as e:
                print(e)
 
-    def list_avaliacao_cliente(self, cpf_cliente):
-
-        if self.veriricar_se_avaliacoes_existem():
-            for avaliacao in self.__avaliacoes:
-                if avaliacao.cliente.cpf == cpf_cliente:
-                    self.__tela_avaliacao.mostra_avaliacao(avaliacao)
-
     def lista_avaliacao_nutricionista(self, cpf_nutricionista):
         if self.veriricar_se_avaliacoes_existem():
             for avaliacao in self.__avaliacoes:
                 if avaliacao.nutricionista.cpf == cpf_nutricionista:
                     self.__tela_avaliacao.mostra_avaliacao(avaliacao)
-
 
     def lista_avaliacao(self):
         if self.veriricar_se_avaliacoes_existem():
@@ -162,3 +155,54 @@ class ControladorAvaliacao:
             return False
         else:
             return True
+
+    def relatorio_de_avaliacoes(self):
+        lista_opcoes = {
+            1: self.relatorio_por_cliente,
+            2: self.relatorio_por_nutricionista,
+            3: self.relatorio_por_data,
+            0: self.retornar
+        }
+
+        while True:
+            opcao = self.__tela_avaliacao.seleciona_tipo_de_relatorio()
+
+            if opcao == 0:
+                self.retornar()
+                break
+
+            funcao_escolhida = lista_opcoes.get(opcao)
+
+            if funcao_escolhida:
+                funcao_escolhida()
+            else:
+                self.__tela_avaliacao.mostra_mensagem("Opção inválida. Tente novamente.")
+
+    def relatorio_por_cliente(self):
+        cliente_alvo = self.__tela_avaliacao.selecionar_cliente_cpf()
+        try:
+            for avaliacao in self.__avaliacoes:
+                if avaliacao.cliente.cpf == cliente_alvo:
+                    self.__tela_avaliacao.mostra_avaliacao(avaliacao)
+                else:
+                    raise ClienteInexistenteException()
+
+        except ClienteInexistenteException:
+            self.__tela_avaliacao.mostra_mensagem(f"Cliente com cpf {cliente_alvo} não existe!")
+            return
+
+    def relatorio_por_nutricionista(self):
+        nutri_alvo = self.__tela_avaliacao.selecionar_nutricionista_cpf()
+        try:
+            for avaliacao in self.__avaliacoes:
+                if avaliacao.nutricionista.cpf == nutri_alvo:
+                    self.__tela_avaliacao.mostra_avaliacao(avaliacao)
+                else:
+                    raise CadastroInexistenteException()
+
+        except CadastroInexistenteException:
+            self.__tela_avaliacao.mostra_mensagem(f"Nutricionista com cpf {nutri_alvo} não existe!")
+            return
+
+    def relatorio_por_data(self):
+        ...

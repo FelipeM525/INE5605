@@ -1,12 +1,12 @@
-from avaliacoes.avaliacao import Avaliacao
-from avaliacoes.tela_avaliacao import TelaAvaliacao
+from model.avaliacao import Avaliacao
+from view.tela_avaliacao import TelaAvaliacao
 from exception.avaliacao_inexistente_exception import AvaliacaoInexistenteException
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from exception.cliente_inexistente_exception import ClienteInexistenteException
-from usuarios.controller.controlador_cliente import ControladorCliente
-from usuarios.controller.controlador_nutricionista import ControladorNutricionista
-from usuarios.model.cliente import Cliente
-from usuarios.model.nutricionista import Nutricionista
+from controller.controlador_cliente import ControladorCliente
+from controller.controlador_nutricionista import ControladorNutricionista
+from model.cliente import Cliente
+from model.nutricionista import Nutricionista
 
 
 class ControladorAvaliacao:

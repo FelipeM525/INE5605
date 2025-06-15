@@ -3,12 +3,12 @@ from exception.nutricionista_inexistente_exception import NutricionistaInexisten
 from exception.plano_inexistente_exception import PlanoInexistenteException
 from exception.plano_ja_cadastrado_exception import PlanoJaCadastradoException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
-from plano.plano_alimentar import PlanoAlimentar
-from plano.tela_plano_alimentar import TelaPlanoAlimentar
-from refeicoes.controlador_refeicao import ControladorRefeicao
-from refeicoes.tela_refeicao import TelaRefeicao
-from usuarios.controller.controlador_cliente import ControladorCliente
-from usuarios.controller.controlador_nutricionista import ControladorNutricionista
+from model.plano_alimentar import PlanoAlimentar
+from view.tela_plano_alimentar import TelaPlanoAlimentar
+from controller.controlador_refeicao import ControladorRefeicao
+from view.tela_refeicao import TelaRefeicao
+from controller.controlador_cliente import ControladorCliente
+from controller.controlador_nutricionista import ControladorNutricionista
 
 
 class ControladorPlanoAlimentar:

@@ -1,5 +1,5 @@
-from usuarios.model.cliente import Cliente
-from core.objetivo import Objetivo
+from model.cliente import Cliente
+from model.objetivo import Objetivo
 
 class TelaCliente:
 

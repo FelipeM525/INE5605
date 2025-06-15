@@ -1,19 +1,19 @@
-from core.tela_sistema import TelaSistema
-from usuarios.controller.controlador_cliente import ControladorCliente
-from usuarios.controller.controlador_nutricionista import ControladorNutricionista
-from alimentos.controlador_alimento import ControladorAlimento
-from avaliacoes.controlador_avaliacao import ControladorAvaliacao
-from refeicoes.controlador_refeicao import ControladorRefeicao
-from plano.controlador_plano_alimentar import ControladorPlanoAlimentar
+from view.tela_sistema import TelaSistema
+from controller.controlador_cliente import ControladorCliente
+from controller.controlador_nutricionista import ControladorNutricionista
+from controller.controlador_alimento import ControladorAlimento
+from controller.controlador_avaliacao import ControladorAvaliacao
+from controller.controlador_refeicao import ControladorRefeicao
+from controller.controlador_plano_alimentar import ControladorPlanoAlimentar
 
-from usuarios.model.cliente import Cliente
-from usuarios.model.nutricionista import Nutricionista
-from alimentos.alimento import Alimento
-from core.objetivo import Objetivo
-from refeicoes.refeicao import Refeicao
-from refeicoes.tipo_refeicao import TipoRefeicao
-from plano.plano_alimentar import PlanoAlimentar
-from avaliacoes.avaliacao import Avaliacao
+from model.cliente import Cliente
+from model.nutricionista import Nutricionista
+from model.alimento import Alimento
+from model.objetivo import Objetivo
+from model.refeicao import Refeicao
+from model.tipo_refeicao import TipoRefeicao
+from model.plano_alimentar import PlanoAlimentar
+from model.avaliacao import Avaliacao
 
 
 class ControladorSistema:

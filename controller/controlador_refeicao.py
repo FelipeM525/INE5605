@@ -1,9 +1,9 @@
-from alimentos.tela_alimento import TelaAlimento
+from view.tela_alimento import TelaAlimento
 from exception.alimento_inexistente_exception import AlimentoInexistenteException
 from exception.refeicao_existente_exception import RefeicaoExistenteException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
-from refeicoes.refeicao import Refeicao
-from refeicoes.tela_refeicao import TelaRefeicao
+from model.refeicao import Refeicao
+from view.tela_refeicao import TelaRefeicao
 from exception.plano_inexistente_exception import PlanoInexistenteException
 
 

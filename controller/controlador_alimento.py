@@ -1,5 +1,5 @@
-from alimentos.alimento import Alimento
-from alimentos.tela_alimento import TelaAlimento
+from model.alimento import Alimento
+from view.tela_alimento import TelaAlimento
 
 
 class ControladorAlimento:

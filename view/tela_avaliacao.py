@@ -22,10 +22,10 @@ class TelaAvaliacao:
         print("------- DADOS AVALIACAO -------")
 
         while True:
-            nome = input("Digite um nome para a avaliação (ex: Avaliação Inicial): ").strip()
-            if nome:
+            codigo = input("Digite um codigo para a avaliação (ex: 123): ").strip()
+            if codigo:
                 break
-            self.mostra_mensagem("O nome não pode ser vazio.")
+            self.mostra_mensagem("O codigo não pode ser vazio.")
 
         while True:
             cpf_cliente = input("Digite o CPF do cliente (apenas números): ").strip()
@@ -63,7 +63,7 @@ class TelaAvaliacao:
             except ValueError:
                 self.mostra_mensagem("Entrada inválida. Por favor, digite um número inteiro para a TMB.")
 
-        return {"nome": nome, "cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista, "data": data, "imc": imc, "tmb": tmb}
+        return {"codigo": codigo, "cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista, "data": data, "imc": imc, "tmb": tmb}
 
 
     def mostra_avaliacao(self, avaliacao: Avaliacao):
@@ -72,11 +72,11 @@ class TelaAvaliacao:
 
     def seleciona_avaliacao(self):
         while True:
-            nome = input("Digite o NOME da avaliação: ").strip()
-            if nome:
-                return nome
+            codigo = input("Digite o CODIGO da avaliação: ").strip()
+            if codigo:
+                return codigo
             else:
-                self.mostra_mensagem("O nome não pode ser vazio.")
+                self.mostra_mensagem("O codigo não pode ser vazio.")
 
     def mostra_mensagem(self, msg):
         print(msg)

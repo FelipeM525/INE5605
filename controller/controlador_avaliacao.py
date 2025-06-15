@@ -42,10 +42,10 @@ class ControladorAvaliacao:
 
     def incluir_avaliacao(self):
         dados_avaliacao = self.__tela_avaliacao.pega_dados_avaliacao()
-        nome_avaliacao = dados_avaliacao["nome"]
+        codigo_avaliacao = dados_avaliacao["codigo"]
 
-        if self.busca_avaliacao_por_nome(nome_avaliacao):
-            self.__tela_avaliacao.mostra_mensagem(f"Já existe uma avaliação com o nome '{nome_avaliacao}'.")
+        if self.busca_avaliacao_por_codigo(codigo_avaliacao):
+            self.__tela_avaliacao.mostra_mensagem(f"Já existe uma avaliação com o codigo '{codigo_avaliacao}'.")
             return
 
         cliente: Cliente = self.__controlador_cliente.buscar_cliente_por_cpf(dados_avaliacao["cpf_cliente"])
@@ -65,16 +65,16 @@ class ControladorAvaliacao:
             self.__tela_avaliacao.mostra_mensagem(f"Nutricionista com cpf {dados_avaliacao['cpf_nutricionista']} não existe!")
             return
 
-        avaliacao = Avaliacao(nome_avaliacao, cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"], dados_avaliacao["tmb"])
+        avaliacao = Avaliacao(codigo_avaliacao, cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"], dados_avaliacao["tmb"])
 
         self.__avaliacoes.append(avaliacao)
-        self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{avaliacao.nome}' incluida com sucesso!")
+        self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{avaliacao.codigo}' incluida com sucesso!")
 
     def alterar_avaliacao(self):
             if not self.veriricar_se_avaliacoes_existem():
                 return
-            nome_alvo = self.__tela_avaliacao.seleciona_avaliacao()
-            avaliacao = self.busca_avaliacao_por_nome(nome_alvo)
+            codigo_alvo = self.__tela_avaliacao.seleciona_avaliacao()
+            avaliacao = self.busca_avaliacao_por_codigo(codigo_alvo)
 
             try:
                 if not avaliacao:
@@ -82,10 +82,10 @@ class ControladorAvaliacao:
 
                 self.__tela_avaliacao.mostra_mensagem("\nDigite os novos dados para a avaliação:")
                 novos_dados = self.__tela_avaliacao.pega_dados_avaliacao()
-                novo_nome = novos_dados["nome"]
+                novo_codigo = novos_dados["codigo"]
 
-                if novo_nome != nome_alvo and self.busca_avaliacao_por_nome(novo_nome):
-                    self.__tela_avaliacao.mostra_mensagem(f"O nome '{novo_nome}' já está em uso por outra avaliação.")
+                if novo_codigo != codigo_alvo and self.busca_avaliacao_por_codigo(novo_codigo):
+                    self.__tela_avaliacao.mostra_mensagem(f"O codigo '{novo_codigo}' já está em uso por outra avaliação.")
                     return
 
                 cliente = self.__controlador_cliente.buscar_cliente_por_cpf(novos_dados["cpf_cliente"])
@@ -97,7 +97,7 @@ class ControladorAvaliacao:
                 if not nutricionista:
                     raise CadastroInexistenteException
 
-                avaliacao.nome = novo_nome
+                avaliacao.codigo = novo_codigo
                 avaliacao.cliente = cliente
                 avaliacao.nutricionista = nutricionista
                 avaliacao.data = novos_dados["data"]
@@ -135,21 +135,21 @@ class ControladorAvaliacao:
     def remover_avaliacao(self):
         if not self.veriricar_se_avaliacoes_existem():
             return
-        nome_avaliacao = self.__tela_avaliacao.seleciona_avaliacao()
-        avaliacao = self.busca_avaliacao_por_nome(nome_avaliacao)
+        codigo_avaliacao = self.__tela_avaliacao.seleciona_avaliacao()
+        avaliacao = self.busca_avaliacao_por_codigo(codigo_avaliacao)
 
         try:
             if avaliacao:
                 self.__avaliacoes.remove(avaliacao)
-                self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{avaliacao.nome}' removida com sucesso!")
+                self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{avaliacao.codigo}' removida com sucesso!")
             else:
                 raise AvaliacaoInexistenteException()
         except AvaliacaoInexistenteException as e:
             print(e)
 
-    def busca_avaliacao_por_nome(self, nome: str):
+    def busca_avaliacao_por_codigo(self, codigo: str):
         for avaliacao in self.__avaliacoes:
-            if avaliacao.nome == nome:
+            if avaliacao.codigo == codigo:
                 return avaliacao
         return None
 

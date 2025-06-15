@@ -1,9 +1,9 @@
 class Avaliacao:
-    def __init__(self, nome: str, cliente, nutricionista, data: str, imc: float, taxa_mb: int):
+    def __init__(self, codigo: str, cliente, nutricionista, data: str, imc: float, taxa_mb: int):
         from model.cliente import Cliente
         from model.nutricionista import Nutricionista
 
-        self.__nome = nome
+        self.__codigo = codigo
         if isinstance(cliente, Cliente) and isinstance(nutricionista, Nutricionista):
             self.__cliente = cliente
             self.__nutricionista = nutricionista
@@ -12,12 +12,12 @@ class Avaliacao:
         self.__taxa_mb = taxa_mb
 
     @property
-    def nome(self):
-        return self.__nome
+    def codigo(self):
+        return self.__codigo
 
-    @nome.setter
-    def nome(self, nome: str):
-        self.__nome = nome
+    @codigo.setter
+    def codigo(self, codigo: str):
+        self.codigo = codigo
 
     @property
     def cliente(self):
@@ -67,7 +67,7 @@ class Avaliacao:
         cliente_info = self.cliente.nome if self.cliente else "N/A"
         nutri_info = str(self.nutricionista) if self.nutricionista else "N/A"
         return (
-            f"--- Avaliação: {self.nome} ---\n"
+            f"--- Avaliação: {self.codigo} ---\n"
             f"Cliente: {cliente_info}\n"
             f"Nutricionista: {nutri_info}\n"
             f"Data: {self.data}\n"

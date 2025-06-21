@@ -96,18 +96,27 @@ class ControladorRefeicao:
             if not alimento:
                 raise AlimentoInexistenteException
 
-            refeicao.alimentos.append(alimento)
+            refeicao.adicionar_alimento(alimento)
 
             return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} incluido na refeicao {nome} com sucesso!")
         except AlimentoInexistenteException:
             return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} nao existe!")
 
     def listar_refeicoes(self):
-        if len(self.__refeicoes) == 0:
-            self.__tela_refeicao.mostra_mensagem("Nao ha refeicoes cadastradas!")
+        if not self.__refeicoes:
+            self.__tela_refeicao.mostra_mensagem("Nenhuma refeicao cadastrada!")
         else:
+            dados_para_tela = []
             for refeicao in self.__refeicoes:
-                self.__tela_refeicao.mostra_refeicao(refeicao)
+                alimentos_da_refeicao = [alimento.nome for alimento in refeicao.alimentos]
+                dados_para_tela.append({
+                    "nome": refeicao.nome,
+                    "horario": refeicao.horario,
+                    "tipo": refeicao.tipo_refeicao.value,
+                    "calorias_total": refeicao.calcular_calorias_total(),
+                    "alimentos": alimentos_da_refeicao
+                })
+            self.__tela_refeicao.mostra_refeicao(dados_para_tela)
 
     def abre_tela(self):
         lista_opcoes = {1: self.incluir_refeicao, 2: self.listar_refeicoes, 3: self.incluir_alimento_na_refeicao,

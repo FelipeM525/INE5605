@@ -95,7 +95,7 @@ class ControladorSistema:
             elif opcao == 2:
                 self.__controlador_nutricionista.abre_tela()
             elif opcao == 3:
-                self.__controlador_alimento.abre_tela()
+                self.__controlador_alimento.abrir_tela()
             elif opcao == 4:
                 self.__controlador_avaliacao.abre_tela()
             elif opcao == 5:

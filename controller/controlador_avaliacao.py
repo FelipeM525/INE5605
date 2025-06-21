@@ -121,9 +121,20 @@ class ControladorAvaliacao:
                     self.__tela_avaliacao.mostra_avaliacao(avaliacao)
 
     def lista_avaliacao(self):
-        if self.veriricar_se_avaliacoes_existem():
+        if not self.__avaliacoes:
+            self.__tela_avaliacao.mostra_mensagem("Nao ha avaliacoes cadastradas!")
+        else:
+            dados_para_tela = []
             for avaliacao in self.__avaliacoes:
-                self.__tela_avaliacao.mostra_avaliacao(avaliacao)
+                dados_para_tela.append({
+                    "codigo": avaliacao.codigo,
+                    "cliente_nome": avaliacao.cliente.nome,
+                    "nutricionista_nome": avaliacao.nutricionista.nome,
+                    "data": avaliacao.data,
+                    "massa_magra": avaliacao.massa_magra,
+                    "taxa_gordura": avaliacao.taxa_gordura
+                })
+            self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
 
     def remover_avaliacao(self):
         if not self.veriricar_se_avaliacoes_existem():
@@ -203,6 +214,34 @@ class ControladorAvaliacao:
         except CadastroInexistenteException:
             self.__tela_avaliacao.mostra_mensagem(f"Nutricionista com cpf {nutri_alvo} não existe!")
             return
+
+    def relatorio_gordura_corporal(self):
+        if not self.__avaliacoes:
+            self.__tela_avaliacao.mostra_mensagem("Nenhuma avaliação disponível para gerar relatório.")
+            return
+
+        dados_para_tela = []
+        for avaliacao in self.__avaliacoes:
+            dados_para_tela.append({
+                "cliente_nome": avaliacao.cliente.nome,
+                "taxa_gordura": avaliacao.taxa_gordura,
+                "data": avaliacao.data
+            })
+        self.__tela_avaliacao.mostra_relatorio_gordura(dados_para_tela)
+
+    def relatorio_massa_magra(self):
+        if not self.__avaliacoes:
+            self.__tela_avaliacao.mostra_mensagem("Nenhuma avaliação disponível para gerar relatório.")
+            return
+
+        dados_para_tela = []
+        for avaliacao in self.__avaliacoes:
+            dados_para_tela.append({
+                "cliente_nome": avaliacao.cliente.nome,
+                "massa_magra": avaliacao.massa_magra,
+                "data": avaliacao.data
+            })
+        self.__tela_avaliacao.mostra_relatorio_massa(dados_para_tela)
 
     def relatorio_por_data(self):
         ...

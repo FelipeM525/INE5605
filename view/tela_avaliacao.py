@@ -66,9 +66,28 @@ class TelaAvaliacao:
 
         return {"codigo": codigo, "cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista, "data": data, "imc": imc, "tmb": tmb}
 
-    def mostra_avaliacao(self, avaliacao: Avaliacao):
-        print("----Informacoes da avaliação:----")
-        print(avaliacao)
+    def mostra_avaliacao(self, dados_avaliacoes):
+        print("---------- LISTA DE AVALIACOES ----------")
+        for dados in dados_avaliacoes:
+            print(f"Codigo: {dados['codigo']}")
+            print(f"Cliente: {dados['cliente_nome']}")
+            print(f"Nutricionista: {dados['nutricionista_nome']}")
+            print(f"Data: {dados['data']}")
+            print(f"Massa Magra: {dados['massa_magra']:.2f}%")
+            print(f"Gordura Corporal: {dados['taxa_gordura']:.2f}%")
+            print("-" * 20)
+
+    def mostra_relatorio_gordura(self, dados_relatorio):
+        print("---------- RELATORIO DE GORDURA CORPORAL ----------")
+        for dados in dados_relatorio:
+            print(
+                f"Cliente: {dados['cliente_nome']}, Gordura Corporal: {dados['taxa_gordura']:.2f}%, Data: {dados['data']}")
+
+    def mostra_relatorio_massa(self, dados_relatorio):
+        print("---------- RELATORIO DE MASSA MAGRA ----------")
+        for dados in dados_relatorio:
+            print(f"Cliente: {dados['cliente_nome']}, Massa Magra: {dados['massa_magra']:.2f}%, Data: {dados['data']}")
+
 
     def seleciona_avaliacao(self):
         while True:

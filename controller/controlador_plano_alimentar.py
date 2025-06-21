@@ -33,6 +33,7 @@ class ControladorPlanoAlimentar:
                 raise ClienteInexistenteException
         except ClienteInexistenteException:
             self.__tela_plano_alimentar.mostra_mensagem(f"Cliente {cpf_cliente} nao existe!")
+            return
 
         nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(cpf_nutricionista)
 
@@ -41,6 +42,7 @@ class ControladorPlanoAlimentar:
                 raise NutricionistaInexistenteException
         except NutricionistaInexistenteException:
             self.__tela_plano_alimentar.mostra_mensagem(f"Nutricionista com cpf {cpf_nutricionista} nao existe!")
+            return
 
         try:
             if cliente.plano_alimentar is None:
@@ -75,7 +77,7 @@ class ControladorPlanoAlimentar:
         except RefeicaoInexistenteException:
             return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao nao existe!")
 
-        plano.refeicoes.append(refeicao_nova)
+        plano.adicionar_refeicao(refeicao_nova)
         self.__controlador_cliente.atualizar_cliente(plano.cliente)
 
         return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao incluida no plano alimentar!")
@@ -120,14 +122,22 @@ class ControladorPlanoAlimentar:
 
         raise RefeicaoInexistenteException
 
-
     def listar_planos(self):
-        if not self.__planos:
-            return self.__tela_plano_alimentar.mostra_mensagem("Nao ha planos cadastrados!")
-        else:
-            for plano in self.__planos:
-                self.__tela_plano_alimentar.mostra_plano(plano)
-            return None
+        if not self.__planos_alimentares:
+            self.__tela_plano_alimentar.mostra_mensagem("Nenhum plano alimentar cadastrado.")
+            return
+
+        dados_para_tela = []
+        for plano in self.__planos_alimentares:
+            refeicoes_do_plano = [refeicao.nome for refeicao in plano.refeicoes]
+            dados_para_tela.append({
+                "codigo": plano.codigo,
+                "cliente_nome": plano.cliente.nome,
+                "nutricionista_nome": plano.nutricionista.nome,
+                "refeicoes": refeicoes_do_plano
+            })
+
+        self.__tela_plano_alimentar.mostra_plano(dados_para_tela)
 
     def abre_tela(self):
         lista_opcoes = {

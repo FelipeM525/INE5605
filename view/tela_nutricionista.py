@@ -63,13 +63,14 @@ class TelaNutricionista:
             print(f"CRN: {nutricionista.crn}")
             print(f"Clinica: {nutricionista.clinica}")
 
-    def listar_nutricionistas(self, nutricionistas: list):
-        if not nutricionistas:
-            self.mostrar_mensagem("Nenhum nutricionista cadastrado")
+    def listar_nutricionistas(self, dados_nutricionistas):
+        print("---------- LISTA DE NUTRICIONISTAS ----------")
+        if not dados_nutricionistas:
+            print("Nenhum nutricionista cadastrado.")
             return
 
-        for nutri in nutricionistas:
-            print(f"Nome: {nutri.nome}, CRN: {nutri.crn}, CPF: {nutri.cpf}, Clinica: {nutri.clinica}")
+        for nutri in dados_nutricionistas:
+            print(f"Nome: {nutri['nome']}, CPF: {nutri['cpf']}")
 
     def mostrar_mensagem(self, msg: str):
         print(msg)

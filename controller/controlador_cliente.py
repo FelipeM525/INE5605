@@ -81,14 +81,19 @@ class ControladorCliente:
                 raise CadastroInexistenteException()
         except CadastroInexistenteException:
             self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {cpf} nao existe!")
-    
-    def listar_clientes(self):
-        lista_de_clientes = self.__clientes
 
-        if len(lista_de_clientes) == 0:
+    def listar_clientes(self):
+        if not self.__clientes:
             self.__tela_cliente.mostrar_mensagem("Nao ha clientes cadastrados!")
         else:
-            self.__tela_cliente.listar_clientes(lista_de_clientes)
+            dados_clientes = []
+            for cliente in self.__clientes:
+                dados_clientes.append({
+                    "nome": cliente.nome,
+                    "cpf": cliente.cpf,
+                    "idade": cliente.idade
+                })
+            self.__tela_cliente.listar_clientes(dados_clientes)
 
     def alterar_cliente(self):
         cpf = self.__tela_cliente.selecionar_cliente_cpf()
@@ -141,7 +146,19 @@ class ControladorCliente:
         cliente = self.buscar_cliente_por_cpf(cpf)
         try:
             if cliente:
-                self.__tela_cliente.mostrar_dados_do_cliente(cliente)
+                dados_cliente = {
+                    "nome": cliente.nome,
+                    "idade": cliente.idade,
+                    "genero": cliente.genero,
+                    "peso": cliente.peso,
+                    "altura": cliente.altura,
+                    "imc": cliente.calcular_imc(),
+                    "tmb": cliente.calcular_tmb(),
+                    "objetivo_meta": cliente.objetivo.meta,
+                    "objetivo_qtd": cliente.objetivo.quantidade,
+                    "objetivo_tempo": cliente.objetivo.tempo
+                }
+                self.__tela_cliente.mostrar_dados_do_cliente(dados_cliente)
             else:
                 raise CadastroInexistenteException()
         except CadastroInexistenteException:

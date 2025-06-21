@@ -134,26 +134,25 @@ class TelaCliente:
         
         return dados_cliente
 
-    def listar_clientes(self, clientes: list):
-        if not clientes:
+    def listar_clientes(self, dados_clientes: list):
+        if not dados_clientes:
             self.mostrar_mensagem("Nenhum cliente cadastrado")
             return
 
-        for c in clientes:
-            print(f"Nome: {c.nome}, CPF: {c.cpf}, Idade: {c.idade}")
+        for c in dados_clientes:
+            print(f"Nome: {c['nome']}, CPF: {c['cpf']}, Idade: {c['idade']}")
 
-    def mostrar_dados_do_cliente(self, cliente: Cliente):
-        if cliente:
-            print(f"Nome: {cliente.nome}")
-            print(f"Idade: {cliente.idade}")
-            print(f"Gênero: {cliente.genero}")
-            print(f"Peso: {cliente.peso}")
-            print(f"Altura: {cliente.altura}")
-            print(f"IMC: {cliente.calcular_imc()}")
-            print(f"TMB: {cliente.calcular_tmb()}")
-            if cliente.objetivo:
-                obj = cliente.objetivo
-                print(f"Objetivo: {obj.meta} - {obj.quantidade}kg em {obj.tempo} meses")
+    def mostrar_dados_do_cliente(self, dados_cliente: dict): # Recebe um dicionário
+        if dados_cliente:
+            print(f"Nome: {dados_cliente['nome']}")
+            print(f"Idade: {dados_cliente['idade']}")
+            print(f"Gênero: {dados_cliente['genero']}")
+            print(f"Peso: {dados_cliente['peso']}")
+            print(f"Altura: {dados_cliente['altura']}")
+            print(f"IMC: {dados_cliente['imc']}")
+            print(f"TMB: {dados_cliente['tmb']}")
+            if dados_cliente.get('objetivo_meta'):
+                print(f"Objetivo: {dados_cliente['objetivo_meta']} - {dados_cliente['objetivo_qtd']}kg em {dados_cliente['objetivo_tempo']} meses")
             else:
                 print("Objetivo não definido")
 

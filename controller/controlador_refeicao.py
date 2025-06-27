@@ -19,18 +19,18 @@ class ControladorRefeicao:
         dados_refeicao = self.__tela_refeicao.pega_dados_refeicao()
         alimentos = []
         try:
-            refeicao = self.busca_refeicao_por_nome(dados_refeicao["nome"])
+            refeicao = self.busca_refeicao_por_codigo(dados_refeicao["codigo"])
             if refeicao:
                 raise RefeicaoExistenteException
 
-            self.__refeicoes.append(Refeicao(dados_refeicao["nome"], alimentos, dados_refeicao["tipo"]))
+            self.__refeicoes.append(Refeicao(dados_refeicao["codigo"], alimentos, dados_refeicao["tipo"]))
 
             return self.__tela_refeicao.mostra_mensagem(f"Refeicao incluida com sucesso!")
         except RefeicaoExistenteException:
             return self.__tela_refeicao.mostra_mensagem(f"Refeicao ja existe!")
-    def busca_refeicao_por_nome(self, nome):
+    def busca_refeicao_por_codigo(self, codigo):
         for refeicao in self.__refeicoes:
-            if refeicao.nome == nome:
+            if refeicao.codigo == codigo:
                 return refeicao
         return None
 
@@ -39,68 +39,68 @@ class ControladorRefeicao:
         try:
             plano = self.busca_plano_por_cliente(cpf_cliente)
             
-            nome_refeicao = self.__tela_refeicao.seleciona_refeicao()
+            codigo_refeicao = self.__tela_refeicao.seleciona_refeicao()
             refeicao_encontrada = None
             for refeicao in plano.refeicoes:
-                if refeicao.nome == nome_refeicao:
+                if refeicao.codigo == codigo_refeicao:
                     refeicao_encontrada = refeicao
                     break
             
             if refeicao_encontrada:
                 plano.refeicoes.remove(refeicao_encontrada)
-                self.__tela_plano_alimentar.mostra_mensagem(f"Refeição '{nome_refeicao}' removida do plano alimentar!")
+                self.__tela_plano_alimentar.mostra_mensagem(f"Refeição '{codigo_refeicao}' removida do plano alimentar!")
             else:
                 raise RefeicaoInexistenteException
 
         except PlanoInexistenteException:
             self.__tela_plano_alimentar.mostra_mensagem(f"Erro: Não foi encontrado um plano alimentar para o CPF {cpf_cliente}.")
         except RefeicaoInexistenteException:
-            self.__tela_plano_alimentar.mostra_mensagem(f"Erro: A refeição '{nome_refeicao}' não foi encontrada neste plano.")
+            self.__tela_plano_alimentar.mostra_mensagem(f"Erro: A refeição '{codigo_refeicao}' não foi encontrada neste plano.")
 
 
     def excluir_alimento_da_refeicao(self):
-        nome = self.__tela_refeicao.seleciona_refeicao()
-        nome_alimento = self.__tela_alimento.seleciona_alimento()
-        refeicao = self.busca_refeicao_por_nome(nome)
+        codigo = self.__tela_refeicao.seleciona_refeicao()
+        codigo_alimento = self.__tela_alimento.seleciona_alimento()
+        refeicao = self.busca_refeicao_por_codigo(codigo)
 
         try:
             if not refeicao:
                 raise RefeicaoInexistenteException
 
             for alimento in refeicao.alimentos:
-                if alimento.nome == nome_alimento:
+                if alimento.codigo == codigo_alimento:
                     refeicao.alimentos.remove(alimento)
                     return self.__tela_refeicao.mostra_mensagem(
-                        f"Alimento {nome_alimento} removido da refeicao {nome} com sucesso!")
+                        f"Alimento {codigo_alimento} removido da refeicao {codigo} com sucesso!")
                 else:
-                    return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} nao encontrado na refeicao {nome}")
+                    return self.__tela_refeicao.mostra_mensagem(f"Alimento {codigo_alimento} nao encontrado na refeicao {codigo}")
         except RefeicaoInexistenteException:
-            return self.__tela_refeicao.mostra_mensagem(f"Refeicao {nome} nao existe!")
+            return self.__tela_refeicao.mostra_mensagem(f"Refeicao {codigo} nao existe!")
 
         return None
 
     def incluir_alimento_na_refeicao(self):
-        nome = self.__tela_refeicao.seleciona_refeicao()
-        refeicao = self.busca_refeicao_por_nome(nome)
+        codigo = self.__tela_refeicao.seleciona_refeicao()
+        refeicao = self.busca_refeicao_por_codigo(codigo)
         try:
             if not refeicao:
                 raise RefeicaoInexistenteException
         except RefeicaoInexistenteException:
-            return self.__tela_refeicao.mostra_mensagem(f"Refeicao {nome} nao existe!")
+            return self.__tela_refeicao.mostra_mensagem(f"Refeicao {codigo} nao existe!")
 
-        nome_alimento = self.__tela_alimento.seleciona_alimento()
+        codigo_alimento = self.__tela_alimento.seleciona_alimento()
 
         try:
-            alimento = self.__controlador_alimento.busca_alimento_por_nome(nome_alimento)
+            alimento = self.__controlador_alimento.busca_alimento_por_nome(codigo_alimento)
 
             if not alimento:
                 raise AlimentoInexistenteException
 
             refeicao.adicionar_alimento(alimento)
 
-            return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} incluido na refeicao {nome} com sucesso!")
+            return self.__tela_refeicao.mostra_mensagem(f"Alimento {codigo_alimento} incluido na refeicao {codigo} com sucesso!")
         except AlimentoInexistenteException:
-            return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} nao existe!")
+            return self.__tela_refeicao.mostra_mensagem(f"Alimento {codigo_alimento} nao existe!")
 
     def listar_refeicoes(self):
         if not self.__refeicoes:
@@ -108,9 +108,9 @@ class ControladorRefeicao:
         else:
             dados_para_tela = []
             for refeicao in self.__refeicoes:
-                alimentos_da_refeicao = [alimento.nome for alimento in refeicao.alimentos]
+                alimentos_da_refeicao = [alimento.codigo for alimento in refeicao.alimentos]
                 dados_para_tela.append({
-                    "nome": refeicao.nome,
+                    "codigo": refeicao.codigo,
                     "horario": refeicao.horario,
                     "tipo": refeicao.tipo_refeicao.value,
                     "calorias_total": refeicao.calcular_calorias_total(),

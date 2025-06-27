@@ -83,7 +83,7 @@ class ControladorNutricionista:
             dados_para_tela = []
             for nutricionista in self.__nutricionistas:
                 dados_para_tela.append({
-                    "nome": nutricionista.nome,
+                    "nome": nutricionista.codigo,
                     "cpf": nutricionista.cpf
                 })
             self.__tela_nutricionista.listar_nutricionistas(dados_para_tela)

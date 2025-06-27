@@ -89,7 +89,7 @@ class ControladorCliente:
             dados_clientes = []
             for cliente in self.__clientes:
                 dados_clientes.append({
-                    "nome": cliente.nome,
+                    "nome": cliente.codigo,
                     "cpf": cliente.cpf,
                     "idade": cliente.idade
                 })

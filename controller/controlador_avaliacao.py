@@ -128,8 +128,8 @@ class ControladorAvaliacao:
             for avaliacao in self.__avaliacoes:
                 dados_para_tela.append({
                     "codigo": avaliacao.codigo,
-                    "cliente_nome": avaliacao.cliente.nome,
-                    "nutricionista_nome": avaliacao.nutricionista.nome,
+                    "cliente_nome": avaliacao.cliente.codigo,
+                    "nutricionista_nome": avaliacao.nutricionista.codigo,
                     "data": avaliacao.data,
                     "massa_magra": avaliacao.massa_magra,
                     "taxa_gordura": avaliacao.taxa_gordura
@@ -223,7 +223,7 @@ class ControladorAvaliacao:
         dados_para_tela = []
         for avaliacao in self.__avaliacoes:
             dados_para_tela.append({
-                "cliente_nome": avaliacao.cliente.nome,
+                "cliente_nome": avaliacao.cliente.codigo,
                 "taxa_gordura": avaliacao.taxa_gordura,
                 "data": avaliacao.data
             })
@@ -237,7 +237,7 @@ class ControladorAvaliacao:
         dados_para_tela = []
         for avaliacao in self.__avaliacoes:
             dados_para_tela.append({
-                "cliente_nome": avaliacao.cliente.nome,
+                "cliente_nome": avaliacao.cliente.codigo,
                 "massa_magra": avaliacao.massa_magra,
                 "data": avaliacao.data
             })

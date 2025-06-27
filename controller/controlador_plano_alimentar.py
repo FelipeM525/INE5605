@@ -69,7 +69,7 @@ class ControladorPlanoAlimentar:
 
         nome_refeicao = self.__tela_refeicao.seleciona_refeicao()
 
-        refeicao_nova = self.__controlador_refeicao.busca_refeicao_por_nome(nome_refeicao)
+        refeicao_nova = self.__controlador_refeicao.busca_refeicao_por_codigo(nome_refeicao)
 
         try:
             if not refeicao_nova:
@@ -116,7 +116,7 @@ class ControladorPlanoAlimentar:
              return self.__tela_plano_alimentar.mostra_mensagem(f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
 
         for refeicao in plano.refeicoes:
-            if refeicao.nome == nome_refeicao:
+            if refeicao.codigo == nome_refeicao:
                 plano.refeicoes.remove(refeicao)
                 return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao {nome_refeicao} removida do plano alimentar!")
 
@@ -129,11 +129,11 @@ class ControladorPlanoAlimentar:
 
         dados_para_tela = []
         for plano in self.__planos_alimentares:
-            refeicoes_do_plano = [refeicao.nome for refeicao in plano.refeicoes]
+            refeicoes_do_plano = [refeicao.codigo for refeicao in plano.refeicoes]
             dados_para_tela.append({
                 "codigo": plano.codigo,
-                "cliente_nome": plano.cliente.nome,
-                "nutricionista_nome": plano.nutricionista.nome,
+                "cliente_nome": plano.cliente.codigo,
+                "nutricionista_nome": plano.nutricionista.codigo,
                 "refeicoes": refeicoes_do_plano
             })
 

@@ -1,18 +1,18 @@
 class Alimento:
-    def __init__(self, nome: str, calorias: int, carboidratos: int, gorduras: int, proteinas: int):
-        self.__nome = nome
+    def __init__(self, codigo: str, calorias: int, carboidratos: int, gorduras: int, proteinas: int):
+        self.__codigo = codigo
         self.__calorias = calorias
         self.__carboidratos = carboidratos
         self.__gorduras = gorduras
         self.__proteinas = proteinas
     
     @property
-    def nome(self):
-        return self.__nome
+    def codigo(self):
+        return self.__codigo
     
-    @nome.setter
-    def nome(self, nome: str):
-        self.__nome = nome
+    @codigo.setter
+    def codigo(self, codigo: str):
+        self.__codigo = codigo
     
     @property
     def calorias(self):

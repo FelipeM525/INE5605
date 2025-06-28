@@ -171,7 +171,6 @@ class ControladorAvaliacao:
         lista_opcoes = {
             1: self.relatorio_por_cliente,
             2: self.relatorio_por_nutricionista,
-            3: self.relatorio_por_data,
             0: self.retornar
         }
 
@@ -242,6 +241,3 @@ class ControladorAvaliacao:
                 "data": avaliacao.data
             })
         self.__tela_avaliacao.mostra_relatorio_massa(dados_para_tela)
-
-    def relatorio_por_data(self):
-        ...

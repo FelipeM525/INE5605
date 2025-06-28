@@ -114,9 +114,8 @@ class ControladorRefeicao:
                 alimentos_da_refeicao = [alimento.nome for alimento in refeicao.alimentos]
                 dados_para_tela.append({
                     "codigo": refeicao.codigo,
-                    "horario": refeicao.horario,
-                    "tipo": refeicao.tipo_refeicao.value,
-                    "calorias_total": refeicao.calcular_calorias_total(),
+                    "tipo": refeicao.tipo,
+                    "calorias_total": refeicao.calorias_totais(),
                     "alimentos": alimentos_da_refeicao
                 })
             self.__tela_refeicao.mostra_refeicao(dados_para_tela)

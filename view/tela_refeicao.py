@@ -44,8 +44,7 @@ class TelaRefeicao:
             return
 
         for refeicao in dados_refeicoes:
-            print(f"codigo da Refeição: {refeicao['codigp']}")
-            print(f"Horário: {refeicao['horario']}")
+            print(f"Código da Refeição: {refeicao['codigo']}")
             print(f"Tipo: {refeicao['tipo']}")
             print(f"Calorias Totais: {refeicao['calorias_total']:.2f} kcal")
             print("Alimentos:")

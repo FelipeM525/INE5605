@@ -1,65 +1,65 @@
-from model.alimento import Alimento
+class TelaAlimento():
 
-
-class TelaAlimento:
-    def mostrar_menu(self):
-        print("---------- ALIMENTOS ------------")
-        print("Opcoes:")
-        print("1 - Cadastrar alimento")
-        print("2 - Listar alimentos")
-        print("0 - Sair")
+    def tela_opcoes(self):
+        print("---------- Alimentos ----------")
+        print("Escolha a opcao")
+        print("1 - Incluir Alimento")
+        print("2 - Alterar Alimento")
+        print("3 - Listar Alimentos")
+        print("4 - Excluir Alimento")
+        print("0 - Retornar")
 
         while True:
             try:
-                opcao = int(input("Escolha uma opcao: "))
-                return opcao
+                opcao = int(input("Escolha a opcao: "))
+                if opcao in [0, 1, 2, 3, 4]:
+                    return opcao
+                else:
+                    print("Opção inválida. Digite um número entre 0 e 4.")
             except ValueError:
-                self.mostra_mensagem("Opção inválida. Por favor, digite um número.")
+                print("Entrada inválida. Por favor, digite um número.")
 
     def pega_dados_alimento(self):
-        print("------- DADOS ALIMENTO -------")
-
+        print("---------- DADOS ALIMENTO ----------")
         while True:
-            nome = input("Digite o nome do alimento: ").strip()
+            nome = input("Nome: ").strip()
             if nome:
                 break
             else:
-                self.mostra_mensagem("O nome do alimento não pode ser vazio.")
-        
+                print("O nome não pode ser vazio.")
+
         while True:
             try:
-                calorias = float(input("Digite as calorias (kcal) a cada 100 gramas: "))
-                carboidratos = float(input("Digite os carboidratos (g) a cada 100 gramas: "))
-                gorduras = float(input("Digite as gorduras (g) a cada 100 gramas: "))
-                proteinas = float(input("Digite as proteinas (g) a cada 100 gramas: "))
-                
-                if all(valor >= 0 for valor in [calorias, carboidratos, gorduras, proteinas]):
-                    break
-                else:
-                    print("Os valores nutricionais não podem ser negativos. Tente novamente.")
+                calorias = float(input("Calorias: "))
+                carboidratos = float(input("Carboidratos (g): "))
+                proteinas = float(input("Proteínas (g): "))
+                gorduras = float(input("Gorduras (g): "))
+                return {"nome": nome, "calorias": calorias, "carboidratos": carboidratos, "proteinas": proteinas,
+                        "gorduras": gorduras}
             except ValueError:
-                print("Por favor, digite valores numéricos válidos.")
+                print("Entrada inválida. Certifique-se de que os valores numéricos estão corretos.")
 
-        return {
-            "nome": nome,
-            "calorias": calorias,
-            "carboidratos": carboidratos,
-            "gorduras": gorduras,
-            "proteinas": proteinas
-        }
+    def mostra_alimento(self, dados_alimentos):
+        print("---------- LISTA DE ALIMENTOS ----------")
+        if not dados_alimentos:
+            print("Nenhum alimento para mostrar.")
+            return
 
-    def mostra_alimento(self, alimento: Alimento):
-        print("\n----- INFORMAÇÕES DO ALIMENTO -----")
-        print(alimento.__str__())
-
-
-    def mostra_mensagem(self, msg):
-        print(msg)
+        for alimento in dados_alimentos:
+            print(f"Nome: {alimento['nome']}")
+            print(f"Calorias: {alimento['calorias']} kcal")
+            print(f"Carboidratos: {alimento['carboidratos']}g")
+            print(f"Proteínas: {alimento['proteinas']}g")
+            print(f"Gorduras: {alimento['gorduras']}g")
+            print("-" * 20)
 
     def seleciona_alimento(self):
         while True:
-            nome = input("Digite o nome do alimento: ").strip()
+            nome = input("Nome do alimento que deseja selecionar: ").strip()
             if nome:
                 return nome
             else:
-                self.mostra_mensagem("O nome do alimento não pode ser vazio.")
+                print("O nome do alimento não pode ser vazio.")
+
+    def mostra_mensagem(self, msg):
+        print(msg)

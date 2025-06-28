@@ -26,28 +26,43 @@ class TelaRefeicao:
         tipo_refeicao = self.mostra_menu_tipo_refeicao()
 
         while True:
-            nome = input("Digite um nome para a refeição: ").strip()
-            if nome:
+            codigo = input("Digite um codigo para a refeição: ").strip()
+            if codigo:
                 break
             else:
-                self.mostra_mensagem("O nome da refeição não pode ser vazio.")
+                self.mostra_mensagem("O codigo da refeição não pode ser vazio.")
 
         return {
-            "nome": nome,
+            "codigo": codigo,
             "tipo": tipo_refeicao,
         }
 
-    def mostra_refeicao(self, refeicao: Refeicao):
-        print("\n----- INFORMAÇÕES DA REFEIÇÃO -----")
-        print(refeicao.__str__())
+    def mostra_refeicao(self, dados_refeicoes):
+        print("---------- LISTA DE REFEICOES ----------")
+        if not dados_refeicoes:
+            print("Nenhuma refeição para mostrar.")
+            return
+
+        for refeicao in dados_refeicoes:
+            print(f"codigo da Refeição: {refeicao['codigp']}")
+            print(f"Horário: {refeicao['horario']}")
+            print(f"Tipo: {refeicao['tipo']}")
+            print(f"Calorias Totais: {refeicao['calorias_total']:.2f} kcal")
+            print("Alimentos:")
+            if refeicao['alimentos']:
+                for alimento in refeicao['alimentos']:
+                    print(f"- {alimento}")
+            else:
+                print("- Nenhum alimento nesta refeição.")
+            print("-" * 20)
 
     def seleciona_refeicao(self):
         while True:
-            nome = input("Digite o nome da refeicao: ").strip()
-            if nome:
-                return nome
+            codigo = input("Digite o codigo (identificador) da refeicao: ").strip()
+            if codigo:
+                return codigo
             else:
-                self.mostra_mensagem("O nome da refeição não pode ser vazio.")
+                self.mostra_mensagem("O codigo da refeição não pode ser vazio.")
 
     def mostra_menu_tipo_refeicao(self):
         for i, tipo in enumerate(TipoRefeicao, 1):

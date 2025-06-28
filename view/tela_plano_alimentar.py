@@ -39,9 +39,23 @@ class TelaPlanoAlimentar:
         
         return {"cpf_cliente": cpf_cliente, "cpf_nutricionista": cpf_nutricionista}
 
-    def mostra_plano(self, plano: PlanoAlimentar):
-        print("Informacoes do plano alimentar:")
-        print(plano.__str__())
+    def mostra_plano(self, dados_planos):
+        print("---------- LISTA DE PLANOS ALIMENTARES ----------")
+        if not dados_planos:
+            print("Nenhum plano para mostrar.")
+            return
+
+        for plano in dados_planos:
+            print(f"Código do Plano: {plano['codigo']}")
+            print(f"Cliente: {plano['cliente_nome']}")
+            print(f"Nutricionista: {plano['nutricionista_nome']}")
+            print("Refeições:")
+            if plano['refeicoes']:
+                for refeicao in plano['refeicoes']:
+                    print(f"- {refeicao}")
+            else:
+                print("- Nenhuma refeição associada a este plano.")
+            print("-" * 30)
 
     def seleciona_plano_por_cliente(self):
         while True:

@@ -1,18 +1,18 @@
 from model.alimento import Alimento
 
 class Refeicao:
-    def __init__(self, nome: str, alimentos: list[Alimento], tipo):
-        self.__nome = nome
+    def __init__(self, codigo: str, alimentos: list[Alimento], tipo):
+        self.__codigo = codigo
         self.__alimentos = alimentos
         self.__tipo = tipo
 
     @property
-    def nome(self):
-        return self.__nome
+    def codigo(self):
+        return self.__codigo
 
-    @nome.setter
-    def nome(self, nome: str):
-        self.__nome = nome
+    @codigo.setter
+    def codigo(self, nome: str):
+        self.__codigo = nome
 
     @property
     def alimentos(self):
@@ -49,7 +49,7 @@ class Refeicao:
     def __str__(self):
         alimentos_str = ", ".join([alimento.__str__() for alimento in self.__alimentos])
         return (
-            f"Refeição: {self.__nome}\n"
+            f"Refeição: {self.__codigo}\n"
             f"Tipo: {self.__tipo}\n"
             f"Alimentos: {alimentos_str}\n"
             f"Calorias Totais: {self.calorias_totais()} kcal\n"

@@ -76,11 +76,16 @@ class ControladorNutricionista:
             return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} nao existe!")
 
     def listar_nutricionistas(self):
-        lista_de_nutricionistas = self.__nutricionistas
-        if len(self.__nutricionistas) == 0:
-             self.__tela_nutricionista.mostrar_mensagem("Nao ha nutricionistas cadastrados!")
+        if not self.__nutricionistas:
+            self.__tela_nutricionista.mostra_mensagem("Nao ha nutricionistas cadastrados!")
         else:
-            self.__tela_nutricionista.listar_nutricionistas(lista_de_nutricionistas)
+            dados_para_tela = []
+            for nutricionista in self.__nutricionistas:
+                dados_para_tela.append({
+                    "nome": nutricionista.codigo,
+                    "cpf": nutricionista.cpf
+                })
+            self.__tela_nutricionista.listar_nutricionistas(dados_para_tela)
 
     def retornar(self):
         pass

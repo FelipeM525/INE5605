@@ -45,9 +45,9 @@ class PlanoAlimentar:
         )
 
     def __str__(self):
-        refeicoes_str = "\n".join([f"  - {refeicao.nome} ({refeicao.tipo})" for refeicao in self.__refeicoes]) if self.__refeicoes else "  Nenhuma refeição cadastrada."
+        refeicoes_str = "\n".join([f"  - {refeicao.codigo} ({refeicao.tipo})" for refeicao in self.__refeicoes]) if self.__refeicoes else "  Nenhuma refeição cadastrada."
     
-        cliente_info = self.cliente.nome if self.cliente else "Nenhum cliente associado."
+        cliente_info = self.cliente.codigo if self.cliente else "Nenhum cliente associado."
         nutricionista_info = str(self.nutricionista) if self.nutricionista else "Nenhum nutricionista associado."
 
         return (

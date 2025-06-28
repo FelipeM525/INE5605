@@ -141,9 +141,9 @@ class ControladorPlanoAlimentar:
         for plano in self.__planos:
             refeicoes_do_plano = [refeicao.codigo for refeicao in plano.refeicoes]
             dados_para_tela.append({
-                "codigo": plano.codigo,
-                "cliente_nome": plano.cliente.codigo,
-                "nutricionista_nome": plano.nutricionista.codigo,
+                "codigo": plano.cliente.cpf,
+                "cliente_nome": plano.cliente.nome,
+                "nutricionista_nome": plano.nutricionista.nome,
                 "refeicoes": refeicoes_do_plano
             })
 

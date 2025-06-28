@@ -46,7 +46,7 @@ class TelaPlanoAlimentar:
             return
 
         for plano in dados_planos:
-            print(f"Código do Plano: {plano['codigo']}")
+            print(f"Código do Plano (CPF do Cliente): {plano['codigo']}")
             print(f"Cliente: {plano['cliente_nome']}")
             print(f"Nutricionista: {plano['nutricionista_nome']}")
             print("Refeições:")

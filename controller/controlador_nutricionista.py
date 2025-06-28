@@ -9,7 +9,6 @@ class ControladorNutricionista:
         self.__tela_nutricionista = TelaNutricionista()
         self.__controlador_sistema = controlador_sistema
 
-
     def abre_tela(self):
         lista_opcoes = {1: self.incluir_nutricionista, 2: self.mostrar_dados_nutricionista, 3: self.listar_nutricionistas,
                         4: self.remover_nutricionista, 0: self.retornar}
@@ -45,7 +44,7 @@ class ControladorNutricionista:
         
             else:
                 self.__nutricionistas.append(novo_nutricionista)
-                print ("Nutricionista cadastrado com sucesso!")
+                return self.__tela_nutricionista.mostrar_mensagem("Nutricionista cadastrado com sucesso")
 
         except JahCadastradoException:
             return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {novo_nutricionista.cpf} ja existe!")

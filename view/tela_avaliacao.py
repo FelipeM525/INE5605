@@ -73,8 +73,8 @@ class TelaAvaliacao:
             print(f"Cliente: {dados['cliente_nome']}")
             print(f"Nutricionista: {dados['nutricionista_nome']}")
             print(f"Data: {dados['data']}")
-            print(f"Massa Magra: {dados['massa_magra']:.2f}%")
-            print(f"Gordura Corporal: {dados['taxa_gordura']:.2f}%")
+#            print(f"Massa Magra: {dados['massa_magra']:.2f}%")
+#            print(f"Gordura Corporal: {dados['taxa_gordura']:.2f}%")
             print("-" * 20)
 
     def mostra_relatorio_gordura(self, dados_relatorio):
@@ -101,7 +101,6 @@ class TelaAvaliacao:
         print("----Selecione o Tipo de Relatório----")
         print("1 - Por cliente")
         print("2 - Por nutricionista")
-        print("3 - Por data")
         print("0 - Sair")
     
         while True:

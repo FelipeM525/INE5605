@@ -189,30 +189,46 @@ class ControladorAvaliacao:
                 self.__tela_avaliacao.mostra_mensagem("Opção inválida. Tente novamente.")
 
     def relatorio_por_cliente(self):
-        cliente_alvo = self.__tela_avaliacao.selecionar_cliente_cpf()
-        try:
-            for avaliacao in self.__avaliacoes:
-                if avaliacao.cliente.cpf == cliente_alvo:
-                    self.__tela_avaliacao.mostra_avaliacao(avaliacao)
-                else:
-                    raise ClienteInexistenteException()
+        cliente_alvo_cpf = self.__tela_avaliacao.selecionar_cliente_cpf()
+        avaliacoes_do_cliente = []
 
-        except ClienteInexistenteException:
-            self.__tela_avaliacao.mostra_mensagem(f"Cliente com cpf {cliente_alvo} não existe!")
-            return
+        for avaliacao in self.__avaliacoes:
+            if avaliacao.cliente.cpf == cliente_alvo_cpf:
+                avaliacoes_do_cliente.append(avaliacao)
+
+        if avaliacoes_do_cliente:
+            dados_para_tela = []
+            for avaliacao in avaliacoes_do_cliente:
+                dados_para_tela.append({
+                    "codigo": avaliacao.codigo,
+                    "cliente_nome": avaliacao.cliente.nome,
+                    "nutricionista_nome": avaliacao.nutricionista.nome,
+                    "data": avaliacao.data,
+                })
+            self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
+        else:
+            self.__tela_avaliacao.mostra_mensagem(f"Nenhuma avaliação encontrada para o cliente com CPF {cliente_alvo_cpf}.")
 
     def relatorio_por_nutricionista(self):
-        nutri_alvo = self.__tela_avaliacao.selecionar_nutricionista_cpf()
-        try:
-            for avaliacao in self.__avaliacoes:
-                if avaliacao.nutricionista.cpf == nutri_alvo:
-                    self.__tela_avaliacao.mostra_avaliacao(avaliacao)
-                else:
-                    raise CadastroInexistenteException()
+        nutricionista_alvo_cpf = self.__tela_avaliacao.selecionar_nutricionista_cpf()
+        avaliacoes_do_nutricionista = []
 
-        except CadastroInexistenteException:
-            self.__tela_avaliacao.mostra_mensagem(f"Nutricionista com cpf {nutri_alvo} não existe!")
-            return
+        for avaliacao in self.__avaliacoes:
+            if avaliacao.nutricionista.cpf == nutricionista_alvo_cpf:
+                avaliacoes_do_nutricionista.append(avaliacao)
+
+        if avaliacoes_do_nutricionista:
+            dados_para_tela = []
+            for avaliacao in avaliacoes_do_nutricionista:
+                dados_para_tela.append({
+                    "codigo": avaliacao.codigo,
+                    "cliente_nome": avaliacao.cliente.nome,
+                    "nutricionista_nome": avaliacao.nutricionista.nome,
+                    "data": avaliacao.data,
+                })
+            self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
+        else:
+            self.__tela_avaliacao.mostra_mensagem(f"Nenhuma avaliação encontrada para o nutricionista com CPF {nutricionista_alvo_cpf}.")
 
     def relatorio_gordura_corporal(self):
         if not self.__avaliacoes:

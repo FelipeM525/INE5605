@@ -3,6 +3,7 @@ from exception.alimento_inexistente_exception import AlimentoInexistenteExceptio
 from exception.refeicao_existente_exception import RefeicaoExistenteException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
 from model.refeicao import Refeicao
+from view.tela_plano_alimentar import TelaPlanoAlimentar
 from view.tela_refeicao import TelaRefeicao
 from exception.plano_inexistente_exception import PlanoInexistenteException
 
@@ -13,6 +14,7 @@ class ControladorRefeicao:
         self.__controlador_sistema = controlador_sistema
         self.__tela_refeicao = TelaRefeicao()
         self.__tela_alimento = TelaAlimento()
+        self.__tela_plano_alimentar = TelaPlanoAlimentar()
         self.__refeicoes = []
 
     def incluir_refeicao(self):
@@ -28,6 +30,7 @@ class ControladorRefeicao:
             return self.__tela_refeicao.mostra_mensagem(f"Refeicao incluida com sucesso!")
         except RefeicaoExistenteException:
             return self.__tela_refeicao.mostra_mensagem(f"Refeicao ja existe!")
+
     def busca_refeicao_por_codigo(self, codigo):
         for refeicao in self.__refeicoes:
             if refeicao.codigo == codigo:
@@ -38,7 +41,7 @@ class ControladorRefeicao:
         cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
         try:
             plano = self.busca_plano_por_cliente(cpf_cliente)
-            
+
             codigo_refeicao = self.__tela_refeicao.seleciona_refeicao()
             refeicao_encontrada = None
             for refeicao in plano.refeicoes:
@@ -60,7 +63,7 @@ class ControladorRefeicao:
 
     def excluir_alimento_da_refeicao(self):
         codigo = self.__tela_refeicao.seleciona_refeicao()
-        codigo_alimento = self.__tela_alimento.seleciona_alimento()
+        nome_alimento = self.__tela_alimento.seleciona_alimento()
         refeicao = self.busca_refeicao_por_codigo(codigo)
 
         try:
@@ -68,12 +71,12 @@ class ControladorRefeicao:
                 raise RefeicaoInexistenteException
 
             for alimento in refeicao.alimentos:
-                if alimento.codigo == codigo_alimento:
+                if alimento.nome == nome_alimento:
                     refeicao.alimentos.remove(alimento)
                     return self.__tela_refeicao.mostra_mensagem(
-                        f"Alimento {codigo_alimento} removido da refeicao {codigo} com sucesso!")
+                        f"Alimento {nome_alimento} removido da refeicao {codigo} com sucesso!")
                 else:
-                    return self.__tela_refeicao.mostra_mensagem(f"Alimento {codigo_alimento} nao encontrado na refeicao {codigo}")
+                    return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} nao encontrado na refeicao {codigo}")
         except RefeicaoInexistenteException:
             return self.__tela_refeicao.mostra_mensagem(f"Refeicao {codigo} nao existe!")
 
@@ -88,19 +91,19 @@ class ControladorRefeicao:
         except RefeicaoInexistenteException:
             return self.__tela_refeicao.mostra_mensagem(f"Refeicao {codigo} nao existe!")
 
-        codigo_alimento = self.__tela_alimento.seleciona_alimento()
+        nome_alimento = self.__tela_alimento.seleciona_alimento()
 
         try:
-            alimento = self.__controlador_alimento.busca_alimento_por_nome(codigo_alimento)
+            alimento = self.__controlador_alimento.buscar_alimento_por_nome(nome_alimento)
 
             if not alimento:
                 raise AlimentoInexistenteException
 
             refeicao.adicionar_alimento(alimento)
 
-            return self.__tela_refeicao.mostra_mensagem(f"Alimento {codigo_alimento} incluido na refeicao {codigo} com sucesso!")
+            return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} incluido na refeicao {codigo} com sucesso!")
         except AlimentoInexistenteException:
-            return self.__tela_refeicao.mostra_mensagem(f"Alimento {codigo_alimento} nao existe!")
+            return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} nao existe!")
 
     def listar_refeicoes(self):
         if not self.__refeicoes:
@@ -108,7 +111,7 @@ class ControladorRefeicao:
         else:
             dados_para_tela = []
             for refeicao in self.__refeicoes:
-                alimentos_da_refeicao = [alimento.codigo for alimento in refeicao.alimentos]
+                alimentos_da_refeicao = [alimento.nome for alimento in refeicao.alimentos]
                 dados_para_tela.append({
                     "codigo": refeicao.codigo,
                     "horario": refeicao.horario,
@@ -120,7 +123,7 @@ class ControladorRefeicao:
 
     def abre_tela(self):
         lista_opcoes = {1: self.incluir_refeicao, 2: self.listar_refeicoes, 3: self.incluir_alimento_na_refeicao,
-                        4: self.excluir_alimento_da_refeicao, 5: self.excluir_refeicao, 0: self.retornar}
+                        4: self.excluir_alimento_da_refeicao, 5: self.remover_refeicao, 0: self.retornar}
 
         while True:
             opcao = self.__tela_refeicao.mostrar_menu()

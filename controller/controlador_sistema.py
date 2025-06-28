@@ -34,11 +34,11 @@ class ControladorSistema:
 
     def gerar_dados(self):
         # --- Criando Alimentos ---
-        alimento1 = Alimento(codigo="Maçã", calorias=52, carboidratos=14, gorduras=0.2, proteinas=0.3)
-        alimento2 = Alimento(codigo="Frango Grelhado", calorias=165, carboidratos=0, gorduras=3.6, proteinas=31)
-        alimento3 = Alimento(codigo="Arroz Integral Cozido", calorias=111, carboidratos=23, gorduras=0.9, proteinas=2.6)
-        alimento4 = Alimento(codigo="Brócolis Cozido", calorias=35, carboidratos=7, gorduras=0.4, proteinas=2.4)
-        alimento5 = Alimento(codigo="Ovo Cozido", calorias=78, carboidratos=0.6, gorduras=5, proteinas=6)
+        alimento1 = Alimento(nome="Maçã", calorias=52, carboidratos=14, gorduras=0.2, proteinas=0.3)
+        alimento2 = Alimento(nome="Frango Grelhado", calorias=165, carboidratos=0, gorduras=3.6, proteinas=31)
+        alimento3 = Alimento(nome="Arroz Integral Cozido", calorias=111, carboidratos=23, gorduras=0.9, proteinas=2.6)
+        alimento4 = Alimento(nome="Brócolis Cozido", calorias=35, carboidratos=7, gorduras=0.4, proteinas=2.4)
+        alimento5 = Alimento(nome="Ovo Cozido", calorias=78, carboidratos=0.6, gorduras=5, proteinas=6)
 
         # Adicionando alimentos diretamente à lista do controlador
         self.__controlador_alimento._ControladorAlimento__alimentos.extend(

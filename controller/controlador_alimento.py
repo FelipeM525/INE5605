@@ -17,13 +17,13 @@ class ControladorAlimento():
     def incluir_alimento(self):
         try:
             dados_alimento = self.__tela_alimento.pega_dados_alimento()
-            codigo_alimento = dados_alimento["codigo"]
+            nome_alimento = dados_alimento["nome"]
 
             for alimento in self.__alimentos:
-                if alimento.codigo == codigo_alimento:
+                if alimento.nome == nome_alimento:
                     raise JahCadastradoException
 
-            novo_alimento = Alimento(codigo_alimento,
+            novo_alimento = Alimento(nome_alimento,
                                      dados_alimento["calorias"],
                                      dados_alimento["carboidratos"],
                                      dados_alimento["proteinas"],
@@ -39,8 +39,8 @@ class ControladorAlimento():
             self.__tela_alimento.mostra_mensagem("Nenhum alimento cadastrado para alterar.")
             return
 
-        codigo_alimento = self.__tela_alimento.seleciona_alimento()
-        alimento = self.buscar_alimento_por_codigo(codigo_alimento)
+        nome_alimento = self.__tela_alimento.seleciona_alimento()
+        alimento = self.buscar_alimento_por_nome(nome_alimento)
 
         try:
             if not alimento:
@@ -48,7 +48,7 @@ class ControladorAlimento():
 
             novos_dados_alimento = self.__tela_alimento.pega_dados_alimento()
 
-            alimento.codigo = novos_dados_alimento["codigo"]
+            alimento.nome = novos_dados_alimento["nome"]
             alimento.calorias = novos_dados_alimento["calorias"]
             alimento.carboidratos = novos_dados_alimento["carboidratos"]
             alimento.proteinas = novos_dados_alimento["proteinas"]
@@ -65,8 +65,8 @@ class ControladorAlimento():
             self.__tela_alimento.mostra_mensagem("Nenhum alimento cadastrado para excluir.")
             return
 
-        codigo_alimento = self.__tela_alimento.seleciona_alimento()
-        alimento = self.buscar_alimento_por_codigo(codigo_alimento)
+        nome_alimento = self.__tela_alimento.seleciona_alimento()
+        alimento = self.buscar_alimento_por_nome(nome_alimento)
 
         try:
             if alimento:
@@ -87,7 +87,7 @@ class ControladorAlimento():
         dados_para_tela = []
         for alimento in self.__alimentos:
             dados_para_tela.append({
-                "codigo": alimento.codigo,
+                "nome": alimento.nome,
                 "calorias": alimento.calorias,
                 "carboidratos": alimento.carboidratos,
                 "proteinas": alimento.proteinas,
@@ -96,14 +96,14 @@ class ControladorAlimento():
 
         self.__tela_alimento.mostra_alimento(dados_para_tela)
 
-    def buscar_alimento_por_codigo(self, codigo: str):
+    def buscar_alimento_por_nome(self, nome: str):
         for alimento in self.__alimentos:
-            if alimento.codigo == codigo:
+            if alimento.nome == nome:
                 return alimento
         return None
 
     def retornar(self):
-        self.__controlador_sistema.abrir_tela()
+        pass
 
     def abrir_tela(self):
         lista_opcoes = {
@@ -118,5 +118,10 @@ class ControladorAlimento():
             funcao_escolhida = lista_opcoes.get(opcao_escolhida)
             if funcao_escolhida:
                 funcao_escolhida()
+
+            if opcao_escolhida == 0:
+                self.retornar()
+                break
+
             else:
                 self.__tela_alimento.mostra_mensagem("Opção inválida!")

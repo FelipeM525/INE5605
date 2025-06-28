@@ -38,28 +38,18 @@ class ControladorRefeicao:
         return None
 
     def remover_refeicao(self):
-        cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
-        try:
-            plano = self.busca_plano_por_cliente(cpf_cliente)
+        codigo_refeicao = self.__tela_refeicao.seleciona_refeicao()
+        refeicao = self.busca_refeicao_por_codigo(codigo_refeicao)
 
-            codigo_refeicao = self.__tela_refeicao.seleciona_refeicao()
-            refeicao_encontrada = None
-            for refeicao in plano.refeicoes:
-                if refeicao.codigo == codigo_refeicao:
-                    refeicao_encontrada = refeicao
-                    break
-            
-            if refeicao_encontrada:
-                plano.refeicoes.remove(refeicao_encontrada)
-                self.__tela_plano_alimentar.mostra_mensagem(f"Refeição '{codigo_refeicao}' removida do plano alimentar!")
+        try:
+            if refeicao:
+                self.__refeicoes.remove(refeicao)
+                self.__tela_refeicao.mostra_mensagem("Refeição removida do sistema com sucesso!")
             else:
                 raise RefeicaoInexistenteException
-
-        except PlanoInexistenteException:
-            self.__tela_plano_alimentar.mostra_mensagem(f"Erro: Não foi encontrado um plano alimentar para o CPF {cpf_cliente}.")
         except RefeicaoInexistenteException:
-            self.__tela_plano_alimentar.mostra_mensagem(f"Erro: A refeição '{codigo_refeicao}' não foi encontrada neste plano.")
-
+            self.__tela_refeicao.mostra_mensagem(
+                f"Erro: A refeição com código '{codigo_refeicao}' não foi encontrada no sistema.")
 
     def excluir_alimento_da_refeicao(self):
         codigo = self.__tela_refeicao.seleciona_refeicao()
@@ -70,17 +60,22 @@ class ControladorRefeicao:
             if not refeicao:
                 raise RefeicaoInexistenteException
 
+            alimento_encontrado = None
             for alimento in refeicao.alimentos:
                 if alimento.nome == nome_alimento:
-                    refeicao.alimentos.remove(alimento)
-                    return self.__tela_refeicao.mostra_mensagem(
-                        f"Alimento {nome_alimento} removido da refeicao {codigo} com sucesso!")
-                else:
-                    return self.__tela_refeicao.mostra_mensagem(f"Alimento {nome_alimento} nao encontrado na refeicao {codigo}")
-        except RefeicaoInexistenteException:
-            return self.__tela_refeicao.mostra_mensagem(f"Refeicao {codigo} nao existe!")
+                    alimento_encontrado = alimento
+                    break
 
-        return None
+            if alimento_encontrado:
+                refeicao.alimentos.remove(alimento_encontrado)
+                return self.__tela_refeicao.mostra_mensagem(
+                    f"Alimento '{nome_alimento}' removido da refeição '{codigo}' com sucesso!")
+            else:
+                return self.__tela_refeicao.mostra_mensagem(
+                    f"Alimento '{nome_alimento}' não encontrado na refeição '{codigo}'.")
+
+        except RefeicaoInexistenteException:
+            return self.__tela_refeicao.mostra_mensagem(f"Refeição '{codigo}' não existe!")
 
     def incluir_alimento_na_refeicao(self):
         codigo = self.__tela_refeicao.seleciona_refeicao()

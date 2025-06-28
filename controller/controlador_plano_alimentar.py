@@ -105,30 +105,40 @@ class ControladorPlanoAlimentar:
         return self.__tela_plano_alimentar.mostra_mensagem("Plano alimentar removido com sucesso!")
 
     def remover_refeicao(self):
-        cpf_cliente  = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
+        cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
         nome_refeicao = self.__tela_refeicao.seleciona_refeicao()
 
         plano = self.busca_plano_por_cliente(cpf_cliente)
         try:
             if not plano:
                 raise PlanoInexistenteException
+
+            refeicao_encontrada = False
+            for refeicao in plano.refeicoes:
+                if refeicao.codigo == nome_refeicao:
+                    plano.refeicoes.remove(refeicao)
+                    refeicao_encontrada = True
+                    self.__tela_plano_alimentar.mostra_mensagem(
+                        f"Refeicao {nome_refeicao} removida do plano alimentar!")
+                    break
+
+            if not refeicao_encontrada:
+                raise RefeicaoInexistenteException
+
         except PlanoInexistenteException:
-             return self.__tela_plano_alimentar.mostra_mensagem(f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
-
-        for refeicao in plano.refeicoes:
-            if refeicao.codigo == nome_refeicao:
-                plano.refeicoes.remove(refeicao)
-                return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao {nome_refeicao} removida do plano alimentar!")
-
-        raise RefeicaoInexistenteException
+            return self.__tela_plano_alimentar.mostra_mensagem(
+                f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
+        except RefeicaoInexistenteException:
+            return self.__tela_plano_alimentar.mostra_mensagem(
+                f"Refeição {nome_refeicao} não encontrada no plano alimentar!")
 
     def listar_planos(self):
-        if not self.__planos_alimentares:
+        if not self.__planos:
             self.__tela_plano_alimentar.mostra_mensagem("Nenhum plano alimentar cadastrado.")
             return
 
         dados_para_tela = []
-        for plano in self.__planos_alimentares:
+        for plano in self.__planos:
             refeicoes_do_plano = [refeicao.codigo for refeicao in plano.refeicoes]
             dados_para_tela.append({
                 "codigo": plano.codigo,

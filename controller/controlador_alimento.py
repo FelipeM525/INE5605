@@ -119,9 +119,9 @@ class ControladorAlimento():
             if funcao_escolhida:
                 funcao_escolhida()
 
+            else:
+                self.__tela_alimento.mostra_mensagem("Opção inválida!")
+
             if opcao_escolhida == 0:
                 self.retornar()
                 break
-
-            else:
-                self.__tela_alimento.mostra_mensagem("Opção inválida!")

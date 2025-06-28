@@ -30,7 +30,9 @@ class ControladorSistema:
                                                                        self.__controlador_nutricionista,
                                                                        self.__controlador_refeicao, self)
 
+        """
         self.gerar_dados()
+
 
     def gerar_dados(self):
         # --- Criando Alimentos ---
@@ -85,6 +87,7 @@ class ControladorSistema:
         cliente1.add_plano_alimentar(plano_joao)
 
         self.__controlador_plano_alimentar._ControladorPlanoAlimentar__planos.append(plano_joao)
+"""
 
     def inicializa_sistema(self):
         while True:

@@ -2,10 +2,11 @@ from model.nutricionista import Nutricionista
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from view.tela_nutricionista import TelaNutricionista
+from dao.nutricionista_dao import NutricionistaDAO
 
 class ControladorNutricionista:
     def __init__(self, controlador_sistema):
-        self.__nutricionistas = []
+        self.__nutricionista_dao = NutricionistaDAO()
         self.__tela_nutricionista = TelaNutricionista()
         self.__controlador_sistema = controlador_sistema
 
@@ -26,10 +27,7 @@ class ControladorNutricionista:
                 self.__tela_nutricionista.mostrar_mensagem("Opção inválida!")
 
     def buscar_nutricionista_por_cpf(self, cpf: str):
-        for nutricionista in self.__nutricionistas:
-            if nutricionista.cpf == cpf:
-                return nutricionista
-        return None
+        return self.__nutricionista_dao.get(cpf)
 
     def incluir_nutricionista(self):
         novo_nutricionista = self.__tela_nutricionista.cadastrar_nutricionista()
@@ -43,7 +41,7 @@ class ControladorNutricionista:
                 raise JahCadastradoException()
         
             else:
-                self.__nutricionistas.append(novo_nutricionista)
+                self.__nutricionista_dao.add(novo_nutricionista)
                 return self.__tela_nutricionista.mostrar_mensagem("Nutricionista cadastrado com sucesso")
 
         except JahCadastradoException:
@@ -55,7 +53,7 @@ class ControladorNutricionista:
 
         try:
             if nutricionista:
-                self.__nutricionistas.remove(nutricionista)
+                self.__nutricionista_dao.remove(cpf)
                 return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} removido com sucesso!")
 
             else:
@@ -76,11 +74,12 @@ class ControladorNutricionista:
             return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} nao existe!")
 
     def listar_nutricionistas(self):
-        if not self.__nutricionistas:
+        nutricionistas = self.__nutricionista_dao.get_all()
+        if not nutricionistas:
             self.__tela_nutricionista.mostra_mensagem("Nao ha nutricionistas cadastrados!")
         else:
             dados_para_tela = []
-            for nutricionista in self.__nutricionistas:
+            for nutricionista in nutricionistas:
                 dados_para_tela.append({
                     "nome": nutricionista.nome,
                     "cpf": nutricionista.cpf

@@ -3,11 +3,13 @@ from model.cliente import Cliente
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from view.tela_cliente import TelaCliente
+from dao.cliente_dao import ClienteDAO
+
 
 class ControladorCliente:
 
     def __init__(self, controlador_sistema):
-        self.__clientes = []
+        self.__cliente_dao = ClienteDAO()
         self.__tela_cliente = TelaCliente()
         self.__controlador_sistema = controlador_sistema
 
@@ -36,11 +38,7 @@ class ControladorCliente:
                 self.__tela_cliente.mostrar_mensagem("Opcao invalida!")
 
     def buscar_cliente_por_cpf(self, cpf: str):
-        for cliente in self.__clientes:
-            if cliente.cpf == cpf:
-                return cliente
-            
-        return None
+        return self.__cliente_dao.get(cpf)
 
     def incluir_cliente(self):
         dados_cliente = self.__tela_cliente.pegar_dados_cliente()
@@ -63,7 +61,7 @@ class ControladorCliente:
                     qtd_objetivo=dados_cliente["qtd_objetivo"],
                     tempo_objetivo=dados_cliente["tempo_objetivo"]
                 )
-                self.__clientes.append(novo_cliente)
+                self.__cliente_dao.add(novo_cliente)
                 self.__tela_cliente.mostrar_mensagem("Cliente incluido com sucesso!")
 
         except JahCadastradoException:
@@ -75,7 +73,7 @@ class ControladorCliente:
 
         try:
             if cliente:
-                self.__clientes.remove(cliente)
+                self.__cliente_dao.remove(cpf)
                 self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {cpf} removido com sucesso!")
             else:
                 raise CadastroInexistenteException()
@@ -83,11 +81,13 @@ class ControladorCliente:
             self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {cpf} nao existe!")
 
     def listar_clientes(self):
-        if not self.__clientes:
+        clientes = self.__cliente_dao.get_all()
+        if not clientes:
             self.__tela_cliente.mostrar_mensagem("Nao ha clientes cadastrados!")
+
         else:
             dados_clientes = []
-            for cliente in self.__clientes:
+            for cliente in clientes:
                 dados_clientes.append({
                     "nome": cliente.nome,
                     "cpf": cliente.cpf,
@@ -105,8 +105,11 @@ class ControladorCliente:
 
                 dados_novos = self.__tela_cliente.pegar_dados_cliente()
 
+                if cpf != dados_novos["cpf"] and self.buscar_cliente_por_cpf(dados_novos["cpf"]):
+                    self.__tela_cliente.mostrar_mensagem(f"Já existe um cliente com o CPF {dados_novos['cpf']}.")
+                    return
+
                 cliente.nome = dados_novos["nome"]
-                cliente.cpf = dados_novos["cpf"]
                 cliente.email = dados_novos["email"]
                 cliente.senha = dados_novos["senha"]
                 cliente.idade = dados_novos["idade"]
@@ -119,9 +122,15 @@ class ControladorCliente:
                     "quantidade": dados_novos["qtd_objetivo"],
                     "tempo": dados_novos["tempo_objetivo"]
                 }
-
                 cliente.objetivo = novos_dados_do_objetivo
-                
+
+                if cpf != dados_novos["cpf"]:
+                    self.__cliente_dao.remove(cpf)
+                    cliente.cpf = dados_novos["cpf"]
+                    self.__cliente_dao.add(cliente)
+                else:
+                    self.__cliente_dao.update(cliente)
+
                 self.__tela_cliente.mostrar_mensagem("Cliente alterado com sucesso!")
 
             else:
@@ -130,14 +139,12 @@ class ControladorCliente:
             self.__tela_cliente.mostrar_mensagem(f"Cliente com cpf {cpf} nao existe!")
 
     def atualizar_cliente(self, cliente_att: Cliente):
-
         try:
-            for cliente in self.__clientes:
-                if cliente_att.cpf == cliente.cpf:
-                    self.__clientes.remove(cliente)
-                    self.__clientes.append(cliente_att)
-                    return self.__tela_cliente.mostrar_mensagem("Cliente atualizado com sucesso!")
-            raise ClienteInexistenteException
+            if self.buscar_cliente_por_cpf(cliente_att.cpf):
+                self.__cliente_dao.update(cliente_att)
+                self.__tela_cliente.mostrar_mensagem("Cliente atualizado com sucesso!")
+            else:
+                raise ClienteInexistenteException
         except ClienteInexistenteException:
             return self.__tela_cliente.mostrar_mensagem("Cliente inexistente!")
 

@@ -128,11 +128,11 @@ class ControladorAvaliacao:
             for avaliacao in self.__avaliacoes:
                 dados_para_tela.append({
                     "codigo": avaliacao.codigo,
-                    "cliente_nome": avaliacao.cliente.codigo,
-                    "nutricionista_nome": avaliacao.nutricionista.codigo,
+                    "cliente_nome": avaliacao.cliente.nome,
+                    "nutricionista_nome": avaliacao.nutricionista.nome,
                     "data": avaliacao.data,
-                    "massa_magra": avaliacao.massa_magra,
-                    "taxa_gordura": avaliacao.taxa_gordura
+#                    "massa_magra": avaliacao.massa_magra,
+#                    "taxa_gordura": avaliacao.taxa_gordura
                 })
             self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
 

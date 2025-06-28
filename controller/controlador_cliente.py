@@ -89,7 +89,7 @@ class ControladorCliente:
             dados_clientes = []
             for cliente in self.__clientes:
                 dados_clientes.append({
-                    "nome": cliente.codigo,
+                    "nome": cliente.nome,
                     "cpf": cliente.cpf,
                     "idade": cliente.idade
                 })
@@ -106,6 +106,7 @@ class ControladorCliente:
                 dados_novos = self.__tela_cliente.pegar_dados_cliente()
 
                 cliente.nome = dados_novos["nome"]
+                cliente.cpf = dados_novos["cpf"]
                 cliente.email = dados_novos["email"]
                 cliente.senha = dados_novos["senha"]
                 cliente.idade = dados_novos["idade"]
@@ -122,7 +123,6 @@ class ControladorCliente:
                 cliente.objetivo = novos_dados_do_objetivo
                 
                 self.__tela_cliente.mostrar_mensagem("Cliente alterado com sucesso!")
-                self.__tela_cliente.mostrar_dados_do_cliente(cliente)
 
             else:
                 raise CadastroInexistenteException()

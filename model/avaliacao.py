@@ -17,7 +17,7 @@ class Avaliacao:
 
     @codigo.setter
     def codigo(self, codigo: str):
-        self.codigo = codigo
+        self.__codigo = codigo
 
     @property
     def cliente(self):

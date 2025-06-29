@@ -76,7 +76,7 @@ class ControladorNutricionista:
     def listar_nutricionistas(self):
         nutricionistas = self.__nutricionista_dao.get_all()
         if not nutricionistas:
-            self.__tela_nutricionista.mostra_mensagem("Nao ha nutricionistas cadastrados!")
+            self.__tela_nutricionista.mostrar_mensagem("Nao ha nutricionistas cadastrados!")
         else:
             dados_para_tela = []
             for nutricionista in nutricionistas:

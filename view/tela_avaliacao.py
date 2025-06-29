@@ -42,7 +42,7 @@ class TelaAvaliacao:
 
         while True:
             data = input("Digite a data da avaliacao (ex: DD/MM/AAAA): ").strip()
-            if data:  # Validação simples para não ser vazio
+            if data:
                 break
             self.mostra_mensagem("A data não pode ser vazia.")
 
@@ -73,8 +73,6 @@ class TelaAvaliacao:
             print(f"Cliente: {dados['cliente_nome']}")
             print(f"Nutricionista: {dados['nutricionista_nome']}")
             print(f"Data: {dados['data']}")
-#            print(f"Massa Magra: {dados['massa_magra']:.2f}%")
-#            print(f"Gordura Corporal: {dados['taxa_gordura']:.2f}%")
             print("-" * 20)
 
     def mostra_relatorio_gordura(self, dados_relatorio):
@@ -87,7 +85,6 @@ class TelaAvaliacao:
         print("---------- RELATORIO DE MASSA MAGRA ----------")
         for dados in dados_relatorio:
             print(f"Cliente: {dados['cliente_nome']}, Massa Magra: {dados['massa_magra']:.2f}%, Data: {dados['data']}")
-
 
     def seleciona_avaliacao(self):
         while True:

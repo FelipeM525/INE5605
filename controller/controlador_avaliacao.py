@@ -104,7 +104,6 @@ class ControladorAvaliacao:
                 avaliacao.data = novos_dados["data"]
                 avaliacao.imc = novos_dados["imc"]
                 avaliacao.taxa_mb = novos_dados["tmb"]
-
                 self.__tela_avaliacao.mostra_mensagem("Avaliação alterada com sucesso!")
 
             except AvaliacaoInexistenteException as e:
@@ -131,8 +130,6 @@ class ControladorAvaliacao:
                     "cliente_nome": avaliacao.cliente.nome,
                     "nutricionista_nome": avaliacao.nutricionista.nome,
                     "data": avaliacao.data,
-#                    "massa_magra": avaliacao.massa_magra,
-#                    "taxa_gordura": avaliacao.taxa_gordura
                 })
             self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
 

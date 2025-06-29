@@ -3,7 +3,6 @@ from model.alimento import Alimento
 from exception.alimento_inexistente_exception import AlimentoInexistenteException
 from exception.jahCadastradoException import JahCadastradoException
 
-
 class ControladorAlimento():
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema

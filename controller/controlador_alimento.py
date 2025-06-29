@@ -1,4 +1,5 @@
-from view.tela_alimento import TelaAlimento
+from tkinter import Toplevel
+from view.tela_alimento_tkinter import TelaAlimentoTk
 from model.alimento import Alimento
 from exception.alimento_inexistente_exception import AlimentoInexistenteException
 from exception.jahCadastradoException import JahCadastradoException
@@ -7,8 +8,14 @@ from dao.alimento_dao import AlimentoDAO
 class ControladorAlimento():
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
-        self.__tela_alimento = TelaAlimento()
         self.__alimento_dao = AlimentoDAO()
+        self.__tela_alimento = None
+        self.__top_level = None
+
+    def abre_tela(self):
+        self.__top_level = Toplevel(self.__controlador_sistema.root)
+        self.__tela_alimento = TelaAlimentoTk(self.__top_level, self)
+        self.__top_level.protocol("WM_DELETE_WINDOW", self.retornar)
 
     @property
     def alimentos(self):
@@ -17,6 +24,10 @@ class ControladorAlimento():
     def incluir_alimento(self):
         try:
             dados_alimento = self.__tela_alimento.pega_dados_alimento()
+            if not dados_alimento.get("nome"):
+                self.__tela_alimento.mostra_mensagem("Cancelado", "Inclusão cancelada.")
+                return
+
             nome_alimento = dados_alimento["nome"]
 
             if self.__alimento_dao.get(nome_alimento):
@@ -27,74 +38,64 @@ class ControladorAlimento():
                                      dados_alimento["carboidratos"],
                                      dados_alimento["proteinas"],
                                      dados_alimento["gorduras"])
-            self.__alimento_dao.add(nome_alimento, novo_alimento)
-            self.__tela_alimento.mostra_mensagem("Alimento cadastrado com sucesso!")
+            self.__alimento_dao.add(novo_alimento.nome, novo_alimento)
+            self.__tela_alimento.mostra_mensagem("Sucesso", "Alimento cadastrado com sucesso!")
 
-        except JahCadastradoException as e:
-            self.__tela_alimento.mostra_mensagem(e)
+        except JahCadastradoException:
+            self.__tela_alimento.mostra_mensagem("Erro", "Alimento já cadastrado!")
+        except Exception as e:
+            self.__tela_alimento.mostra_mensagem("Erro", f"Ocorreu um erro: {e}")
 
     def alterar_alimento(self):
-        if not self.alimentos:
-            self.__tela_alimento.mostra_mensagem("Nenhum alimento cadastrado para alterar.")
-            return
-
         nome_alimento = self.__tela_alimento.seleciona_alimento()
+        if not nome_alimento: return
+
         alimento = self.buscar_alimento_por_nome(nome_alimento)
 
         try:
             if not alimento:
-                raise AlimentoInexistenteException
+                raise AlimentoInexistenteException()
 
-            novos_dados_alimento = self.__tela_alimento.pega_dados_alimento()
+            novos_dados = self.__tela_alimento.pega_dados_alimento(alimento)
+            if not novos_dados.get("nome"):
+                self.__tela_alimento.mostra_mensagem("Cancelado", "Alteração cancelada.")
+                return
 
-            # Remove o antigo antes de adicionar o novo com a chave potentially nova
-            self.__alimento_dao.remove(alimento.nome)
+            alimento.calorias = novos_dados["calorias"]
+            alimento.carboidratos = novos_dados["carboidratos"]
+            alimento.proteinas = novos_dados["proteinas"]
+            alimento.gorduras = novos_dados["gorduras"]
 
-            alimento.nome = novos_dados_alimento["nome"]
-            alimento.calorias = novos_dados_alimento["calorias"]
-            alimento.carboidratos = novos_dados_alimento["carboidratos"]
-            alimento.proteinas = novos_dados_alimento["proteinas"]
-            alimento.gorduras = novos_dados_alimento["gorduras"]
+            self.__alimento_dao.update(alimento.nome, alimento)
+            self.__tela_alimento.mostra_mensagem("Sucesso", "Alimento alterado com sucesso!")
 
-            self.__alimento_dao.add(alimento.nome, alimento)
-            self.listar_alimento()
-            self.__tela_alimento.mostra_mensagem("Alimento alterado com sucesso!")
-
-        except AlimentoInexistenteException as e:
-            self.__tela_alimento.mostra_mensagem(f"Erro: {e}")
+        except AlimentoInexistenteException:
+            self.__tela_alimento.mostra_mensagem("Erro", f"Alimento '{nome_alimento}' não encontrado.")
 
     def excluir_alimento(self):
-        if not self.alimentos:
-            self.__tela_alimento.mostra_mensagem("Nenhum alimento cadastrado para excluir.")
-            return
-
         nome_alimento = self.__tela_alimento.seleciona_alimento()
+        if not nome_alimento: return
 
         try:
             if self.__alimento_dao.get(nome_alimento):
                 self.__alimento_dao.remove(nome_alimento)
-                self.listar_alimento()
-                self.__tela_alimento.mostra_mensagem("Alimento removido com sucesso!")
+                self.__tela_alimento.mostra_mensagem("Sucesso", "Alimento removido com sucesso!")
             else:
-                raise AlimentoInexistenteException
+                raise AlimentoInexistenteException()
 
-        except AlimentoInexistenteException as e:
-            self.__tela_alimento.mostra_mensagem(f"Erro: {e}")
+        except AlimentoInexistenteException:
+            self.__tela_alimento.mostra_mensagem("Erro", f"Alimento '{nome_alimento}' não encontrado.")
 
     def listar_alimento(self):
         if not self.alimentos:
-            self.__tela_alimento.mostra_mensagem("Nenhum alimento cadastrado.")
+            self.__tela_alimento.mostra_mensagem("Info", "Nenhum alimento cadastrado.")
             return
 
-        dados_para_tela = []
-        for alimento in self.alimentos:
-            dados_para_tela.append({
-                "nome": alimento.nome,
-                "calorias": alimento.calorias,
-                "carboidratos": alimento.carboidratos,
-                "proteinas": alimento.proteinas,
-                "gorduras": alimento.gorduras
-            })
+        dados_para_tela = [{
+            "nome": alimento.nome, "calorias": alimento.calorias,
+            "carboidratos": alimento.carboidratos, "proteinas": alimento.proteinas,
+            "gorduras": alimento.gorduras
+        } for alimento in self.alimentos]
 
         self.__tela_alimento.mostra_alimento(dados_para_tela)
 
@@ -102,24 +103,5 @@ class ControladorAlimento():
         return self.__alimento_dao.get(nome)
 
     def retornar(self):
-        pass
-
-    def abrir_tela(self):
-        lista_opcoes = {
-            1: self.incluir_alimento,
-            2: self.alterar_alimento,
-            3: self.listar_alimento,
-            4: self.excluir_alimento,
-            0: self.retornar
-        }
-        while True:
-            opcao_escolhida = self.__tela_alimento.tela_opcoes()
-            funcao_escolhida = lista_opcoes.get(opcao_escolhida)
-            if funcao_escolhida:
-                funcao_escolhida()
-            else:
-                self.__tela_alimento.mostra_mensagem("Opção inválida!")
-
-            if opcao_escolhida == 0:
-                self.retornar()
-                break
+        self.__top_level.destroy()
+        self.__controlador_sistema.reabre_tela_principal()

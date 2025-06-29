@@ -6,7 +6,7 @@ class TelaAvaliacaoTk:
         self.__master = master
         self.__controlador_avaliacao = controlador_avaliacao
         self.__master.title("Menu Avaliação")
-        self.__master.geometry("300x300")
+        self.__master.geometry("400x350")
 
         self.frame = tk.Frame(self.__master)
         self.frame.pack(pady=10, padx=10, fill="both", expand=True)

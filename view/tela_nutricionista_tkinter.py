@@ -6,7 +6,7 @@ class TelaNutricionistaTk:
         self.__master = master
         self.__controlador_nutricionista = controlador_nutricionista
         self.__master.title("Menu Nutricionista")
-        self.__master.geometry("300x250")
+        self.__master.geometry("400x300")
 
         self.frame = tk.Frame(self.__master)
         self.frame.pack(pady=10, padx=10, fill="both", expand=True)

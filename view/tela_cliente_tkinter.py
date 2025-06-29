@@ -6,7 +6,7 @@ class TelaClienteTk:
         self.__master = master
         self.__controlador_cliente = controlador_cliente
         self.__master.title("Menu Cliente")
-        self.__master.geometry("300x300")
+        self.__master.geometry("400x350")
 
         self.frame = tk.Frame(self.__master)
         self.frame.pack(pady=10, padx=10, fill="both", expand=True)

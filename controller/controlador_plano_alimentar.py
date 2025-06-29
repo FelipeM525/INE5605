@@ -1,175 +1,117 @@
+from tkinter import Toplevel
 from exception.cliente_inexistente_exception import ClienteInexistenteException
 from exception.nutricionista_inexistente_exception import NutricionistaInexistenteException
 from exception.plano_inexistente_exception import PlanoInexistenteException
 from exception.plano_ja_cadastrado_exception import PlanoJaCadastradoException
 from exception.refeicao_inexistente_exception import RefeicaoInexistenteException
 from model.plano_alimentar import PlanoAlimentar
-from view.tela_plano_alimentar import TelaPlanoAlimentar
-from controller.controlador_refeicao import ControladorRefeicao
-from view.tela_refeicao import TelaRefeicao
-from controller.controlador_cliente import ControladorCliente
-from controller.controlador_nutricionista import ControladorNutricionista
+from view.tela_plano_alimentar_tkinter import TelaPlanoAlimentarTk
 from dao.plano_alimentar_dao import PlanoAlimentarDAO
 
-
 class ControladorPlanoAlimentar:
-
-    def __init__(self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista, controlador_refeicao: ControladorRefeicao, controlador_sistema):
+    def __init__(self, controlador_cliente, controlador_nutricionista, controlador_refeicao, controlador_sistema):
         self.__plano_dao = PlanoAlimentarDAO()
-        self.__tela_plano_alimentar = TelaPlanoAlimentar()
-        self.__tela_refeicao = TelaRefeicao()
-        self.__controlador_nutricionista = controlador_nutricionista
+        self.__tela_plano_alimentar = None
         self.__controlador_cliente = controlador_cliente
+        self.__controlador_nutricionista = controlador_nutricionista
         self.__controlador_refeicao = controlador_refeicao
         self.__controlador_sistema = controlador_sistema
+        self.__top_level = None
+
+    def abre_tela(self):
+        self.__top_level = Toplevel(self.__controlador_sistema.root)
+        self.__tela_plano_alimentar = TelaPlanoAlimentarTk(self.__top_level, self)
+        self.__top_level.protocol("WM_DELETE_WINDOW", self.retornar)
 
     def incluir_plano_alimentar(self):
         dados_plano = self.__tela_plano_alimentar.pegar_dados_plano()
-        cpf_cliente = dados_plano["cpf_cliente"]
-        cpf_nutricionista = dados_plano["cpf_nutricionista"]
-
-        cliente = self.__controlador_cliente.buscar_cliente_por_cpf(cpf_cliente)
-        try:
-            if not cliente:
-                raise ClienteInexistenteException
-        except ClienteInexistenteException:
-            self.__tela_plano_alimentar.mostra_mensagem(f"Cliente {cpf_cliente} nao existe!")
-            return
-
-        nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(cpf_nutricionista)
-
-        try:
-            if not nutricionista:
-                raise NutricionistaInexistenteException
-        except NutricionistaInexistenteException:
-            self.__tela_plano_alimentar.mostra_mensagem(f"Nutricionista com cpf {cpf_nutricionista} nao existe!")
+        if not dados_plano.get("cpf_cliente"):
+            self.__tela_plano_alimentar.mostra_mensagem("Cancelado", "Inclusão cancelada.")
             return
 
         try:
-            if cliente.plano_alimentar is None:
-                plano_alimentar = PlanoAlimentar([], nutricionista, cliente)
-                cliente.plano_alimentar = plano_alimentar
-                self.__controlador_cliente.atualizar_cliente(cliente)
-                self.__plano_dao.add(cliente.cpf, plano_alimentar)
-                return self.__tela_plano_alimentar.mostra_mensagem("Plano alimentar incluido com sucesso!")
-            else:
-                raise PlanoJaCadastradoException
-        except PlanoJaCadastradoException:
-            return self.__tela_plano_alimentar.mostra_mensagem(f"Cliente {cpf_cliente} ja possui um plano alimentar cadastrado!")
+            cliente = self.__controlador_cliente.buscar_cliente_por_cpf(dados_plano["cpf_cliente"])
+            if not cliente: raise ClienteInexistenteException()
+
+            nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(dados_plano["cpf_nutricionista"])
+            if not nutricionista: raise NutricionistaInexistenteException()
+
+            if self.busca_plano_por_cliente(cliente.cpf):
+                raise PlanoJaCadastradoException()
+
+            plano = PlanoAlimentar([], nutricionista, cliente)
+            self.__plano_dao.add(cliente.cpf, plano)
+            self.__tela_plano_alimentar.mostra_mensagem("Sucesso", "Plano alimentar incluído!")
+        except (ClienteInexistenteException, NutricionistaInexistenteException, PlanoJaCadastradoException) as e:
+            self.__tela_plano_alimentar.mostra_mensagem("Erro", str(e))
 
     def inclui_refeicao_no_plano(self):
         cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
+        if not cpf_cliente: return
 
         plano = self.busca_plano_por_cliente(cpf_cliente)
+        if not plano:
+            self.__tela_plano_alimentar.mostra_mensagem("Erro", f"Plano não encontrado para o cliente {cpf_cliente}.")
+            return
 
-        try:
-            if not plano:
-                raise PlanoInexistenteException
-        except PlanoInexistenteException:
-            return self.__tela_plano_alimentar.mostra_mensagem(f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
+        codigo_refeicao = self.__tela_plano_alimentar.seleciona_refeicao_cod()
+        if not codigo_refeicao: return
 
-        nome_refeicao = self.__tela_refeicao.seleciona_refeicao()
-        refeicao_nova = self.__controlador_refeicao.busca_refeicao_por_codigo(nome_refeicao)
-
-        try:
-            if not refeicao_nova:
-                raise RefeicaoInexistenteException
-        except RefeicaoInexistenteException:
-            return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao nao existe!")
+        refeicao_nova = self.__controlador_refeicao.busca_refeicao_por_codigo(codigo_refeicao)
+        if not refeicao_nova:
+            self.__tela_plano_alimentar.mostra_mensagem("Erro", "Refeição não encontrada.")
+            return
 
         plano.adicionar_refeicao(refeicao_nova)
         self.__plano_dao.update(plano.cliente.cpf, plano)
-        self.__controlador_cliente.atualizar_cliente(plano.cliente)
-
-        return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao incluida no plano alimentar!")
+        self.__tela_plano_alimentar.mostra_mensagem("Sucesso", "Refeição incluída no plano!")
 
     def busca_plano_por_cliente(self, cpf_cliente):
         return self.__plano_dao.get(cpf_cliente)
 
     def remover_plano(self):
         cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
-        plano = self.busca_plano_por_cliente(cpf_cliente)
+        if not cpf_cliente: return
 
-        try:
-            if not plano:
-                raise PlanoInexistenteException
-        except PlanoInexistenteException:
-            return self.__tela_plano_alimentar.mostra_mensagem(f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
-
-        plano.cliente.plano_alimentar = None
-        self.__controlador_cliente.atualizar_cliente(plano.cliente)
-        self.__plano_dao.remove(cpf_cliente)
-
-        return self.__tela_plano_alimentar.mostra_mensagem("Plano alimentar removido com sucesso!")
+        if self.busca_plano_por_cliente(cpf_cliente):
+            self.__plano_dao.remove(cpf_cliente)
+            self.__tela_plano_alimentar.mostra_mensagem("Sucesso", "Plano removido.")
+        else:
+            self.__tela_plano_alimentar.mostra_mensagem("Erro", "Plano não encontrado.")
 
     def remover_refeicao(self):
         cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
-        nome_refeicao = self.__tela_refeicao.seleciona_refeicao()
+        if not cpf_cliente: return
 
         plano = self.busca_plano_por_cliente(cpf_cliente)
-        try:
-            if not plano:
-                raise PlanoInexistenteException
+        if not plano:
+            self.__tela_plano_alimentar.mostra_mensagem("Erro", "Plano não encontrado.")
+            return
 
-            refeicao_encontrada = False
-            for refeicao in plano.refeicoes:
-                if refeicao.codigo == nome_refeicao:
-                    plano.refeicoes.remove(refeicao)
-                    refeicao_encontrada = True
-                    self.__plano_dao.update(plano.cliente.cpf, plano)
-                    self.__tela_plano_alimentar.mostra_mensagem(
-                        f"Refeicao {nome_refeicao} removida do plano alimentar!")
-                    break
+        codigo_refeicao = self.__tela_plano_alimentar.seleciona_refeicao_cod()
+        if not codigo_refeicao: return
 
-            if not refeicao_encontrada:
-                raise RefeicaoInexistenteException
-
-        except PlanoInexistenteException:
-            return self.__tela_plano_alimentar.mostra_mensagem(
-                f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
-        except RefeicaoInexistenteException:
-            return self.__tela_plano_alimentar.mostra_mensagem(
-                f"Refeição {nome_refeicao} não encontrada no plano alimentar!")
+        refeicao_encontrada = next((r for r in plano.refeicoes if r.codigo == codigo_refeicao), None)
+        if refeicao_encontrada:
+            plano.refeicoes.remove(refeicao_encontrada)
+            self.__plano_dao.update(plano.cliente.cpf, plano)
+            self.__tela_plano_alimentar.mostra_mensagem("Sucesso", "Refeição removida do plano.")
+        else:
+            self.__tela_plano_alimentar.mostra_mensagem("Erro", "Refeição não encontrada no plano.")
 
     def listar_planos(self):
         planos = self.__plano_dao.get_all()
         if not planos:
-            self.__tela_plano_alimentar.mostra_mensagem("Nenhum plano alimentar cadastrado.")
+            self.__tela_plano_alimentar.mostra_mensagem("Info", "Nenhum plano cadastrado.")
             return
 
-        dados_para_tela = []
-        for plano in planos:
-            refeicoes_do_plano = [refeicao.codigo for refeicao in plano.refeicoes]
-            dados_para_tela.append({
-                "codigo": plano.cliente.cpf,
-                "cliente_nome": plano.cliente.nome,
-                "nutricionista_nome": plano.nutricionista.nome,
-                "refeicoes": refeicoes_do_plano
-            })
-
+        dados_para_tela = [{
+            "codigo": p.cliente.cpf, "cliente_nome": p.cliente.nome,
+            "nutricionista_nome": p.nutricionista.nome,
+            "refeicoes": [r.codigo for r in p.refeicoes]
+        } for p in planos]
         self.__tela_plano_alimentar.mostra_plano(dados_para_tela)
 
-    def abre_tela(self):
-        lista_opcoes = {
-            1: self.incluir_plano_alimentar,
-            2: self.listar_planos,
-            3: self.inclui_refeicao_no_plano,
-            4: self.remover_refeicao,
-            5: self.remover_plano,
-            0: self.retornar
-        }
-
-        while True:
-            opcao = self.__tela_plano_alimentar.mostra_tela()
-            if opcao == 0:
-                self.retornar()
-                break
-
-            funcao_escolhida = lista_opcoes.get(opcao)
-            if funcao_escolhida:
-                funcao_escolhida()
-            else:
-                self.__tela_plano_alimentar.mostra_mensagem("Opção inválida!")
-
     def retornar(self):
-        pass
+        self.__top_level.destroy()
+        self.__controlador_sistema.reabre_tela_principal()

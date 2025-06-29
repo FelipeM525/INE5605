@@ -5,7 +5,7 @@ class TelaObjetivoTk:
     def __init__(self, master, objetivo_existente=None):
         self.__master = master
         self.__master.title("Definir Objetivo do Cliente")
-        self.__master.geometry("350x250")
+        self.__master.geometry("400x300")
         self.__dados_objetivo = {}
 
         self.frame = tk.Frame(self.__master)

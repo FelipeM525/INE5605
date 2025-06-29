@@ -42,6 +42,10 @@ class ControladorSistema:
         self.__root.withdraw()  # Esconde a janela principal
         self.__controlador_nutricionista.abre_tela()
 
+    def chama_controlador_avaliacao(self):
+        self.__root.withdraw()
+        self.__controlador_avaliacao.abre_tela()
+
     def reabre_tela_principal(self):
         self.__root.deiconify()  # Reexibe a janela principal
 

@@ -1,5 +1,6 @@
+from tkinter import Toplevel
 from model.avaliacao import Avaliacao
-from view.tela_avaliacao import TelaAvaliacao
+from view.tela_avaliacao_tkinter import TelaAvaliacaoTk
 from exception.avaliacao_inexistente_exception import AvaliacaoInexistenteException
 from exception.cadastroInexistenteException import CadastroInexistenteException
 from exception.cliente_inexistente_exception import ClienteInexistenteException
@@ -13,94 +14,81 @@ from dao.avaliacao_dao import AvaliacaoDAO
 class ControladorAvaliacao:
     def __init__(self, controlador_sistema, controlador_cliente: ControladorCliente,
                  controlador_nutricionista: ControladorNutricionista):
-        self.__tela_avaliacao = TelaAvaliacao()
+        self.__tela_avaliacao = None
         self.__controlador_cliente = controlador_cliente
         self.__controlador_nutricionista = controlador_nutricionista
         self.__controlador_sistema = controlador_sistema
         self.__avaliacao_dao = AvaliacaoDAO()
+        self.__top_level = None
 
     def abre_tela(self):
-        lista_opcoes = {
-            1: self.incluir_avaliacao,
-            2: self.lista_avaliacao,
-            3: self.alterar_avaliacao,
-            4: self.remover_avaliacao,
-            5: self.relatorio_de_avaliacoes,
-            0: self.retornar
-        }
+        self.__top_level = Toplevel(self.__controlador_sistema.root)
+        self.__tela_avaliacao = TelaAvaliacaoTk(self.__top_level, self)
+        self.__top_level.protocol("WM_DELETE_WINDOW", self.retornar)
 
-        while True:
-            opcao = self.__tela_avaliacao.mostrar_menu()
-
-            if opcao == 0:
-                self.retornar()
-                break
-
-            funcao_escolhida = lista_opcoes.get(opcao)
-
-            if funcao_escolhida:
-                funcao_escolhida()
-            else:
-                self.__tela_avaliacao.mostra_mensagem("Opção inválida. Tente novamente.")
 
     def incluir_avaliacao(self):
         dados_avaliacao = self.__tela_avaliacao.pega_dados_avaliacao()
+        if not dados_avaliacao.get("codigo"):
+            return
+
         codigo_avaliacao = dados_avaliacao["codigo"]
 
         if self.busca_avaliacao_por_codigo(codigo_avaliacao):
-            self.__tela_avaliacao.mostra_mensagem(f"Já existe uma avaliação com o codigo '{codigo_avaliacao}'.")
+            self.__tela_avaliacao.mostra_mensagem("Erro", f"Já existe uma avaliação com o código '{codigo_avaliacao}'.")
             return
 
-        cliente: Cliente = self.__controlador_cliente.buscar_cliente_por_cpf(dados_avaliacao["cpf_cliente"])
         try:
+            cliente: Cliente = self.__controlador_cliente.buscar_cliente_por_cpf(dados_avaliacao["cpf_cliente"])
             if not cliente:
                 raise ClienteInexistenteException
-        except ClienteInexistenteException:
-            self.__tela_avaliacao.mostra_mensagem(f"Cliente com cpf {dados_avaliacao['cpf_cliente']} não existe!")
-            return
 
-        nutricionista: Nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(
-            dados_avaliacao["cpf_nutricionista"])
-        try:
+            nutricionista: Nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(
+                dados_avaliacao["cpf_nutricionista"])
             if not nutricionista:
                 raise CadastroInexistenteException
+
+            avaliacao = Avaliacao(codigo_avaliacao, cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"],
+                                  dados_avaliacao["tmb"])
+
+            self.__avaliacao_dao.add(avaliacao.codigo, avaliacao)
+            self.__tela_avaliacao.mostra_mensagem("Sucesso", f"Avaliação '{avaliacao.codigo}' incluída com sucesso!")
+
+        except ClienteInexistenteException:
+            self.__tela_avaliacao.mostra_mensagem("Erro", f"Cliente com CPF {dados_avaliacao['cpf_cliente']} não existe!")
         except CadastroInexistenteException:
-            self.__tela_avaliacao.mostra_mensagem(
-                f"Nutricionista com cpf {dados_avaliacao['cpf_nutricionista']} não existe!")
-            return
+            self.__tela_avaliacao.mostra_mensagem("Erro", f"Nutricionista com CPF {dados_avaliacao['cpf_nutricionista']} não existe!")
 
-        avaliacao = Avaliacao(codigo_avaliacao, cliente, nutricionista, dados_avaliacao["data"], dados_avaliacao["imc"],
-                              dados_avaliacao["tmb"])
-
-        self.__avaliacao_dao.add(avaliacao.codigo, avaliacao)
-        self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{avaliacao.codigo}' incluida com sucesso!")
 
     def alterar_avaliacao(self):
-        if not self.veriricar_se_avaliacoes_existem():
+        if not self.verificar_se_avaliacoes_existem():
             return
         codigo_alvo = self.__tela_avaliacao.seleciona_avaliacao()
+        if not codigo_alvo: return
+
         avaliacao = self.busca_avaliacao_por_codigo(codigo_alvo)
 
         try:
             if not avaliacao:
                 raise AvaliacaoInexistenteException
 
-            self.__tela_avaliacao.mostra_mensagem("\nDigite os novos dados para a avaliação:")
             novos_dados = self.__tela_avaliacao.pega_dados_avaliacao()
+            if not novos_dados.get("codigo"): return
+
             novo_codigo = novos_dados["codigo"]
 
             if novo_codigo != codigo_alvo and self.busca_avaliacao_por_codigo(novo_codigo):
-                self.__tela_avaliacao.mostra_mensagem(f"O codigo '{novo_codigo}' já está em uso por outra avaliação.")
+                self.__tela_avaliacao.mostra_mensagem("Erro", f"O código '{novo_codigo}' já está em uso por outra avaliação.")
                 return
 
             cliente = self.__controlador_cliente.buscar_cliente_por_cpf(novos_dados["cpf_cliente"])
-            if not cliente:
-                raise ClienteInexistenteException
+            if not cliente: raise ClienteInexistenteException
 
             nutricionista = self.__controlador_nutricionista.buscar_nutricionista_por_cpf(
                 novos_dados["cpf_nutricionista"])
-            if not nutricionista:
-                raise CadastroInexistenteException
+            if not nutricionista: raise CadastroInexistenteException
+
+            self.__avaliacao_dao.remove(codigo_alvo)
 
             avaliacao.codigo = novo_codigo
             avaliacao.cliente = cliente
@@ -109,19 +97,20 @@ class ControladorAvaliacao:
             avaliacao.imc = novos_dados["imc"]
             avaliacao.taxa_mb = novos_dados["tmb"]
 
-            self.__avaliacao_dao.update(avaliacao.codigo, avaliacao)
-            self.__tela_avaliacao.mostra_mensagem("Avaliação alterada com sucesso!")
+            self.__avaliacao_dao.add(avaliacao.codigo, avaliacao)
+            self.__tela_avaliacao.mostra_mensagem("Sucesso", "Avaliação alterada com sucesso!")
 
-        except AvaliacaoInexistenteException as e:
-            print(e)
-        except ClienteInexistenteException as e:
-            print(e)
-        except CadastroInexistenteException as e:
-            print(e)
+        except AvaliacaoInexistenteException:
+            self.__tela_avaliacao.mostra_mensagem("Erro", f"Avaliação com código {codigo_alvo} não existe!")
+        except ClienteInexistenteException:
+            self.__tela_avaliacao.mostra_mensagem("Erro", "Cliente não encontrado!")
+        except CadastroInexistenteException:
+            self.__tela_avaliacao.mostra_mensagem("Erro", "Nutricionista não encontrado!")
+
 
     def lista_avaliacao(self):
         if not self.__avaliacao_dao.get_all():
-            self.__tela_avaliacao.mostra_mensagem("Nao ha avaliacoes cadastradas!")
+            self.__tela_avaliacao.mostra_mensagem("Info", "Não há avaliações cadastradas!")
         else:
             dados_para_tela = []
             for avaliacao in self.__avaliacao_dao.get_all():
@@ -130,97 +119,79 @@ class ControladorAvaliacao:
                     "cliente_nome": avaliacao.cliente.nome,
                     "nutricionista_nome": avaliacao.nutricionista.nome,
                     "data": avaliacao.data,
+                    "imc": avaliacao.imc,          # <-- ADICIONADO
+                    "tmb": avaliacao.taxa_mb      # <-- ADICIONADO
                 })
             self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
 
     def remover_avaliacao(self):
-        if not self.veriricar_se_avaliacoes_existem():
+        if not self.verificar_se_avaliacoes_existem():
             return
+
         codigo_avaliacao = self.__tela_avaliacao.seleciona_avaliacao()
+        if not codigo_avaliacao: return
 
         try:
             if self.__avaliacao_dao.get(codigo_avaliacao):
                 self.__avaliacao_dao.remove(codigo_avaliacao)
-                self.__tela_avaliacao.mostra_mensagem(f"Avaliacao '{codigo_avaliacao}' removida com sucesso!")
+                self.__tela_avaliacao.mostra_mensagem("Sucesso", f"Avaliação '{codigo_avaliacao}' removida com sucesso!")
             else:
                 raise AvaliacaoInexistenteException()
-        except AvaliacaoInexistenteException as e:
-            print(e)
+        except AvaliacaoInexistenteException:
+            self.__tela_avaliacao.mostra_mensagem("Erro", "Avaliação não existente!")
 
     def busca_avaliacao_por_codigo(self, codigo: str):
         return self.__avaliacao_dao.get(codigo)
 
     def retornar(self):
-        pass
+        self.__top_level.destroy()
+        self.__controlador_sistema.reabre_tela_principal()
 
-    def veriricar_se_avaliacoes_existem(self):
+    def verificar_se_avaliacoes_existem(self):
         if len(self.__avaliacao_dao.get_all()) == 0:
-            self.__tela_avaliacao.mostra_mensagem("Não há avaliacoes cadastradas!")
+            self.__tela_avaliacao.mostra_mensagem("Info", "Não há avaliações cadastradas!")
             return False
-        else:
-            return True
+        return True
 
     def relatorio_de_avaliacoes(self):
-        lista_opcoes = {
-            1: self.relatorio_por_cliente,
-            2: self.relatorio_por_nutricionista,
-            0: self.retornar
-        }
-
-        while True:
-            opcao = self.__tela_avaliacao.seleciona_tipo_de_relatorio()
-
-            if opcao == 0:
-                self.retornar()
-                break
-
-            funcao_escolhida = lista_opcoes.get(opcao)
-
-            if funcao_escolhida:
-                funcao_escolhida()
-            else:
-                self.__tela_avaliacao.mostra_mensagem("Opção inválida. Tente novamente.")
+        tipo = self.__tela_avaliacao.seleciona_tipo_de_relatorio()
+        if tipo == "cliente":
+            self.relatorio_por_cliente()
+        elif tipo == "nutricionista":
+            self.relatorio_por_nutricionista()
 
     def relatorio_por_cliente(self):
         cliente_alvo_cpf = self.__tela_avaliacao.selecionar_cliente_cpf()
-        avaliacoes_do_cliente = []
+        if not cliente_alvo_cpf: return
 
-        for avaliacao in self.__avaliacao_dao.get_all():
-            if avaliacao.cliente.cpf == cliente_alvo_cpf:
-                avaliacoes_do_cliente.append(avaliacao)
+        avaliacoes_do_cliente = [ava for ava in self.__avaliacao_dao.get_all() if ava.cliente.cpf == cliente_alvo_cpf]
 
         if avaliacoes_do_cliente:
-            dados_para_tela = []
-            for avaliacao in avaliacoes_do_cliente:
-                dados_para_tela.append({
-                    "codigo": avaliacao.codigo,
-                    "cliente_nome": avaliacao.cliente.nome,
-                    "nutricionista_nome": avaliacao.nutricionista.nome,
-                    "data": avaliacao.data,
-                })
+            dados_para_tela = [{
+                "codigo": avaliacao.codigo, "cliente_nome": avaliacao.cliente.nome,
+                "nutricionista_nome": avaliacao.nutricionista.nome, "data": avaliacao.data,
+                "imc": avaliacao.imc,      # <-- ADICIONADO
+                "tmb": avaliacao.taxa_mb  # <-- ADICIONADO
+            } for avaliacao in avaliacoes_do_cliente]
             self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
         else:
             self.__tela_avaliacao.mostra_mensagem(
-                f"Nenhuma avaliação encontrada para o cliente com CPF {cliente_alvo_cpf}.")
+                "Info", f"Nenhuma avaliação encontrada para o cliente com CPF {cliente_alvo_cpf}.")
 
     def relatorio_por_nutricionista(self):
-        nutricionista_alvo_cpf = self.__tela_avaliacao.selecionar_nutricionista_cpf()
-        avaliacoes_do_nutricionista = []
+        nutri_alvo_cpf = self.__tela_avaliacao.selecionar_nutricionista_cpf()
+        if not nutri_alvo_cpf: return
 
-        for avaliacao in self.__avaliacao_dao.get_all():
-            if avaliacao.nutricionista.cpf == nutricionista_alvo_cpf:
-                avaliacoes_do_nutricionista.append(avaliacao)
+        avaliacoes_do_nutri = [ava for ava in self.__avaliacao_dao.get_all() if ava.nutricionista.cpf == nutri_alvo_cpf]
 
-        if avaliacoes_do_nutricionista:
-            dados_para_tela = []
-            for avaliacao in avaliacoes_do_nutricionista:
-                dados_para_tela.append({
-                    "codigo": avaliacao.codigo,
-                    "cliente_nome": avaliacao.cliente.nome,
-                    "nutricionista_nome": avaliacao.nutricionista.nome,
-                    "data": avaliacao.data,
-                })
+        if avaliacoes_do_nutri:
+            dados_para_tela = [{
+                "codigo": avaliacao.codigo, "cliente_nome": avaliacao.cliente.nome,
+                "nutricionista_nome": avaliacao.nutricionista.nome, "data": avaliacao.data,
+                "imc": avaliacao.imc,      # <-- ADICIONADO
+                "tmb": avaliacao.taxa_mb  # <-- ADICIONADO
+            } for avaliacao in avaliacoes_do_nutri]
             self.__tela_avaliacao.mostra_avaliacao(dados_para_tela)
         else:
             self.__tela_avaliacao.mostra_mensagem(
-                f"Nenhuma avaliação encontrada para o nutricionista com CPF {nutricionista_alvo_cpf}.")
+                "Info", f"Nenhuma avaliação encontrada para o nutricionista com CPF {nutri_alvo_cpf}.")

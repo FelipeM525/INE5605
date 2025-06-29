@@ -9,12 +9,13 @@ from controller.controlador_refeicao import ControladorRefeicao
 from view.tela_refeicao import TelaRefeicao
 from controller.controlador_cliente import ControladorCliente
 from controller.controlador_nutricionista import ControladorNutricionista
+from dao.plano_alimentar_dao import PlanoAlimentarDAO
 
 
 class ControladorPlanoAlimentar:
 
     def __init__(self, controlador_cliente: ControladorCliente, controlador_nutricionista: ControladorNutricionista, controlador_refeicao: ControladorRefeicao, controlador_sistema):
-        self.__planos = []
+        self.__plano_dao = PlanoAlimentarDAO()
         self.__tela_plano_alimentar = TelaPlanoAlimentar()
         self.__tela_refeicao = TelaRefeicao()
         self.__controlador_nutricionista = controlador_nutricionista
@@ -49,7 +50,7 @@ class ControladorPlanoAlimentar:
                 plano_alimentar = PlanoAlimentar([], nutricionista, cliente)
                 cliente.plano_alimentar = plano_alimentar
                 self.__controlador_cliente.atualizar_cliente(cliente)
-                self.__planos.append(plano_alimentar)
+                self.__plano_dao.add(cliente.cpf, plano_alimentar)
                 return self.__tela_plano_alimentar.mostra_mensagem("Plano alimentar incluido com sucesso!")
             else:
                 raise PlanoJaCadastradoException
@@ -68,7 +69,6 @@ class ControladorPlanoAlimentar:
             return self.__tela_plano_alimentar.mostra_mensagem(f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
 
         nome_refeicao = self.__tela_refeicao.seleciona_refeicao()
-
         refeicao_nova = self.__controlador_refeicao.busca_refeicao_por_codigo(nome_refeicao)
 
         try:
@@ -78,19 +78,16 @@ class ControladorPlanoAlimentar:
             return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao nao existe!")
 
         plano.adicionar_refeicao(refeicao_nova)
+        self.__plano_dao.update(plano.cliente.cpf, plano)
         self.__controlador_cliente.atualizar_cliente(plano.cliente)
 
         return self.__tela_plano_alimentar.mostra_mensagem(f"Refeicao incluida no plano alimentar!")
 
     def busca_plano_por_cliente(self, cpf_cliente):
-        for plano in self.__planos:
-            if plano.cliente.cpf == cpf_cliente:
-                return plano
-        return None
+        return self.__plano_dao.get(cpf_cliente)
 
     def remover_plano(self):
         cpf_cliente = self.__tela_plano_alimentar.seleciona_plano_por_cliente()
-
         plano = self.busca_plano_por_cliente(cpf_cliente)
 
         try:
@@ -99,8 +96,9 @@ class ControladorPlanoAlimentar:
         except PlanoInexistenteException:
             return self.__tela_plano_alimentar.mostra_mensagem(f"Plano alimentar nao existe para o cliente {cpf_cliente}!")
 
-        self.__planos.remove(plano)
+        plano.cliente.plano_alimentar = None
         self.__controlador_cliente.atualizar_cliente(plano.cliente)
+        self.__plano_dao.remove(cpf_cliente)
 
         return self.__tela_plano_alimentar.mostra_mensagem("Plano alimentar removido com sucesso!")
 
@@ -118,6 +116,7 @@ class ControladorPlanoAlimentar:
                 if refeicao.codigo == nome_refeicao:
                     plano.refeicoes.remove(refeicao)
                     refeicao_encontrada = True
+                    self.__plano_dao.update(plano.cliente.cpf, plano)
                     self.__tela_plano_alimentar.mostra_mensagem(
                         f"Refeicao {nome_refeicao} removida do plano alimentar!")
                     break
@@ -133,12 +132,13 @@ class ControladorPlanoAlimentar:
                 f"Refeição {nome_refeicao} não encontrada no plano alimentar!")
 
     def listar_planos(self):
-        if not self.__planos:
+        planos = self.__plano_dao.get_all()
+        if not planos:
             self.__tela_plano_alimentar.mostra_mensagem("Nenhum plano alimentar cadastrado.")
             return
 
         dados_para_tela = []
-        for plano in self.__planos:
+        for plano in planos:
             refeicoes_do_plano = [refeicao.codigo for refeicao in plano.refeicoes]
             dados_para_tela.append({
                 "codigo": plano.cliente.cpf,
@@ -173,7 +173,3 @@ class ControladorPlanoAlimentar:
 
     def retornar(self):
         pass
-
-
-
-

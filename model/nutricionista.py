@@ -2,11 +2,22 @@ from model.usuario import Usuario
 
 
 class Nutricionista(Usuario):
-    def __init__(self, nome: str, email: str, senha: str, cpf: str, clinica: str, crn: str):
+    def __init__(self, nome: str, email: str, senha: str, cpf: str, crn: str, clinica: str):
         super().__init__(nome, email, senha, cpf)
-        self.__clinica = clinica
-        self.__crn = crn
+        if isinstance(crn, str):
+            self.__crn = crn
+        if isinstance(clinica, str):
+            self.__clinica = clinica
         self.__avaliacoes = []
+
+    @property
+    def crn(self):
+        return self.__crn
+
+    @crn.setter
+    def crn(self, crn: str):
+        if isinstance(crn, str):
+            self.__crn = crn
 
     @property
     def clinica(self):
@@ -14,19 +25,8 @@ class Nutricionista(Usuario):
 
     @clinica.setter
     def clinica(self, clinica: str):
-        self.__clinica = clinica
-
-    @property
-    def crn(self):
-        return self.__crn
-
-    @crn.setter
-    def crn(self, crn):
-        self.__crn = crn
-
-    @property
-    def avaliacoes(self):
-        return self.__avaliacoes
+        if isinstance(clinica, str):
+            self.__clinica = clinica
 
     def adicionar_avaliacao(self, avaliacao):
         from model.avaliacao import Avaliacao
@@ -35,7 +35,4 @@ class Nutricionista(Usuario):
             self.__avaliacoes.append(avaliacao)
 
     def cadastrar(self):
-        print(f"Nutricionista {self.nome} cadastrado com sucesso.")
-
-    def __str__(self):
-        return f"{self.nome} (CRN: {self.crn})"
+        print(f"Nutricionista {self.nome} sendo instanciado/cadastrado.")

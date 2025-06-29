@@ -1,90 +1,96 @@
+from tkinter import Toplevel
+from view.tela_nutricionista_tkinter import TelaNutricionistaTk
 from model.nutricionista import Nutricionista
 from exception.jahCadastradoException import JahCadastradoException
 from exception.cadastroInexistenteException import CadastroInexistenteException
-from view.tela_nutricionista import TelaNutricionista
 from dao.nutricionista_dao import NutricionistaDAO
 
 class ControladorNutricionista:
     def __init__(self, controlador_sistema):
         self.__nutricionista_dao = NutricionistaDAO()
-        self.__tela_nutricionista = TelaNutricionista()
+        self.__tela_nutricionista = None
         self.__controlador_sistema = controlador_sistema
+        self.__top_level = None
 
     def abre_tela(self):
-        lista_opcoes = {1: self.incluir_nutricionista, 2: self.mostrar_dados_nutricionista, 3: self.listar_nutricionistas,
-                        4: self.remover_nutricionista, 0: self.retornar}
-
-        while True:
-            opcao = self.__tela_nutricionista.mostrar_menu()
-            if opcao == 0:
-                self.retornar()
-                break
-
-            funcao_escolhida = lista_opcoes.get(opcao)
-            if funcao_escolhida:
-                funcao_escolhida()
-            else:
-                self.__tela_nutricionista.mostrar_mensagem("Opção inválida!")
+        self.__top_level = Toplevel(self.__controlador_sistema.root)
+        self.__tela_nutricionista = TelaNutricionistaTk(self.__top_level, self)
+        self.__top_level.protocol("WM_DELETE_WINDOW", self.retornar)
 
     def buscar_nutricionista_por_cpf(self, cpf: str):
         return self.__nutricionista_dao.get(cpf)
 
     def incluir_nutricionista(self):
-        novo_nutricionista = self.__tela_nutricionista.cadastrar_nutricionista()
-
-        if not isinstance(novo_nutricionista, Nutricionista):
-            raise ValueError("Valores inválidos")
+        dados_nutri = self.__tela_nutricionista.cadastrar_nutricionista()
+        if not dados_nutri.get("cpf"):
+            self.__tela_nutricionista.mostrar_mensagem("Cancelado", "Cadastro cancelado.")
+            return
 
         try:
-        
-            if self.buscar_nutricionista_por_cpf(novo_nutricionista.cpf):
+            if self.buscar_nutricionista_por_cpf(dados_nutri["cpf"]):
                 raise JahCadastradoException()
-        
-            else:
-                self.__nutricionista_dao.add(novo_nutricionista)
-                return self.__tela_nutricionista.mostrar_mensagem("Nutricionista cadastrado com sucesso")
+
+            novo_nutricionista = Nutricionista(
+                nome=dados_nutri["nome"],
+                email=dados_nutri["email"],
+                senha=dados_nutri["senha"],
+                cpf=dados_nutri["cpf"],
+                crn=dados_nutri["crn"],
+                clinica=dados_nutri["clinica"]
+            )
+
+            self.__nutricionista_dao.add(novo_nutricionista)
+            self.__tela_nutricionista.mostrar_mensagem("Sucesso", "Nutricionista cadastrado com sucesso!")
 
         except JahCadastradoException:
-            return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {novo_nutricionista.cpf} ja existe!")
+            self.__tela_nutricionista.mostrar_mensagem("Erro", f"Nutricionista com CPF {dados_nutri['cpf']} já existe!")
+        except Exception as e:
+            self.__tela_nutricionista.mostrar_mensagem("Erro", f"Ocorreu um erro inesperado: {e}")
 
     def remover_nutricionista(self):
         cpf = self.__tela_nutricionista.selecionar_nutricionista_cpf()
+        if not cpf: return
         nutricionista = self.buscar_nutricionista_por_cpf(cpf)
 
         try:
             if nutricionista:
                 self.__nutricionista_dao.remove(cpf)
-                return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} removido com sucesso!")
+                self.__tela_nutricionista.mostrar_mensagem("Sucesso", f"Nutricionista com CPF {cpf} removido com sucesso!")
 
             else:
                 raise CadastroInexistenteException()
         except CadastroInexistenteException:
-            return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} nao existe!")
+            self.__tela_nutricionista.mostrar_mensagem("Erro", f"Nutricionista com CPF {cpf} não existe!")
 
     def mostrar_dados_nutricionista(self):
         cpf = self.__tela_nutricionista.selecionar_nutricionista_cpf()
+        if not cpf: return
         nutricionista = self.buscar_nutricionista_por_cpf(cpf)
         try:
             if nutricionista:
-                return self.__tela_nutricionista.pegar_dados_nutricionista(nutricionista)
+                self.__tela_nutricionista.pegar_dados_nutricionista(nutricionista)
 
             else:
                 raise CadastroInexistenteException()
         except CadastroInexistenteException:
-            return self.__tela_nutricionista.mostrar_mensagem(f"Nutricionista com cpf {cpf} nao existe!")
+            self.__tela_nutricionista.mostrar_mensagem("Erro", f"Nutricionista com CPF {cpf} não existe!")
 
     def listar_nutricionistas(self):
         nutricionistas = self.__nutricionista_dao.get_all()
+
         if not nutricionistas:
-            self.__tela_nutricionista.mostrar_mensagem("Nao ha nutricionistas cadastrados!")
-        else:
-            dados_para_tela = []
-            for nutricionista in nutricionistas:
-                dados_para_tela.append({
-                    "nome": nutricionista.nome,
-                    "cpf": nutricionista.cpf
-                })
-            self.__tela_nutricionista.listar_nutricionistas(dados_para_tela)
+            self.__tela_nutricionista.mostrar_mensagem("Info", "Não há nutricionistas cadastrados.")
+            return
+
+        dados_para_tela = []
+        for nutricionista in nutricionistas:
+            dados_para_tela.append({
+                "nome": nutricionista.nome,
+                "cpf": nutricionista.cpf
+            })
+
+        self.__tela_nutricionista.listar_nutricionistas(dados_para_tela)
 
     def retornar(self):
-        pass
+        self.__top_level.destroy()
+        self.__controlador_sistema.reabre_tela_principal()

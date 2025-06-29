@@ -1,0 +1,24 @@
+import tkinter as tk
+from tkinter import messagebox
+
+class TelaSistemaTk:
+    def __init__(self, master, controlador_sistema):
+        self.__master = master
+        self.__controlador_sistema = controlador_sistema
+        self.__master.title("Sistema de Nutrição")
+        self.__master.geometry("300x250")
+
+        self.frame = tk.Frame(self.__master)
+        self.frame.pack(pady=10, padx=10, fill="both", expand=True)
+
+        tk.Label(self.frame, text="SISTEMA PARA NUTRICIONISTAS", font=("Arial", 12, "bold")).pack(pady=10)
+
+        tk.Button(self.frame, text="Menu Clientes", command=self.__controlador_sistema.chama_controlador_cliente).pack(fill="x", pady=5)
+        tk.Button(self.frame, text="Menu Nutricionistas", command=self.__controlador_sistema.chama_controlador_nutricionista).pack(fill="x", pady=5)
+        ##################
+        # Adicionar outros botões de menu aqui (Avaliações, Plano Alimentar, Refeições, Alimentos)
+        ##################
+        tk.Button(self.frame, text="Finalizar Sistema", command=self.__master.quit).pack(fill="x", pady=5)
+
+    def mostra_mensagem(self, titulo, msg):
+        messagebox.showinfo(titulo, msg)

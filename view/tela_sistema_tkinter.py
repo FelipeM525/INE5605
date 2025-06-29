@@ -11,7 +11,7 @@ class TelaSistemaTk:
         self.frame = tk.Frame(self.__master)
         self.frame.pack(pady=10, padx=10, fill="both", expand=True)
 
-        tk.Label(self.frame, text="SISTEMA PARA NUTRICIONISTAS", font=("Arial", 12, "bold")).pack(pady=10)
+        tk.Label(self.frame, text="Nutr-In-Sight", font=("Arial", 12, "bold")).pack(pady=10)
 
         tk.Button(self.frame, text="Menu Clientes", command=self.__controlador_sistema.chama_controlador_cliente).pack(
             fill="x", pady=5)
